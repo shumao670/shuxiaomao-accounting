@@ -647,7 +647,7 @@
               React.createElement('textarea', {
                 value: input, onChange: (e) => setInput(e.target.value),
                 placeholder: '输入消费描述，例如：今天早上吃了两个鸡蛋花了3元，中午买了一件T恤花了38',
-                className: 'w-full h-32 p-4 bg-gray-50 rounded-xl border-none outline-none text-dark placeholder-gray-400 resize-none text-base',
+                className: 'w-full h-24 p-4 bg-gray-50 rounded-xl border-none outline-none text-dark placeholder-gray-400 resize-none text-base',
                 autoFocus: true
               }),
               parsedRecords.length > 0 && React.createElement('div', { className: 'mt-4 space-y-3' },
@@ -676,8 +676,8 @@
             React.createElement('div', { className: 'p-4 border-t border-gray-100' },
               React.createElement('button', {
                 onClick: handleSubmit, disabled: parsedRecords.length === 0 || isLoading,
-                className: `w-full py-3 rounded-xl font-medium transition-all duration-200 flex items-center justify-center gap-2 ${parsedRecords.length > 0 && !isLoading ? 'bg-primary text-white hover:bg-primary/90 active:scale-[0.98]' : 'bg-gray-200 text-gray-400 cursor-not-allowed'}`
-              }, isLoading ? React.createElement('svg', { className: 'animate-spin h-5 w-5 text-white', xmlns: 'http://www.w3.org/2000/svg', fill: 'none', viewBox: '0 0 24 24' }, React.createElement('circle', { className: 'opacity-25', cx: '12', cy: '12', r: '10', stroke: 'currentColor', strokeWidth: '4' }), React.createElement('path', { className: 'opacity-75', fill: 'currentColor', d: 'M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z' })) : React.createElement(icons.Check, { size: 20 }), isLoading ? '智能识别中...' : `确认记账 (${parsedRecords.length})`)
+                className: `w-24 py-2 rounded-xl font-medium transition-all duration-200 flex items-center justify-center ${parsedRecords.length > 0 && !isLoading ? 'bg-primary text-white hover:bg-primary/90 active:scale-[0.98]' : 'bg-gray-200 text-gray-400 cursor-not-allowed'}`
+              }, isLoading ? React.createElement('svg', { className: 'animate-spin h-5 w-5 text-white', xmlns: 'http://www.w3.org/2000/svg', fill: 'none', viewBox: '0 0 24 24' }, React.createElement('circle', { className: 'opacity-25', cx: '12', cy: '12', r: '10', stroke: 'currentColor', strokeWidth: '4' }), React.createElement('path', { className: 'opacity-75', fill: 'currentColor', d: 'M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z' })) : React.createElement(icons.Check, { size: 20 }))
             )
           )
         );
@@ -784,18 +784,20 @@
           return `${date.getMonth() + 1}月${date.getDate()}日`;
         };
 
-        return React.createElement('div', { className: 'min-h-screen bg-light pb-24' },
+        return React.createElement('div', { className: 'min-h-screen bg-light pb-28' },
           React.createElement('header', { className: 'pt-8 pb-4 px-4 bg-white sticky top-0 z-10' },
             React.createElement('h1', { className: 'text-xl font-bold text-dark text-center' }, '账单明细')
           ),
           React.createElement('div', { className: 'px-4 mt-4' },
-            React.createElement('div', { className: 'flex flex-wrap gap-2 mb-4' },
-              React.createElement('button', { onClick: () => setSelectedCategory(null), className: `px-4 py-2 rounded-full text-xs font-medium transition-colors ${!selectedCategory ? 'bg-primary text-white' : 'bg-white text-gray-600 border border-gray-200'}` }, '全部'),
-              categories.map(cat => React.createElement('button', {
-                key: cat.id, onClick: () => setSelectedCategory(cat.id),
-                className: `px-4 py-2 rounded-full text-xs font-medium transition-colors ${selectedCategory === cat.id ? 'text-white' : 'bg-white text-gray-600 border border-gray-200'}`,
-                style: { backgroundColor: selectedCategory === cat.id ? cat.color : undefined }
-              }, cat.name))
+            React.createElement('div', { className: 'mb-4' },
+              React.createElement('select', {
+                value: selectedCategory || '',
+                onChange: function(e) { setSelectedCategory(e.target.value || null); },
+                className: 'w-full px-4 py-3 bg-white border border-gray-200 rounded-xl outline-none focus:border-primary text-dark text-sm appearance-none cursor-pointer'
+              },
+                React.createElement('option', { value: '' }, '全部类别'),
+                categories.map(function(cat) { return React.createElement('option', { key: cat.id, value: cat.id }, cat.name); })
+              )
             ),
             sortedDates.length > 0 ? React.createElement('div', { className: 'space-y-6' },
               sortedDates.map(date => React.createElement('div', { key: date },
