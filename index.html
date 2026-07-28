@@ -102,6 +102,10 @@
       svg[size="20"]{width:20px;height:20px}
       svg[size="24"]{width:24px;height:24px}
       svg[size="32"]{width:32px;height:32px}
+      /* 隐藏number输入框的spinner箭头 */
+      input[type=number]::-webkit-inner-spin-button,
+      input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0;}
+      input[type=number]{-moz-appearance:textfield;appearance:textfield;}
       button svg{pointer-events:none}
       .flex-col{flex-direction:column}
       .items-center{align-items:center}
@@ -247,8 +251,16 @@
   </head>
   <body class="bg-light min-h-screen">
     <div id="app"></div>
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script>
+      // CDN 加载失败时显示提示
+      window.addEventListener('error', function(e) {
+        if (e.target && e.target.src && e.target.src.indexOf('react') > -1) {
+          document.getElementById('app').innerHTML = '<div style="text-align:center;padding:40px 20px;color:#666;font-size:14px;"><p>React 加载失败，请检查网络连接</p><p style="margin-top:8px;color:#999;">如果持续出现此问题，请尝试刷新页面</p></div>';
+        }
+      }, true);
+    </script>
+    <script crossorigin src="https://cdn.staticfile.org/react/18.2.0/umd/react.production.min.js"></script>
+    <script crossorigin src="https://cdn.staticfile.org/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
     <script>
       const { createContext, useContext, useReducer, useEffect, useState, useRef } = React;
       const { createRoot } = ReactDOM;
@@ -733,6 +745,12 @@
             saveRecords(updatedRecords);
             return { records: updatedRecords };
           }
+          case 'UPDATE_RECORD': {
+            const { id, updates } = action.payload;
+            const updatedRecords = state.records.map(r => r.id === id ? { ...r, ...updates } : r);
+            saveRecords(updatedRecords);
+            return { records: updatedRecords };
+          }
           default: return state;
         }
       };
@@ -742,6 +760,7 @@
 
         const addRecords = (parsedRecords) => dispatch({ type: 'ADD_RECORDS', payload: parsedRecords });
         const deleteRecord = (id) => dispatch({ type: 'DELETE_RECORD', payload: id });
+        const updateRecord = (id, updates) => dispatch({ type: 'UPDATE_RECORD', payload: { id, updates } });
         
         const getTodayExpense = () => state.records.filter(r => r.date === getTodayStr() && (r.type === 'expense' || !r.type)).reduce((sum, r) => sum + r.amount, 0);
         const getTodayIncome = () => state.records.filter(r => r.date === getTodayStr() && r.type === 'income').reduce((sum, r) => sum + r.amount, 0);
@@ -795,7 +814,7 @@
         };
 
         return React.createElement(RecordsContext.Provider, { value: {
-          records: state.records, addRecords, deleteRecord, getTodayExpense, getTodayIncome, 
+          records: state.records, addRecords, deleteRecord, updateRecord, getTodayExpense, getTodayIncome, 
           getMonthExpense, getMonthIncome, getRecentRecords, getCategoryStats, getTotalByPeriod
         } }, children);
       };
@@ -808,31 +827,141 @@
 
       const CategoryIcon = ({ icon, color, size = 20 }) => React.createElement(icons[icon] || icons.MoreHorizontal, { size, style: { color } });
 
-      const RecordCard = ({ record, onDelete }) => {
+      const RecordCard = ({ record, onDelete, onEdit }) => {
         const category = getCategoryById(record.category);
         const isIncome = record.type === 'income';
         return React.createElement('div', { className: 'flex items-center justify-between bg-white rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow duration-200' },
-          React.createElement('div', { className: 'flex items-center gap-3' },
-            React.createElement('div', { className: 'w-10 h-10 rounded-full flex items-center justify-center', style: { backgroundColor: `${category.color}15` } },
+          React.createElement('div', { className: 'flex items-center gap-3 flex-1 min-w-0', onClick: onEdit, style: { cursor: onEdit ? 'pointer' : 'default' } },
+            React.createElement('div', { className: 'w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0', style: { backgroundColor: `${category.color}15` } },
               React.createElement(CategoryIcon, { icon: category.icon, color: category.color, size: 20 })
             ),
-            React.createElement('div', null,
-              React.createElement('p', { className: 'text-dark font-medium text-sm' }, record.description),
-              React.createElement('div', { className: 'flex items-center gap-2 mt-1' },
+            React.createElement('div', { className: 'min-w-0 flex-1' },
+              React.createElement('p', { className: 'text-dark font-medium text-sm truncate' }, record.description),
+              React.createElement('div', { className: 'flex items-center gap-2 mt-1 flex-wrap' },
                 React.createElement('span', { className: 'text-xs px-2 py-0.5 rounded-full', style: { backgroundColor: `${category.color}20`, color: category.color } }, category.name),
                 React.createElement('span', { className: 'text-xs px-2 py-0.5 rounded-full', style: { backgroundColor: isIncome ? '#27AE6020' : '#E74C3C20', color: isIncome ? '#27AE60' : '#E74C3C' } }, isIncome ? '收入' : '支出'),
                 React.createElement('span', { className: 'text-gray-400 text-xs' }, formatDate(record.date))
               )
             )
           ),
-          React.createElement('div', { className: 'flex items-center gap-2' },
+          React.createElement('div', { className: 'flex items-center gap-1 flex-shrink-0' },
             React.createElement('span', { className: `font-bold text-lg ${isIncome ? 'text-green-500' : 'text-red-500'}` }, `${isIncome ? '+' : '-'}${formatAmount(record.amount)}`),
-            onDelete && React.createElement('button', { onClick: onDelete, className: 'text-gray-300 hover:text-red-400 transition-colors p-1' },
+            onEdit && React.createElement('button', { onClick: onEdit, className: 'text-gray-300 hover:text-primary transition-colors p-1', title: '编辑' },
+              React.createElement('svg', { width: '16', height: '16', viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: '2', strokeLinecap: 'round', strokeLinejoin: 'round' },
+                React.createElement('path', { d: 'M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7' }),
+                React.createElement('path', { d: 'M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z' })
+              )
+            ),
+            onDelete && React.createElement('button', { onClick: onDelete, className: 'text-gray-300 hover:text-red-400 transition-colors p-1', title: '删除' },
               React.createElement('svg', { width: '16', height: '16', viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: '2' },
                 React.createElement('path', { d: 'M3 6h18' }),
                 React.createElement('path', { d: 'M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6' }),
                 React.createElement('path', { d: 'M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2' })
               )
+            )
+          )
+        );
+      };
+
+      // 编辑记录弹窗
+      const EditRecordModal = ({ record, onClose, onSave }) => {
+        const [description, setDescription] = useState(record.description);
+        const [amountStr, setAmountStr] = useState((record.amount / 100).toFixed(2));
+        const [category, setCategory] = useState(record.category);
+        const [type, setType] = useState(record.type || 'expense');
+        const [date, setDate] = useState(record.date);
+        const [error, setError] = useState('');
+
+        const handleSave = () => {
+          const desc = description.trim();
+          const amt = parseFloat(amountStr);
+          if (!desc) { setError('请输入描述'); return; }
+          if (isNaN(amt) || amt <= 0) { setError('请输入有效金额'); return; }
+          onSave({
+            description: desc,
+            amount: Math.round(amt * 100),
+            category: category,
+            type: type,
+            date: date
+          });
+        };
+
+        const expenseCategories = categories.filter(c => c.type === 'expense' || !c.type);
+        const incomeCategories = categories.filter(c => c.type === 'income');
+        const showCategories = type === 'income' ? incomeCategories : expenseCategories;
+
+        return React.createElement('div', { className: 'fixed inset-0 z-50 flex items-end justify-center bg-black/40', onClick: onClose },
+          React.createElement('div', { className: 'w-full max-w-md bg-white rounded-t-3xl animate-slide-up max-h-[85vh] overflow-y-auto', onClick: e => e.stopPropagation() },
+            // 标题栏
+            React.createElement('div', { className: 'flex items-center justify-between p-4 border-b border-gray-100 sticky top-0 bg-white z-10' },
+              React.createElement('button', { onClick: onClose, className: 'text-gray-400 text-sm' }, '取消'),
+              React.createElement('h3', { className: 'text-base font-bold text-dark' }, '编辑记录'),
+              React.createElement('button', { onClick: handleSave, className: 'text-primary text-sm font-medium' }, '保存')
+            ),
+            // 表单
+            React.createElement('div', { className: 'p-4 space-y-4' },
+              // 收支类型切换
+              React.createElement('div', { className: 'flex bg-gray-100 rounded-xl p-1' },
+                React.createElement('button', { onClick: () => setType('expense'), className: `flex-1 py-2 rounded-lg text-sm font-medium transition-all ${type === 'expense' ? 'bg-white text-red-500 shadow-sm' : 'text-gray-500'}` }, '支出'),
+                React.createElement('button', { onClick: () => setType('income'), className: `flex-1 py-2 rounded-lg text-sm font-medium transition-all ${type === 'income' ? 'bg-white text-green-500 shadow-sm' : 'text-gray-500'}` }, '收入')
+              ),
+              // 金额
+              React.createElement('div', null,
+                React.createElement('label', { className: 'block text-sm text-gray-600 mb-1' }, '金额'),
+                React.createElement('div', { className: 'flex items-center' },
+                  React.createElement('span', { className: 'text-xl font-bold text-dark mr-2' }, '¥'),
+                  React.createElement('input', {
+                    type: 'number',
+                    value: amountStr,
+                    onChange: e => { setAmountStr(e.target.value); setError(''); },
+                    step: '0.01',
+                    min: '0',
+                    className: 'flex-1 text-2xl font-bold text-dark bg-gray-50 rounded-xl px-3 py-2 border-none outline-none'
+                  })
+                )
+              ),
+              // 描述
+              React.createElement('div', null,
+                React.createElement('label', { className: 'block text-sm text-gray-600 mb-1' }, '描述'),
+                React.createElement('input', {
+                  type: 'text',
+                  value: description,
+                  onChange: e => { setDescription(e.target.value); setError(''); },
+                  placeholder: '这笔钱花在哪了？',
+                  className: 'w-full px-3 py-2.5 bg-gray-50 rounded-xl border-none outline-none text-dark placeholder-gray-400 text-sm'
+                })
+              ),
+              // 类别
+              React.createElement('div', null,
+                React.createElement('label', { className: 'block text-sm text-gray-600 mb-2' }, '类别'),
+                React.createElement('div', { className: 'grid grid-cols-4 gap-2' },
+                  showCategories.map(function(cat) {
+                    const active = category === cat.id;
+                    return React.createElement('button', {
+                      key: cat.id,
+                      onClick: () => setCategory(cat.id),
+                      className: 'flex flex-col items-center gap-1 p-2 rounded-xl transition-all ' + (active ? 'bg-primary/10' : 'bg-gray-50 hover:bg-gray-100')
+                    },
+                      React.createElement('div', { className: 'w-8 h-8 rounded-full flex items-center justify-center', style: { backgroundColor: `${cat.color}20` } },
+                        React.createElement(CategoryIcon, { icon: cat.icon, color: cat.color, size: 18 })
+                      ),
+                      React.createElement('span', { className: 'text-xs ' + (active ? 'text-primary font-medium' : 'text-gray-500') }, cat.name)
+                    );
+                  })
+                )
+              ),
+              // 日期
+              React.createElement('div', null,
+                React.createElement('label', { className: 'block text-sm text-gray-600 mb-1' }, '日期'),
+                React.createElement('input', {
+                  type: 'date',
+                  value: date,
+                  onChange: e => setDate(e.target.value),
+                  className: 'w-full px-3 py-2.5 bg-gray-50 rounded-xl border-none outline-none text-dark text-sm'
+                })
+              ),
+              // 错误提示
+              error && React.createElement('p', { className: 'text-xs text-red-500' }, '⚠ ' + error)
             )
           )
         );
@@ -1020,7 +1149,8 @@
 
       const HomePage = () => {
         const [isModalOpen, setIsModalOpen] = useState(false);
-        const { getTodayExpense, getTodayIncome, getMonthExpense, getMonthIncome, getRecentRecords, deleteRecord } = useRecords();
+        const [editingRecord, setEditingRecord] = useState(null);
+        const { getTodayExpense, getTodayIncome, getMonthExpense, getMonthIncome, getRecentRecords, deleteRecord, updateRecord } = useRecords();
         const todayExpense = getTodayExpense();
         const todayIncome = getTodayIncome();
         const monthExpense = getMonthExpense();
@@ -1068,20 +1198,53 @@
               )
             ),
             recentRecords.length > 0 ? React.createElement('div', { className: 'space-y-3' },
-              recentRecords.map(record => React.createElement(RecordCard, { key: record.id, record, onDelete: () => deleteRecord(record.id) }))
+              recentRecords.map(record => React.createElement(RecordCard, {
+                key: record.id,
+                record,
+                onDelete: () => deleteRecord(record.id),
+                onEdit: () => setEditingRecord(record)
+              }))
             ) : React.createElement('div', { className: 'text-center py-8 text-gray-400' },
               React.createElement('p', null, '暂无记录'),
               React.createElement('p', { className: 'text-xs mt-1' }, '点击上方按钮开始记账')
             )
           ),
-          React.createElement(AddRecordModal, { isOpen: isModalOpen, onClose: () => setIsModalOpen(false) })
+          React.createElement(AddRecordModal, { isOpen: isModalOpen, onClose: () => setIsModalOpen(false) }),
+          editingRecord && React.createElement(EditRecordModal, {
+            record: editingRecord,
+            onClose: () => setEditingRecord(null),
+            onSave: function(updates) {
+              updateRecord(editingRecord.id, updates);
+              setEditingRecord(null);
+            }
+          })
         );
       };
 
       const BillsPage = () => {
         const [selectedCategory, setSelectedCategory] = useState(null);
-        const { records, deleteRecord } = useRecords();
-        const filteredRecords = selectedCategory ? records.filter(r => r.category === selectedCategory) : records;
+        const [dateFrom, setDateFrom] = useState('');
+        const [dateTo, setDateTo] = useState('');
+        const [minAmount, setMinAmount] = useState('');
+        const [maxAmount, setMaxAmount] = useState('');
+        const [recordType, setRecordType] = useState('all');
+        const [showFilters, setShowFilters] = useState(false);
+        const [editingRecord, setEditingRecord] = useState(null);
+        const { records, deleteRecord, updateRecord } = useRecords();
+
+        const filteredRecords = records.filter(function(r) {
+          if (selectedCategory && r.category !== selectedCategory) return false;
+          if (recordType === 'expense' && r.type !== 'expense' && r.type) return false;
+          if (recordType === 'income' && r.type !== 'income') return false;
+          if (dateFrom && r.date < dateFrom) return false;
+          if (dateTo && r.date > dateTo) return false;
+          if (minAmount && r.amount < parseFloat(minAmount) * 100) return false;
+          if (maxAmount && r.amount > parseFloat(maxAmount) * 100) return false;
+          return true;
+        });
+
+        const activeFilterCount = (selectedCategory ? 1 : 0) + (dateFrom || dateTo ? 1 : 0) + (minAmount || maxAmount ? 1 : 0) + (recordType !== 'all' ? 1 : 0);
+
         const groupedRecords = filteredRecords.reduce((groups, record) => {
           const date = record.date;
           if (!groups[date]) groups[date] = [];
@@ -1089,6 +1252,7 @@
           return groups;
         }, {});
         const sortedDates = Object.keys(groupedRecords).sort((a, b) => new Date(b).getTime() - new Date(a).getTime());
+
         const formatDateHeader = (dateStr) => {
           const date = new Date(dateStr + 'T00:00:00');
           if (dateStr === getTodayStr()) return '今天';
@@ -1097,32 +1261,135 @@
           return `${date.getMonth() + 1}月${date.getDate()}日`;
         };
 
+        const resetFilters = () => {
+          setSelectedCategory(null);
+          setDateFrom('');
+          setDateTo('');
+          setMinAmount('');
+          setMaxAmount('');
+          setRecordType('all');
+        };
+
+        const handleEditSave = (updates) => {
+          updateRecord(editingRecord.id, updates);
+          setEditingRecord(null);
+        };
+
         return React.createElement('div', { className: 'min-h-screen bg-light pb-28' },
           React.createElement('header', { className: 'pt-8 pb-4 px-4 bg-white sticky top-0 z-10' },
             React.createElement('h1', { className: 'text-xl font-bold text-dark text-center' }, '账单明细')
           ),
           React.createElement('div', { className: 'px-4 mt-4' },
-            React.createElement('div', { className: 'mb-4' },
-              React.createElement('select', {
-                value: selectedCategory || '',
-                onChange: function(e) { setSelectedCategory(e.target.value || null); },
-                className: 'w-full px-4 py-3 bg-white border border-gray-200 rounded-xl outline-none focus:border-primary text-dark text-sm appearance-none cursor-pointer'
+            // 顶部：收支切换 + 筛选按钮
+            React.createElement('div', { className: 'flex items-center gap-2 mb-3' },
+              React.createElement('div', { className: 'flex-1 flex bg-gray-100 rounded-xl p-1' },
+                React.createElement('button', { onClick: () => setRecordType('all'), className: `flex-1 py-2 rounded-lg text-sm font-medium transition-all ${recordType === 'all' ? 'bg-white text-primary shadow-sm' : 'text-gray-500'}` }, '全部'),
+                React.createElement('button', { onClick: () => setRecordType('expense'), className: `flex-1 py-2 rounded-lg text-sm font-medium transition-all ${recordType === 'expense' ? 'bg-white text-red-500 shadow-sm' : 'text-gray-500'}` }, '支出'),
+                React.createElement('button', { onClick: () => setRecordType('income'), className: `flex-1 py-2 rounded-lg text-sm font-medium transition-all ${recordType === 'income' ? 'bg-white text-green-500 shadow-sm' : 'text-gray-500'}` }, '收入')
+              ),
+              React.createElement('button', {
+                onClick: () => setShowFilters(!showFilters),
+                className: 'flex items-center gap-1 px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm text-gray-600 flex-shrink-0 relative'
               },
-                React.createElement('option', { value: '' }, '全部类别'),
-                categories.map(function(cat) { return React.createElement('option', { key: cat.id, value: cat.id }, cat.name); })
+                React.createElement('svg', { width: '16', height: '16', viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: '2', strokeLinecap: 'round', strokeLinejoin: 'round' },
+                  React.createElement('polygon', { points: '22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3' })
+                ),
+                '筛选',
+                activeFilterCount > 0 && React.createElement('span', { className: 'absolute -top-1 -right-1 w-4 h-4 bg-primary text-white text-xs rounded-full flex items-center justify-center' }, activeFilterCount)
               )
             ),
+
+            // 展开的筛选面板
+            showFilters && React.createElement('div', { className: 'bg-white rounded-2xl p-4 mb-4 shadow-sm space-y-4' },
+              // 类别筛选
+              React.createElement('div', null,
+                React.createElement('label', { className: 'block text-sm text-gray-600 mb-2' }, '类别'),
+                React.createElement('select', {
+                  value: selectedCategory || '',
+                  onChange: function(e) { setSelectedCategory(e.target.value || null); },
+                  className: 'w-full px-3 py-2.5 bg-gray-50 border-none rounded-xl outline-none focus:ring-2 focus:ring-primary/30 text-dark text-sm appearance-none'
+                },
+                  React.createElement('option', { value: '' }, '全部类别'),
+                  categories.map(function(cat) { return React.createElement('option', { key: cat.id, value: cat.id }, cat.name); })
+                )
+              ),
+              // 日期范围
+              React.createElement('div', null,
+                React.createElement('label', { className: 'block text-sm text-gray-600 mb-2' }, '日期范围'),
+                React.createElement('div', { className: 'flex items-center gap-2' },
+                  React.createElement('input', {
+                    type: 'date', value: dateFrom,
+                    onChange: e => setDateFrom(e.target.value),
+                    className: 'flex-1 min-w-0 px-3 py-2.5 bg-gray-50 border-none rounded-xl outline-none focus:ring-2 focus:ring-primary/30 text-dark text-sm'
+                  }),
+                  React.createElement('span', { className: 'text-gray-400 text-sm flex-shrink-0' }, '至'),
+                  React.createElement('input', {
+                    type: 'date', value: dateTo,
+                    onChange: e => setDateTo(e.target.value),
+                    className: 'flex-1 min-w-0 px-3 py-2.5 bg-gray-50 border-none rounded-xl outline-none focus:ring-2 focus:ring-primary/30 text-dark text-sm'
+                  })
+                )
+              ),
+              // 金额范围
+              React.createElement('div', null,
+                React.createElement('label', { className: 'block text-sm text-gray-600 mb-2' }, '金额范围（元）'),
+                React.createElement('div', { className: 'flex items-center gap-2' },
+                  React.createElement('input', {
+                    type: 'text', inputMode: 'decimal', value: minAmount,
+                    onChange: e => setMinAmount(e.target.value.replace(/[^0-9.]/g, '')),
+                    className: 'flex-1 min-w-0 px-3 py-2.5 bg-gray-50 border-none rounded-xl outline-none focus:ring-2 focus:ring-primary/30 text-dark text-sm w-0'
+                  }),
+                  React.createElement('span', { className: 'text-gray-400 text-sm flex-shrink-0' }, '至'),
+                  React.createElement('input', {
+                    type: 'text', inputMode: 'decimal', value: maxAmount,
+                    onChange: e => setMaxAmount(e.target.value.replace(/[^0-9.]/g, '')),
+                    className: 'flex-1 min-w-0 px-3 py-2.5 bg-gray-50 border-none rounded-xl outline-none focus:ring-2 focus:ring-primary/30 text-dark text-sm w-0'
+                  })
+                )
+              ),
+              // 重置按钮
+              activeFilterCount > 0 && React.createElement('button', {
+                onClick: resetFilters,
+                className: 'w-full py-2 text-sm text-gray-500 hover:text-primary transition-colors'
+              }, '重置筛选条件')
+            ),
+
+            // 结果统计
+            filteredRecords.length > 0 && React.createElement('div', { className: 'text-xs text-gray-400 mb-3' },
+              `共 ${filteredRecords.length} 条记录`
+            ),
+
             sortedDates.length > 0 ? React.createElement('div', { className: 'space-y-6' },
               sortedDates.map(date => React.createElement('div', { key: date },
                 React.createElement('p', { className: 'text-xs text-gray-400 mb-3' }, formatDateHeader(date)),
                 React.createElement('div', { className: 'space-y-3' },
-                  groupedRecords[date].map(record => React.createElement(RecordCard, { key: record.id, record, onDelete: () => deleteRecord(record.id) }))
+                  groupedRecords[date].map(record => React.createElement(RecordCard, {
+                    key: record.id,
+                    record,
+                    onDelete: () => deleteRecord(record.id),
+                    onEdit: () => setEditingRecord(record)
+                  }))
                 )
               ))
             ) : React.createElement('div', { className: 'text-center py-16 text-gray-400' },
-              React.createElement('p', null, '暂无记录')
+              React.createElement('div', { className: 'w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-4' },
+                React.createElement('svg', { width: '32', height: '32', viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: '2', strokeLinecap: 'round', strokeLinejoin: 'round', className: 'text-gray-300' },
+                  React.createElement('path', { d: 'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z' }),
+                  React.createElement('polyline', { points: '14 2 14 8 20 8' }),
+                  React.createElement('line', { x1: '16', y1: '13', x2: '8', y2: '13' }),
+                  React.createElement('line', { x1: '16', y1: '17', x2: '8', y2: '17' })
+                )
+              ),
+              React.createElement('p', null, activeFilterCount > 0 ? '没有符合条件的记录' : '暂无记录'),
+              activeFilterCount > 0 && React.createElement('button', { onClick: resetFilters, className: 'mt-3 text-sm text-primary' }, '清除筛选')
             )
-          )
+          ),
+          // 编辑弹窗
+          editingRecord && React.createElement(EditRecordModal, {
+            record: editingRecord,
+            onClose: () => setEditingRecord(null),
+            onSave: handleEditSave
+          })
         );
       };
 
