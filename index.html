@@ -31,8 +31,9 @@
     </script>
     <style>
       *{margin:0;padding:0;box-sizing:border-box}
-      html{scroll-behavior:smooth}
-      body{font-family:'PingFang SC','Microsoft YaHei',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;background-color:#F5F5F5}
+      html{scroll-behavior:smooth;width:100%;overflow-x:hidden}
+      body{font-family:'PingFang SC','Microsoft YaHei',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;background-color:#F5F5F5;width:100%;overflow-x:hidden}
+      #app{width:100%;overflow-x:hidden}
       ::-webkit-scrollbar{width:0;height:0;background:transparent}
       .bg-primary{background-color:#4ECDC4}
       .bg-secondary{background-color:#FF9F1C}
@@ -846,14 +847,24 @@
           ),
           React.createElement('div', { className: 'flex items-center gap-1 flex-shrink-0' },
             React.createElement('span', { className: `font-bold text-lg ${isIncome ? 'text-green-500' : 'text-red-500'}` }, `${isIncome ? '+' : '-'}${formatAmount(record.amount)}`),
-            onEdit && React.createElement('button', { onClick: onEdit, className: 'text-gray-300 hover:text-primary transition-colors p-1', title: '编辑' },
-              React.createElement('svg', { width: '16', height: '16', viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: '2', strokeLinecap: 'round', strokeLinejoin: 'round' },
+            onEdit && React.createElement('button', {
+              onClick: onEdit, title: '编辑', 'aria-label': '编辑',
+              style: { display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '28px', height: '28px', borderRadius: '8px', color: '#9ca3af', background: 'transparent', border: 'none', cursor: 'pointer', padding: 0, transition: 'all 0.15s' },
+              onMouseEnter: e => { e.currentTarget.style.background = '#f3f4f6'; e.currentTarget.style.color = '#6366f1'; },
+              onMouseLeave: e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#9ca3af'; }
+            },
+              React.createElement('svg', { width: '14', height: '14', viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: '2', strokeLinecap: 'round', strokeLinejoin: 'round' },
                 React.createElement('path', { d: 'M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7' }),
                 React.createElement('path', { d: 'M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z' })
               )
             ),
-            onDelete && React.createElement('button', { onClick: onDelete, className: 'text-gray-300 hover:text-red-400 transition-colors p-1', title: '删除' },
-              React.createElement('svg', { width: '16', height: '16', viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: '2' },
+            onDelete && React.createElement('button', {
+              onClick: onDelete, title: '删除', 'aria-label': '删除',
+              style: { display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '28px', height: '28px', borderRadius: '8px', color: '#9ca3af', background: 'transparent', border: 'none', cursor: 'pointer', padding: 0, transition: 'all 0.15s' },
+              onMouseEnter: e => { e.currentTarget.style.background = '#fef2f2'; e.currentTarget.style.color = '#ef4444'; },
+              onMouseLeave: e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#9ca3af'; }
+            },
+              React.createElement('svg', { width: '14', height: '14', viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: '2', strokeLinecap: 'round', strokeLinejoin: 'round' },
                 React.createElement('path', { d: 'M3 6h18' }),
                 React.createElement('path', { d: 'M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6' }),
                 React.createElement('path', { d: 'M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2' })
@@ -1157,12 +1168,71 @@
         const monthIncome = getMonthIncome();
         const recentRecords = getRecentRecords(5);
 
-        return React.createElement('div', { className: 'min-h-screen bg-gradient-to-br from-primary/5 via-white to-secondary/5 pb-24' },
-          React.createElement('header', { className: 'pt-8 pb-4 px-4' },
-            React.createElement('h1', { className: 'text-2xl font-bold text-dark text-center' }, '舒小茂记账'),
+        return React.createElement('div', { className: 'min-h-screen pb-24 relative overflow-hidden', style: { background: 'linear-gradient(135deg, #f0fdfa 0%, #fdf4ff 30%, #fef9f3 60%, #f0f9ff 100%)' } },
+          // 装饰性背景元素 - 顶部右侧淡紫色
+          React.createElement('div', { style: { position: 'absolute', top: '-80px', right: '-60px', width: '220px', height: '220px', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(99,102,241,0.15), rgba(168,85,247,0.1))', filter: 'blur(50px)', zIndex: 0 } }),
+          // 装饰性背景元素 - 顶部左侧淡青色
+          React.createElement('div', { style: { position: 'absolute', top: '80px', left: '-70px', width: '160px', height: '160px', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(78,205,196,0.12), rgba(59,130,246,0.08))', filter: 'blur(40px)', zIndex: 0 } }),
+          // 装饰性背景元素 - 中间淡粉色
+          React.createElement('div', { style: { position: 'absolute', top: '20px', left: '55%', width: '100px', height: '100px', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(236,72,153,0.1), rgba(99,102,241,0.06))', filter: 'blur(30px)', zIndex: 0 } }),
+          // 装饰性背景元素 - 底部淡橙色
+          React.createElement('div', { style: { position: 'absolute', bottom: '100px', right: '-30px', width: '140px', height: '140px', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(255,159,28,0.1), rgba(236,72,153,0.06))', filter: 'blur(35px)', zIndex: 0 } }),
+          // 装饰性背景元素 - 底部左侧
+          React.createElement('div', { style: { position: 'absolute', bottom: '200px', left: '-40px', width: '120px', height: '120px', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(168,85,247,0.1), rgba(78,205,196,0.06))', filter: 'blur(32px)', zIndex: 0 } }),
+          React.createElement('header', { className: 'pt-8 pb-4 px-4 relative z-10' },
+            React.createElement('div', { className: 'flex items-center justify-center', style: { gap: '4px' } },
+              // 可爱小猫图标（黑白简约风格）
+              React.createElement('div', { style: { width: '44px', height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center' } },
+                React.createElement('svg', { xmlns: 'http://www.w3.org/2000/svg', width: '42', height: '42', viewBox: '0 0 80 80', fill: 'none' },
+                  // 左耳外
+                  React.createElement('path', { d: 'M20 30 L16 10 L34 22 Z', fill: '#fff', stroke: '#2C3E50', strokeWidth: '2.5', strokeLinejoin: 'round' }),
+                  // 右耳外
+                  React.createElement('path', { d: 'M60 30 L64 10 L46 22 Z', fill: '#fff', stroke: '#2C3E50', strokeWidth: '2.5', strokeLinejoin: 'round' }),
+                  // 左耳内
+                  React.createElement('path', { d: 'M22 25 L20 16 L30 22 Z', fill: '#fbbf24', stroke: '#2C3E50', strokeWidth: '1.5', strokeLinejoin: 'round' }),
+                  // 右耳内
+                  React.createElement('path', { d: 'M58 25 L60 16 L50 22 Z', fill: '#fbbf24', stroke: '#2C3E50', strokeWidth: '1.5', strokeLinejoin: 'round' }),
+                  // 脸
+                  React.createElement('ellipse', { cx: '40', cy: '42', rx: '24', ry: '22', fill: '#fff', stroke: '#2C3E50', strokeWidth: '2.5' }),
+                  // 身体
+                  React.createElement('ellipse', { cx: '40', cy: '68', rx: '20', ry: '12', fill: '#fff', stroke: '#2C3E50', strokeWidth: '2.5' }),
+                  // 眼睛左眼
+                  React.createElement('ellipse', { cx: '30', cy: '40', rx: '5', ry: '6', fill: '#2C3E50' }),
+                  // 眼睛右眼
+                  React.createElement('ellipse', { cx: '50', cy: '40', rx: '5', ry: '6', fill: '#2C3E50' }),
+                  // 左眼高光
+                  React.createElement('ellipse', { cx: '31.5', cy: '38', rx: '1.8', ry: '2.2', fill: '#fff' }),
+                  // 右眼高光
+                  React.createElement('ellipse', { cx: '51.5', cy: '38', rx: '1.8', ry: '2.2', fill: '#fff' }),
+                  // 腮红左
+                  React.createElement('ellipse', { cx: '22', cy: '48', rx: '5', ry: '3', fill: '#fca5a5', opacity: '0.6' }),
+                  // 腮红右
+                  React.createElement('ellipse', { cx: '58', cy: '48', rx: '5', ry: '3', fill: '#fca5a5', opacity: '0.6' }),
+                  // 鼻子
+                  React.createElement('path', { d: 'M37 48 L40 51 L43 48 Z', fill: '#f472b6', stroke: '#2C3E50', strokeWidth: '1.5', strokeLinejoin: 'round' }),
+                  // 嘴巴
+                  React.createElement('path', { d: 'M40 51 Q37 55 34 53', stroke: '#2C3E50', strokeWidth: '1.8', fill: 'none', strokeLinecap: 'round' }),
+                  React.createElement('path', { d: 'M40 51 Q43 55 46 53', stroke: '#2C3E50', strokeWidth: '1.8', fill: 'none', strokeLinecap: 'round' }),
+                  // 胡须左
+                  React.createElement('line', { x1: '14', y1: '48', x2: '24', y2: '48', stroke: '#2C3E50', strokeWidth: '1.5', strokeLinecap: 'round' }),
+                  React.createElement('line', { x1: '14', y1: '51', x2: '24', y2: '50', stroke: '#2C3E50', strokeWidth: '1.5', strokeLinecap: 'round' }),
+                  // 胡须右
+                  React.createElement('line', { x1: '56', y1: '48', x2: '66', y2: '48', stroke: '#2C3E50', strokeWidth: '1.5', strokeLinecap: 'round' }),
+                  React.createElement('line', { x1: '56', y1: '50', x2: '66', y2: '51', stroke: '#2C3E50', strokeWidth: '1.5', strokeLinecap: 'round' }),
+                  // 垫子
+                  React.createElement('ellipse', { cx: '40', cy: '75', rx: '22', ry: '4', fill: '#D4A574', stroke: '#2C3E50', strokeWidth: '2', opacity: '0.8' }),
+                  // 爪子
+                  React.createElement('ellipse', { cx: '32', cy: '66', rx: '5', ry: '4', fill: '#fff', stroke: '#2C3E50', strokeWidth: '2' }),
+                  React.createElement('ellipse', { cx: '48', cy: '66', rx: '5', ry: '4', fill: '#fff', stroke: '#2C3E50', strokeWidth: '2' }),
+                  // 尾巴
+                  React.createElement('path', { d: 'M58 65 Q72 58 68 48 Q65 42 60 45', stroke: '#2C3E50', strokeWidth: '2.5', fill: 'none', strokeLinecap: 'round' })
+                )
+              ),
+              React.createElement('h1', { className: 'text-2xl font-bold text-dark' }, '舒小茂记账')
+            ),
             React.createElement('p', { className: 'text-center text-gray-400 text-sm mt-1' }, '轻松记录每一笔')
           ),
-          React.createElement('div', { className: 'px-4 mt-6' },
+          React.createElement('div', { className: 'px-4 mt-6 relative z-10' },
             React.createElement('div', { className: 'grid grid-cols-2 gap-4' },
               React.createElement('div', { className: 'bg-white rounded-2xl p-4 shadow-sm' },
                 React.createElement('p', { className: 'text-gray-400 text-xs' }, '今日支出'),
@@ -1275,11 +1345,15 @@
           setEditingRecord(null);
         };
 
-        return React.createElement('div', { className: 'min-h-screen bg-light pb-28' },
-          React.createElement('header', { className: 'pt-8 pb-4 px-4 bg-white sticky top-0 z-10' },
+        return React.createElement('div', { className: 'min-h-screen pb-28 relative overflow-hidden', style: { background: 'linear-gradient(135deg, #f0fdfa 0%, #fdf4ff 30%, #fef9f3 60%, #f0f9ff 100%)' } },
+          // 装饰性背景元素
+          React.createElement('div', { style: { position: 'absolute', top: '-80px', right: '-60px', width: '220px', height: '220px', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(99,102,241,0.15), rgba(168,85,247,0.1))', filter: 'blur(50px)', zIndex: 0 } }),
+          React.createElement('div', { style: { position: 'absolute', top: '80px', left: '-70px', width: '160px', height: '160px', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(78,205,196,0.12), rgba(59,130,246,0.08))', filter: 'blur(40px)', zIndex: 0 } }),
+          React.createElement('div', { style: { position: 'absolute', bottom: '100px', right: '-30px', width: '140px', height: '140px', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(255,159,28,0.1), rgba(236,72,153,0.06))', filter: 'blur(35px)', zIndex: 0 } }),
+          React.createElement('header', { className: 'pt-8 pb-4 px-4 bg-white/80 sticky top-0 z-10', style: { backdropFilter: 'blur(12px)' } },
             React.createElement('h1', { className: 'text-xl font-bold text-dark text-center' }, '账单明细')
           ),
-          React.createElement('div', { className: 'px-4 mt-4' },
+          React.createElement('div', { className: 'px-4 mt-4 relative z-10' },
             // 顶部：收支切换 + 筛选按钮
             React.createElement('div', { className: 'flex items-center gap-2 mb-3' },
               React.createElement('div', { className: 'flex-1 flex bg-gray-100 rounded-xl p-1' },
@@ -1316,34 +1390,34 @@
               // 日期范围
               React.createElement('div', null,
                 React.createElement('label', { className: 'block text-sm text-gray-600 mb-2' }, '日期范围'),
-                React.createElement('div', { className: 'flex items-center gap-2' },
+                React.createElement('div', { style: { display: 'grid', gridTemplateColumns: '1fr auto 1fr', gap: '8px', width: '100%' } },
                   React.createElement('input', {
                     type: 'date', value: dateFrom,
                     onChange: e => setDateFrom(e.target.value),
-                    className: 'flex-1 min-w-0 px-3 py-2.5 bg-gray-50 border-none rounded-xl outline-none focus:ring-2 focus:ring-primary/30 text-dark text-sm'
+                    style: { width: '100%', boxSizing: 'border-box', padding: '10px 12px', background: '#f9fafb', borderRadius: '12px', border: 'none', outline: 'none', fontSize: '14px', color: '#0f172a' }
                   }),
-                  React.createElement('span', { className: 'text-gray-400 text-sm flex-shrink-0' }, '至'),
+                  React.createElement('span', { style: { color: '#9ca3af', fontSize: '14px', alignSelf: 'center', whiteSpace: 'nowrap' } }, '至'),
                   React.createElement('input', {
                     type: 'date', value: dateTo,
                     onChange: e => setDateTo(e.target.value),
-                    className: 'flex-1 min-w-0 px-3 py-2.5 bg-gray-50 border-none rounded-xl outline-none focus:ring-2 focus:ring-primary/30 text-dark text-sm'
+                    style: { width: '100%', boxSizing: 'border-box', padding: '10px 12px', background: '#f9fafb', borderRadius: '12px', border: 'none', outline: 'none', fontSize: '14px', color: '#0f172a' }
                   })
                 )
               ),
               // 金额范围
               React.createElement('div', null,
                 React.createElement('label', { className: 'block text-sm text-gray-600 mb-2' }, '金额范围（元）'),
-                React.createElement('div', { className: 'flex items-center gap-2' },
+                React.createElement('div', { style: { display: 'grid', gridTemplateColumns: '1fr auto 1fr', gap: '8px', width: '100%' } },
                   React.createElement('input', {
                     type: 'text', inputMode: 'decimal', value: minAmount,
                     onChange: e => setMinAmount(e.target.value.replace(/[^0-9.]/g, '')),
-                    className: 'flex-1 min-w-0 px-3 py-2.5 bg-gray-50 border-none rounded-xl outline-none focus:ring-2 focus:ring-primary/30 text-dark text-sm w-0'
+                    style: { width: '100%', boxSizing: 'border-box', padding: '10px 12px', background: '#f9fafb', borderRadius: '12px', border: 'none', outline: 'none', fontSize: '14px', color: '#0f172a' }
                   }),
-                  React.createElement('span', { className: 'text-gray-400 text-sm flex-shrink-0' }, '至'),
+                  React.createElement('span', { style: { color: '#9ca3af', fontSize: '14px', alignSelf: 'center', whiteSpace: 'nowrap' } }, '至'),
                   React.createElement('input', {
                     type: 'text', inputMode: 'decimal', value: maxAmount,
                     onChange: e => setMaxAmount(e.target.value.replace(/[^0-9.]/g, '')),
-                    className: 'flex-1 min-w-0 px-3 py-2.5 bg-gray-50 border-none rounded-xl outline-none focus:ring-2 focus:ring-primary/30 text-dark text-sm w-0'
+                    style: { width: '100%', boxSizing: 'border-box', padding: '10px 12px', background: '#f9fafb', borderRadius: '12px', border: 'none', outline: 'none', fontSize: '14px', color: '#0f172a' }
                   })
                 )
               ),
@@ -1401,6 +1475,7 @@
         const [selectedYear, setSelectedYear] = useState(now.getFullYear());
         const [selectedMonth, setSelectedMonth] = useState(now.getMonth() + 1);
         const [recordType, setRecordType] = useState('expense');
+        const [selectedSlice, setSelectedSlice] = useState(null);
         
         const totalAmount = getTotalByPeriod(periodType, selectedYear, selectedMonth, recordType);
         const categoryStats = getCategoryStats(periodType, selectedYear, selectedMonth, recordType);
@@ -1421,9 +1496,11 @@
             const percentage = (stat.amount / totalAmount) * 100;
             const angle = (percentage / 100) * 360;
             const startAngle = currentAngle;
+            const midAngle = currentAngle + angle / 2;
             currentAngle += angle;
             const startRad = (startAngle - 90) * (Math.PI / 180);
             const endRad = (currentAngle - 90) * (Math.PI / 180);
+            const midRad = (midAngle - 90) * (Math.PI / 180);
             const cx = 50, cy = 50, radius = 40;
             const x1 = cx + radius * Math.cos(startRad);
             const y1 = cy + radius * Math.sin(startRad);
@@ -1432,17 +1509,21 @@
             const largeArc = percentage > 50 ? 1 : 0;
             const path = `M ${cx} ${cy} L ${x1} ${y1} A ${radius} ${radius} 0 ${largeArc} 1 ${x2} ${y2} Z`;
             const category = getCategoryById(stat.category);
-            return { ...stat, percentage, path, category, cx, cy };
+            return { ...stat, percentage, path, category, cx, cy, midRad };
           });
         }
         
         const maxAmount = sortedStats.length > 0 ? Math.max(...sortedStats.map(s => s.amount)) : 1;
 
-        return React.createElement('div', { className: 'min-h-screen bg-light pb-24' },
-          React.createElement('header', { className: 'pt-8 pb-4 px-4 bg-white sticky top-0 z-10' },
+        return React.createElement('div', { className: 'min-h-screen pb-24 relative overflow-hidden', style: { background: 'linear-gradient(135deg, #f0fdfa 0%, #fdf4ff 30%, #fef9f3 60%, #f0f9ff 100%)' } },
+          // 装饰性背景元素
+          React.createElement('div', { style: { position: 'absolute', top: '-80px', right: '-60px', width: '220px', height: '220px', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(99,102,241,0.15), rgba(168,85,247,0.1))', filter: 'blur(50px)', zIndex: 0 } }),
+          React.createElement('div', { style: { position: 'absolute', top: '80px', left: '-70px', width: '160px', height: '160px', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(78,205,196,0.12), rgba(59,130,246,0.08))', filter: 'blur(40px)', zIndex: 0 } }),
+          React.createElement('div', { style: { position: 'absolute', bottom: '100px', right: '-30px', width: '140px', height: '140px', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(255,159,28,0.1), rgba(236,72,153,0.06))', filter: 'blur(35px)', zIndex: 0 } }),
+          React.createElement('header', { className: 'pt-8 pb-4 px-4 bg-white/80 sticky top-0 z-10', style: { backdropFilter: 'blur(12px)' } },
             React.createElement('h1', { className: 'text-xl font-bold text-dark text-center' }, '收支统计')
           ),
-          React.createElement('div', { className: 'px-4 mt-4' },
+          React.createElement('div', { className: 'px-4 mt-4 relative z-10' },
             React.createElement('div', { className: 'bg-white rounded-2xl p-4 shadow-sm mb-4' },
               React.createElement('div', { className: 'flex items-center justify-between mb-4' },
                 React.createElement('div', { className: 'flex gap-2' },
@@ -1482,20 +1563,46 @@
               ),
               chartType === 'pie' ? React.createElement('div', { className: 'flex flex-col items-center mb-6' },
                 React.createElement('div', { className: 'relative w-64 h-64' },
-                  React.createElement('svg', { viewBox: '0 0 100 100', className: 'w-full h-full' },
-                    pieSegments.map(function(segment, index) { return React.createElement('path', { key: index, d: segment.path, fill: segment.category.color, className: 'transition-all duration-300 hover:opacity-80' }); }),
-                    pieSegments.length > 0 && React.createElement('circle', { cx: '50', cy: '50', r: '25', fill: 'white' })
+                  React.createElement('svg', { viewBox: '0 0 100 100', className: 'w-full h-full', onClick: () => setSelectedSlice(null) },
+                    pieSegments.map(function(segment, index) {
+                      const isSelected = selectedSlice === index;
+                      const isOtherSelected = selectedSlice !== null && !isSelected;
+                      const shiftX = isSelected ? Math.cos(segment.midRad) * 4 : 0;
+                      const shiftY = isSelected ? Math.sin(segment.midRad) * 4 : 0;
+                      return React.createElement('path', {
+                        key: index,
+                        d: segment.path,
+                        fill: segment.category.color,
+                        style: {
+                          transform: `translate(${shiftX}px, ${shiftY}px)`,
+                          transition: 'transform 0.2s ease, opacity 0.2s ease',
+                          opacity: isOtherSelected ? 0.5 : 1,
+                          cursor: 'pointer',
+                          filter: isSelected ? 'brightness(1.1)' : 'saturate(0.7)'
+                        },
+                        onClick: (e) => { e.stopPropagation(); setSelectedSlice(isSelected ? null : index); }
+                      });
+                    }),
+                    pieSegments.length > 0 && React.createElement('circle', { cx: '50', cy: '50', r: '25', fill: 'white', style: { pointerEvents: 'none' } })
                   ),
-                  React.createElement('div', { className: 'absolute inset-0 flex flex-col items-center justify-center' },
-                    React.createElement('span', { className: 'text-lg font-bold text-dark' }, sortedStats.length),
-                    React.createElement('span', { className: 'text-xs text-gray-400' }, '个类别')
+                  React.createElement('div', { className: 'absolute inset-0 flex flex-col items-center justify-center', style: { pointerEvents: 'none' } },
+                    selectedSlice !== null && pieSegments[selectedSlice] ?
+                    React.createElement('div', { style: { display: 'flex', flexDirection: 'column', alignItems: 'center' } },
+                      React.createElement('span', { className: 'text-base font-bold', style: { color: pieSegments[selectedSlice].category.color } }, pieSegments[selectedSlice].category.name),
+                      React.createElement('span', { className: 'text-xs text-gray-400', style: { marginTop: '2px' } }, `${pieSegments[selectedSlice].percentage.toFixed(1)}%`),
+                      React.createElement('span', { className: 'text-xs text-gray-300', style: { marginTop: '2px' } }, `¥${formatAmount(pieSegments[selectedSlice].amount)}`)
+                    ) :
+                    React.createElement('img', {
+                      src: 'assets/cat.png',
+                      alt: '可爱小猫',
+                      style: { width: '85px', height: '85px', objectFit: 'contain' }
+                    })
                   )
                 ),
-                React.createElement('div', { className: 'grid grid-cols-2 gap-2 mt-4 w-full' },
-                  pieSegments.map(function(segment, index) { return React.createElement('div', { key: index, className: 'flex items-center gap-2' },
-                    React.createElement('div', { className: 'w-3 h-3 rounded-full', style: { backgroundColor: segment.category.color } }),
-                    React.createElement('span', { className: 'text-sm text-dark' }, segment.category.name),
-                    React.createElement('span', { className: 'text-xs text-gray-400 ml-auto' }, segment.percentage.toFixed(0) + '%')
+                React.createElement('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px 8px', marginTop: '20px' } },
+                  pieSegments.map(function(segment, index) { return React.createElement('div', { key: index, style: { display: 'flex', alignItems: 'center', gap: '6px' } },
+                    React.createElement('div', { style: { width: '12px', height: '12px', borderRadius: '50%', flexShrink: 0, backgroundColor: segment.category.color, boxShadow: '0 1px 3px rgba(0,0,0,0.1)' } }),
+                    React.createElement('span', { style: { fontSize: '13px', color: '#2C3E50', fontWeight: 500, whiteSpace: 'nowrap' } }, segment.category.name + ' ' + segment.percentage.toFixed(0) + '%')
                   ); })
                 )
               ) : React.createElement('div', { className: 'h-48' },
@@ -1660,11 +1767,15 @@
 
         var hasApiKey = apiKey.trim() !== '';
 
-        return React.createElement('div', { className: 'min-h-screen bg-light pb-24' },
-          React.createElement('header', { className: 'pt-8 pb-4 px-4 bg-white sticky top-0 z-10' },
+        return React.createElement('div', { className: 'min-h-screen pb-24 relative overflow-hidden', style: { background: 'linear-gradient(135deg, #f0fdfa 0%, #fdf4ff 30%, #fef9f3 60%, #f0f9ff 100%)' } },
+          // 装饰性背景元素
+          React.createElement('div', { style: { position: 'absolute', top: '-80px', right: '-60px', width: '220px', height: '220px', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(99,102,241,0.15), rgba(168,85,247,0.1))', filter: 'blur(50px)', zIndex: 0 } }),
+          React.createElement('div', { style: { position: 'absolute', top: '80px', left: '-70px', width: '160px', height: '160px', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(78,205,196,0.12), rgba(59,130,246,0.08))', filter: 'blur(40px)', zIndex: 0 } }),
+          React.createElement('div', { style: { position: 'absolute', bottom: '100px', right: '-30px', width: '140px', height: '140px', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(255,159,28,0.1), rgba(236,72,153,0.06))', filter: 'blur(35px)', zIndex: 0 } }),
+          React.createElement('header', { className: 'pt-8 pb-4 px-4 bg-white/80 sticky top-0 z-10', style: { backdropFilter: 'blur(12px)' } },
             React.createElement('h1', { className: 'text-xl font-bold text-dark text-center' }, '设置')
           ),
-          React.createElement('div', { className: 'px-4 mt-4 space-y-4' },
+          React.createElement('div', { className: 'px-4 mt-4 space-y-4 relative z-10' },
             // 大模型配置卡片
             React.createElement('div', { className: 'bg-white rounded-2xl p-4 shadow-sm' },
               React.createElement('div', { className: 'flex items-center justify-between mb-4' },
@@ -1882,12 +1993,50 @@
             // 头像 + 标题
             React.createElement('div', { className: 'flex flex-col items-center mb-10' },
               React.createElement('div', { className: 'auth-avatar mb-3' },
-                React.createElement('svg', { xmlns: 'http://www.w3.org/2000/svg', width: '48', height: '48', viewBox: '0 0 24 24', fill: 'none', stroke: '#fff', strokeWidth: '1.5', strokeLinecap: 'round', strokeLinejoin: 'round' },
-                  React.createElement('path', { d: 'M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2' }),
-                  React.createElement('circle', { cx: '12', cy: '7', r: '4' })
+                React.createElement('svg', { xmlns: 'http://www.w3.org/2000/svg', width: '40', height: '40', viewBox: '0 0 80 80', fill: 'none' },
+                  // 左耳外
+                  React.createElement('path', { d: 'M20 30 L16 10 L34 22 Z', fill: '#fff', stroke: '#2C3E50', strokeWidth: '2.5', strokeLinejoin: 'round' }),
+                  // 右耳外
+                  React.createElement('path', { d: 'M60 30 L64 10 L46 22 Z', fill: '#fff', stroke: '#2C3E50', strokeWidth: '2.5', strokeLinejoin: 'round' }),
+                  // 左耳内
+                  React.createElement('path', { d: 'M22 25 L20 16 L30 22 Z', fill: '#fbbf24', stroke: '#2C3E50', strokeWidth: '1.5', strokeLinejoin: 'round' }),
+                  // 右耳内
+                  React.createElement('path', { d: 'M58 25 L60 16 L50 22 Z', fill: '#fbbf24', stroke: '#2C3E50', strokeWidth: '1.5', strokeLinejoin: 'round' }),
+                  // 脸
+                  React.createElement('ellipse', { cx: '40', cy: '42', rx: '24', ry: '22', fill: '#fff', stroke: '#2C3E50', strokeWidth: '2.5' }),
+                  // 身体
+                  React.createElement('ellipse', { cx: '40', cy: '68', rx: '20', ry: '12', fill: '#fff', stroke: '#2C3E50', strokeWidth: '2.5' }),
+                  // 眼睛左眼
+                  React.createElement('ellipse', { cx: '30', cy: '40', rx: '5', ry: '6', fill: '#2C3E50' }),
+                  // 眼睛右眼
+                  React.createElement('ellipse', { cx: '50', cy: '40', rx: '5', ry: '6', fill: '#2C3E50' }),
+                  // 左眼高光
+                  React.createElement('ellipse', { cx: '31.5', cy: '38', rx: '1.8', ry: '2.2', fill: '#fff' }),
+                  // 右眼高光
+                  React.createElement('ellipse', { cx: '51.5', cy: '38', rx: '1.8', ry: '2.2', fill: '#fff' }),
+                  // 腮红左
+                  React.createElement('ellipse', { cx: '22', cy: '48', rx: '5', ry: '3', fill: '#fca5a5', opacity: '0.6' }),
+                  // 腮红右
+                  React.createElement('ellipse', { cx: '58', cy: '48', rx: '5', ry: '3', fill: '#fca5a5', opacity: '0.6' }),
+                  // 鼻子
+                  React.createElement('path', { d: 'M37 48 L40 51 L43 48 Z', fill: '#f472b6', stroke: '#2C3E50', strokeWidth: '1.5', strokeLinejoin: 'round' }),
+                  // 嘴巴
+                  React.createElement('path', { d: 'M40 51 Q37 55 34 53', stroke: '#2C3E50', strokeWidth: '1.8', fill: 'none', strokeLinecap: 'round' }),
+                  React.createElement('path', { d: 'M40 51 Q43 55 46 53', stroke: '#2C3E50', strokeWidth: '1.8', fill: 'none', strokeLinecap: 'round' }),
+                  // 胡须左
+                  React.createElement('line', { x1: '14', y1: '48', x2: '24', y2: '48', stroke: '#2C3E50', strokeWidth: '1.5', strokeLinecap: 'round' }),
+                  React.createElement('line', { x1: '14', y1: '51', x2: '24', y2: '50', stroke: '#2C3E50', strokeWidth: '1.5', strokeLinecap: 'round' }),
+                  // 胡须右
+                  React.createElement('line', { x1: '56', y1: '48', x2: '66', y2: '48', stroke: '#2C3E50', strokeWidth: '1.5', strokeLinecap: 'round' }),
+                  React.createElement('line', { x1: '56', y1: '50', x2: '66', y2: '51', stroke: '#2C3E50', strokeWidth: '1.5', strokeLinecap: 'round' }),
+                  // 爪子
+                  React.createElement('ellipse', { cx: '32', cy: '66', rx: '5', ry: '4', fill: '#fff', stroke: '#2C3E50', strokeWidth: '2' }),
+                  React.createElement('ellipse', { cx: '48', cy: '66', rx: '5', ry: '4', fill: '#fff', stroke: '#2C3E50', strokeWidth: '2' })
                 )
               ),
-              React.createElement('h1', { className: 'text-white text-xl font-medium' }, '舒小茂记账')
+              React.createElement('div', { className: 'flex items-center gap-2' },
+                React.createElement('h1', { className: 'text-white text-xl font-medium' }, '舒小茂记账')
+              )
             ),
 
             // 输入框
@@ -1959,7 +2108,7 @@
         }
         var [currentPage, setCurrentPage] = useState('/');
         return React.createElement(RecordsProvider, null,
-          React.createElement('div', { className: 'min-h-screen bg-light' },
+          React.createElement('div', { className: 'min-h-screen bg-light', style: { width: '100%', overflowX: 'hidden' } },
             currentPage === '/' && React.createElement(HomePage, null),
             currentPage === '/bills' && React.createElement(BillsPage, null),
             currentPage === '/stats' && React.createElement(StatsPage, null),
