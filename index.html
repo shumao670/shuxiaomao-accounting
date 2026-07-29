@@ -117,6 +117,8 @@
       .flex-1{flex:1}
       .grid{display:grid}
       .grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}
+      .grid-cols-5{grid-template-columns:repeat(5,minmax(0,1fr))}
       .w-full{width:100%}
       .w-5{width:1.25rem}
       .w-6{width:1.5rem}
@@ -203,6 +205,13 @@
         animation:twinkle 3s infinite ease-in-out;
       }
       @keyframes twinkle{0%,100%{opacity:.3}50%{opacity:1}}
+      @keyframes ripple{0%{transform:translate(-50%,-50%) scale(0.8);opacity:.5}100%{transform:translate(-50%,-50%) scale(2.8);opacity:0}}
+      @keyframes sound-bar{0%,100%{transform:scaleY(.25)}50%{transform:scaleY(1)}}
+      .animate-ripple{animation:ripple 2s ease-out infinite}
+      .animate-sound-bar{animation:sound-bar .7s ease-in-out infinite}
+      .ripple-ring{position:absolute;top:50%;left:50%;width:96px;height:96px;border-radius:50%;border:2px solid rgba(255,123,84,.4);transform:translate(-50%,-50%) scale(.8);pointer-events:none}
+      .ripple-ring:nth-child(2){animation-delay:.6s}
+      .ripple-ring:nth-child(3){animation-delay:1.2s}
       .auth-mountains{
         position:absolute;bottom:0;left:0;right:0;height:180px;pointer-events:none;
       }
@@ -309,6 +318,10 @@
           React.createElement('circle', { cx: '19', cy: '12', r: '1' }),
           React.createElement('circle', { cx: '5', cy: '12', r: '1' })
         ),
+        RotateCcw: (props) => React.createElement('svg', { ...props, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: '2', strokeLinecap: 'round', strokeLinejoin: 'round' },
+          React.createElement('polyline', { points: '1 4 1 10 7 10' }),
+          React.createElement('path', { d: 'M3.51 15a9 9 0 1 0 2.13-9.36L1 10' })
+        ),
         Plus: (props) => React.createElement('svg', { ...props, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: '2' },
           React.createElement('line', { x1: '12', y1: '5', x2: '12', y2: '19' }),
           React.createElement('line', { x1: '5', y1: '12', x2: '19', y2: '12' })
@@ -352,6 +365,31 @@
           React.createElement('path', { d: 'M19 10v2a7 7 0 0 1-14 0v-2' }),
           React.createElement('line', { x1: '12', y1: '19', x2: '12', y2: '23' }),
           React.createElement('line', { x1: '8', y1: '23', x2: '16', y2: '23' })
+        ),
+        DollarSign: (props) => React.createElement('svg', { ...props, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: '2', strokeLinecap: 'round', strokeLinejoin: 'round' },
+          React.createElement('line', { x1: '12', y1: '2', x2: '12', y2: '22' }),
+          React.createElement('path', { d: 'M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6' })
+        ),
+        Star: (props) => React.createElement('svg', { ...props, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: '2', strokeLinecap: 'round', strokeLinejoin: 'round' },
+          React.createElement('polygon', { points: '12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2' })
+        ),
+        BarChartUp: (props) => React.createElement('svg', { ...props, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: '2', strokeLinecap: 'round', strokeLinejoin: 'round' },
+          React.createElement('path', { d: 'M18 20V10' }),
+          React.createElement('path', { d: 'M12 20V4' }),
+          React.createElement('path', { d: 'M6 20v-6' }),
+          React.createElement('path', { d: 'M22 20H2' })
+        ),
+        Gift: (props) => React.createElement('svg', { ...props, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: '2', strokeLinecap: 'round', strokeLinejoin: 'round' },
+          React.createElement('polyline', { points: '20 12 20 22 4 22 4 12' }),
+          React.createElement('rect', { x: '2', y: '7', width: '20', height: '5' }),
+          React.createElement('line', { x1: '12', y1: '22', x2: '12', y2: '7' }),
+          React.createElement('path', { d: 'M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z' }),
+          React.createElement('path', { d: 'M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z' })
+        ),
+        UserSwitch: (props) => React.createElement('svg', { ...props, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: '2', strokeLinecap: 'round', strokeLinejoin: 'round' },
+          React.createElement('path', { d: 'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2' }),
+          React.createElement('circle', { cx: '9', cy: '7', r: '4' }),
+          React.createElement('polyline', { points: '16 11 18 13 22 9' })
         )
       };
 
@@ -362,11 +400,12 @@
         { id: 'entertainment', name: '娱乐', icon: 'Gamepad2', color: '#9B59B6', keywords: ['电影', '游戏'] },
         { id: 'living', name: '居住', icon: 'Home', color: '#3498DB', keywords: ['房租', '水电'] },
         { id: 'medical', name: '医疗', icon: 'Heart', color: '#E74C3C', keywords: ['药', '医院'] },
+        { id: 'refund', name: '退货', icon: 'RotateCcw', color: '#F97316', keywords: ['退款', '退', '退货'] },
         { id: 'education', name: '教育', icon: 'GraduationCap', color: '#1ABC9C', keywords: ['学习', '培训'] },
-        { id: 'salary', name: '工资', icon: 'MoreHorizontal', color: '#27AE60', keywords: ['工资'] },
-        { id: 'bonus', name: '奖金', icon: 'MoreHorizontal', color: '#2ECC71', keywords: ['奖金'] },
-        { id: 'investment', name: '理财', icon: 'MoreHorizontal', color: '#3498DB', keywords: ['理财', '利息'] },
-        { id: 'gift', name: '礼金', icon: 'MoreHorizontal', color: '#9B59B6', keywords: ['红包'] },
+        { id: 'salary', name: '工资', icon: 'DollarSign', color: '#27AE60', type: 'income', keywords: ['工资'] },
+        { id: 'bonus', name: '奖金', icon: 'Star', color: '#2ECC71', type: 'income', keywords: ['奖金'] },
+        { id: 'investment', name: '理财', icon: 'BarChartUp', color: '#3498DB', type: 'income', keywords: ['理财', '利息'] },
+        { id: 'gift', name: '礼金', icon: 'Gift', color: '#9B59B6', type: 'income', keywords: ['红包'] },
         { id: 'other', name: '其他', icon: 'MoreHorizontal', color: '#7F8C8D', keywords: [] }
       ];
 
@@ -907,54 +946,32 @@
           ),
           React.createElement('div', { className: 'flex items-center gap-1 flex-shrink-0' },
             React.createElement('span', { className: `font-bold text-sm ${isIncome ? 'text-green-500' : 'text-red-500'}` }, `${isIncome ? '+' : '-'}${formatAmount(record.amount)}`),
-            onEdit && React.createElement('button', {
-              onClick: onEdit, title: '编辑', 'aria-label': '编辑',
-              style: {
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '24px',
-                height: '24px',
-                borderRadius: '8px',
-                color: '#fff',
-                background: '#7ED7D1',
-                border: 'none',
-                cursor: 'pointer',
-                padding: 0,
-                transition: 'all 0.15s',
-                boxShadow: '0 2px 5px rgba(126,215,209,0.35)',
-                flexShrink: 0
-              },
-              onMouseEnter: e => { e.currentTarget.style.transform = 'scale(1.1)'; e.currentTarget.style.boxShadow = '0 3px 8px rgba(126,215,209,0.45)'; },
-              onMouseLeave: e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 2px 5px rgba(126,215,209,0.35)'; }
-            },
-              React.createElement('svg', { width: '10', height: '10', viewBox: '-4 -4 32 32', fill: 'none', stroke: 'currentColor', strokeWidth: '2.5', strokeLinecap: 'round', strokeLinejoin: 'round' },
-                React.createElement('path', { d: 'M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7' }),
-                React.createElement('path', { d: 'M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z' })
-              )
-            ),
             onDelete && React.createElement('button', {
-              onClick: onDelete, title: '删除', 'aria-label': '删除',
+              onClick: function(e) { e.stopPropagation(); if (window.confirm('确认删除这条记录？')) onDelete(); },
+              title: '删除', 'aria-label': '删除',
               style: {
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                width: '24px',
-                height: '24px',
-                borderRadius: '8px',
+                width: '32px',
+                height: '32px',
+                borderRadius: '10px',
                 color: '#fff',
                 background: '#F28C82',
                 border: 'none',
+                outline: 'none',
                 cursor: 'pointer',
                 padding: 0,
                 transition: 'all 0.15s',
                 boxShadow: '0 2px 5px rgba(242,140,130,0.35)',
-                flexShrink: 0
+                flexShrink: 0,
+                touchAction: 'manipulation',
+                zIndex: 5
               },
               onMouseEnter: e => { e.currentTarget.style.transform = 'scale(1.1)'; e.currentTarget.style.boxShadow = '0 3px 8px rgba(242,140,130,0.45)'; },
               onMouseLeave: e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 2px 5px rgba(242,140,130,0.35)'; }
             },
-              React.createElement('svg', { width: '10', height: '10', viewBox: '-4 -4 32 32', fill: 'none', stroke: 'currentColor', strokeWidth: '2.5', strokeLinecap: 'round', strokeLinejoin: 'round' },
+              React.createElement('svg', { width: '14', height: '14', viewBox: '-4 -4 32 32', fill: 'none', stroke: 'currentColor', strokeWidth: '2.5', strokeLinecap: 'round', strokeLinejoin: 'round' },
                 React.createElement('path', { d: 'M3 6h18' }),
                 React.createElement('path', { d: 'M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6' }),
                 React.createElement('path', { d: 'M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2' })
@@ -989,67 +1006,39 @@
           });
         };
 
-        const expenseCategories = categories.filter(c => c.type === 'expense' || !c.type);
-        const incomeCategories = categories.filter(c => c.type === 'income');
-        const showCategories = type === 'income' ? incomeCategories : expenseCategories;
+        const showCategories = categories;
 
         return React.createElement('div', { className: 'fixed inset-0 z-50 flex items-end justify-center bg-black/40', onClick: onClose },
           React.createElement('div', { className: 'w-full max-w-md bg-white rounded-t-3xl animate-slide-up max-h-[85vh] overflow-y-auto', onClick: e => e.stopPropagation() },
             // 标题栏
-            React.createElement('div', { className: 'flex items-center justify-between p-4 border-b border-gray-100 sticky top-0 bg-white z-10' },
-              React.createElement('button', { onClick: onClose, className: 'text-gray-400 text-sm' }, '取消'),
+            React.createElement('div', { className: 'flex items-center justify-between p-5 border-b border-gray-100 sticky top-0 bg-white z-10' },
+              React.createElement('button', {
+                onClick: onClose,
+                className: 'text-gray-500 text-base font-medium',
+                style: { border: 'none', outline: 'none', background: 'transparent', padding: '6px 14px', borderRadius: '10px', cursor: 'pointer' }
+              }, '取消'),
               React.createElement('h3', { className: 'text-base font-bold text-dark' }, '编辑记录'),
-              React.createElement('button', { onClick: handleSave, className: 'text-primary text-sm font-medium' }, '保存')
+              React.createElement('div', { style: { width: '62px' } })
             ),
             // 表单
-            React.createElement('div', { className: 'p-4 space-y-4' },
-              // 收支类型切换
-              React.createElement('div', { className: 'flex bg-gray-100 rounded-xl p-1' },
-                React.createElement('button', { onClick: () => setType('expense'), className: `flex-1 py-2 rounded-lg text-sm font-medium transition-all ${type === 'expense' ? 'bg-white text-red-500 shadow-sm' : 'text-gray-500'}` }, '支出'),
-                React.createElement('button', { onClick: () => setType('income'), className: `flex-1 py-2 rounded-lg text-sm font-medium transition-all ${type === 'income' ? 'bg-white text-green-500 shadow-sm' : 'text-gray-500'}` }, '收入')
+            React.createElement('div', { className: 'p-5 space-y-4' },
+              // 收支类型切换 — 长条形胶囊
+              React.createElement('div', { className: 'flex gap-2' },
+                React.createElement('button', { onClick: () => setType('expense'), style: { border: 'none', outline: 'none' }, className: `flex-1 py-2 rounded-full text-sm font-medium transition-all ${type === 'expense' ? 'bg-red-500 text-white shadow-sm' : 'bg-gray-100 text-gray-500'}` }, '支出'),
+                React.createElement('button', { onClick: () => setType('income'), style: { border: 'none', outline: 'none' }, className: `flex-1 py-2 rounded-full text-sm font-medium transition-all ${type === 'income' ? 'bg-green-500 text-white shadow-sm' : 'bg-gray-100 text-gray-500'}` }, '收入')
               ),
               // 金额
               React.createElement('div', null,
                 React.createElement('label', { className: 'block text-sm text-gray-600 mb-1' }, '金额'),
                 React.createElement('div', { className: 'flex items-center' },
-                  React.createElement('span', { className: 'text-xl font-bold text-dark mr-2' }, '¥'),
+                  React.createElement('span', { className: 'text-lg font-bold text-dark mr-2' }, '¥'),
                   React.createElement('input', {
                     type: 'number',
                     value: amountStr,
                     onChange: e => { setAmountStr(e.target.value); setError(''); },
                     step: '0.01',
                     min: '0',
-                    className: 'flex-1 text-2xl font-bold text-dark bg-gray-50 rounded-xl px-3 py-2 border-none outline-none'
-                  })
-                )
-              ),
-              // 描述
-              React.createElement('div', null,
-                React.createElement('label', { className: 'block text-sm text-gray-600 mb-1' }, '描述'),
-                React.createElement('input', {
-                  type: 'text',
-                  value: description,
-                  onChange: e => { setDescription(e.target.value); setError(''); },
-                  placeholder: '这笔钱花在哪了？',
-                  className: 'w-full px-3 py-2.5 bg-gray-50 rounded-xl border-none outline-none text-dark placeholder-gray-400 text-sm'
-                })
-              ),
-              // 类别
-              React.createElement('div', null,
-                React.createElement('label', { className: 'block text-sm text-gray-600 mb-2' }, '类别'),
-                React.createElement('div', { className: 'grid grid-cols-4 gap-2' },
-                  showCategories.map(function(cat) {
-                    const active = category === cat.id;
-                    return React.createElement('button', {
-                      key: cat.id,
-                      onClick: () => setCategory(cat.id),
-                      className: 'flex flex-col items-center gap-1 p-2 rounded-xl transition-all ' + (active ? 'bg-primary/10' : 'bg-gray-50 hover:bg-gray-100')
-                    },
-                      React.createElement('div', { className: 'w-8 h-8 rounded-full flex items-center justify-center', style: { backgroundColor: `${cat.color}20` } },
-                        React.createElement(CategoryIcon, { icon: cat.icon, color: cat.color, size: 18 })
-                      ),
-                      React.createElement('span', { className: 'text-xs ' + (active ? 'text-primary font-medium' : 'text-gray-500') }, cat.name)
-                    );
+                    className: 'flex-1 text-lg font-bold text-dark bg-gray-50 rounded-xl px-3 py-2 border-none outline-none'
                   })
                 )
               ),
@@ -1076,6 +1065,51 @@
                     style: { width: '100%', boxSizing: 'border-box' }
                   })
                 )
+              ),
+              // 描述
+              React.createElement('div', null,
+                React.createElement('label', { className: 'block text-sm text-gray-600 mb-1' }, '描述'),
+                React.createElement('input', {
+                  type: 'text',
+                  value: description,
+                  onChange: e => { setDescription(e.target.value); setError(''); },
+                  placeholder: '这笔钱花在哪了？',
+                  className: 'w-full px-3 py-2.5 bg-gray-50 rounded-xl border-none outline-none text-dark placeholder-gray-400 text-sm'
+                })
+              ),
+              // 类别 — 无外框，单行多列
+              React.createElement('div', null,
+                React.createElement('label', { className: 'block text-sm text-gray-600 mb-2' }, '类别'),
+                React.createElement('div', { className: 'grid grid-cols-5 gap-2' },
+                  showCategories.map(function(cat) {
+                    const active = category === cat.id;
+                    return React.createElement('button', {
+                      key: cat.id,
+                      onClick: () => setCategory(cat.id),
+                      className: 'flex flex-col items-center gap-1 py-2 transition-all bg-transparent border-none',
+                      style: { background: 'none', border: 'none' }
+                    },
+                      React.createElement('div', { className: 'w-9 h-9 rounded-full flex items-center justify-center transition-all',
+                        style: {
+                          backgroundColor: active ? cat.color : `${cat.color}15`,
+                          transform: active ? 'scale(1.05)' : 'scale(1)',
+                          boxShadow: active ? `0 2px 8px ${cat.color}40` : 'none'
+                        }
+                      },
+                        React.createElement(CategoryIcon, { icon: cat.icon, color: active ? '#fff' : cat.color, size: 18 })
+                      ),
+                      React.createElement('span', { className: `text-xs transition-all ${active ? 'font-semibold' : ''}`, style: { color: active ? cat.color : '#9ca3af' } }, cat.name)
+                    );
+                  })
+                )
+              ),
+              // 保存按钮
+              React.createElement('div', { className: 'pt-2' },
+                React.createElement('button', {
+                  onClick: handleSave,
+                  className: 'w-full text-white text-base font-medium',
+                  style: { border: 'none', outline: 'none', background: '#7ED7D1', padding: '12px 0', borderRadius: '12px', cursor: 'pointer', boxShadow: '0 2px 8px rgba(126,215,209,0.35)' }
+                }, '保存')
               ),
               // 错误提示
               error && React.createElement('p', { className: 'text-xs text-red-500' }, '⚠ ' + error)
@@ -1438,8 +1472,8 @@
           }
         };
 
-        return React.createElement('div', { className: 'min-h-screen pb-24 relative overflow-hidden', style: { background: 'linear-gradient(135deg, #f0fdfa 0%, #fdf4ff 30%, #fef9f3 60%, #f0f9ff 100%)' } },
-          // 装饰性背景元素 - 顶部右侧淡紫色
+        return React.createElement('div', { className: 'min-h-screen pb-32 relative', style: { background: 'linear-gradient(135deg, #f0fdfa 0%, #fdf4ff 30%, #fef9f3 60%, #f0f9ff 100%)' } },
+          // 装饰性背景元素 - 顶部右侧淡紫色（首页）
           React.createElement('div', { style: { position: 'absolute', top: '-80px', right: '-60px', width: '220px', height: '220px', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(99,102,241,0.15), rgba(168,85,247,0.1))', filter: 'blur(50px)', zIndex: 0 } }),
           // 装饰性背景元素 - 顶部左侧淡青色
           React.createElement('div', { style: { position: 'absolute', top: '80px', left: '-70px', width: '160px', height: '160px', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(78,205,196,0.12), rgba(59,130,246,0.08))', filter: 'blur(40px)', zIndex: 0 } }),
@@ -1524,47 +1558,64 @@
               )
             )
           ),
-          React.createElement('div', { className: 'flex justify-center mt-8', style: { position: 'relative', zIndex: 20 } },
-            React.createElement('div', { className: 'flex flex-col items-center gap-2' },
-              React.createElement('button', {
-                onMouseDown: handleVoiceStart,
-                onMouseUp: handleVoiceEnd,
-                onMouseLeave: handleVoiceEnd,
-                onTouchStart: handleVoiceStart,
-                onTouchEnd: handleVoiceEnd,
-                onTouchCancel: handleVoiceEnd,
-                style: {
-                  WebkitTouchCallout: 'none',
-                  WebkitUserSelect: 'none',
-                  touchAction: 'none',
-                  pointerEvents: 'auto',
-                  width: isRecording ? '112px' : '96px',
-                  height: isRecording ? '112px' : '96px',
-                  borderRadius: '50%',
-                  backgroundImage: isRecording ? 'none' : 'linear-gradient(to bottom right, #4ECDC4, rgba(78,205,196,0.8))',
-                  backgroundColor: isRecording ? '#ef4444' : 'transparent',
-                  color: '#fff',
-                  boxShadow: isRecording ? '0 10px 15px -3px rgba(239,68,68,0.4), 0 4px 6px -4px rgba(239,68,68,0.4)' : '0 10px 15px -3px rgba(78,205,196,0.3), 0 4px 6px -4px rgba(78,205,196,0.3)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  transition: 'all 0.3s',
-                  transform: isRecording ? 'scale(1.1)' : 'scale(1)',
-                  border: 'none',
-                  cursor: 'pointer',
-                  outline: 'none',
-                  position: 'relative',
-                  zIndex: 20
-                }
-              },
-              React.createElement(icons.Mic, { size: isRecording ? 36 : 32 })
+          React.createElement('div', { className: 'flex justify-center mt-10', style: { position: 'relative', zIndex: 20 } },
+            React.createElement('div', { className: 'flex flex-col items-center gap-5' },
+              // 按钮 + 波纹
+              React.createElement('div', { style: { position: 'relative', width: '140px', height: '140px', display: 'flex', alignItems: 'center', justifyContent: 'center' } },
+                // 波纹环（录音时）
+                isRecording && React.createElement('div', { className: 'ripple-ring animate-ripple' }),
+                isRecording && React.createElement('div', { className: 'ripple-ring animate-ripple' }),
+                isRecording && React.createElement('div', { className: 'ripple-ring animate-ripple' }),
+                // 麦克风按钮
+                React.createElement('button', {
+                  onMouseDown: handleVoiceStart,
+                  onMouseUp: handleVoiceEnd,
+                  onMouseLeave: handleVoiceEnd,
+                  onTouchStart: handleVoiceStart,
+                  onTouchEnd: handleVoiceEnd,
+                  onTouchCancel: handleVoiceEnd,
+                  style: {
+                    WebkitTouchCallout: 'none',
+                    WebkitUserSelect: 'none',
+                    touchAction: 'none',
+                    pointerEvents: 'auto',
+                    width: '96px',
+                    height: '96px',
+                    borderRadius: '50%',
+                    backgroundColor: '#FF7B54',
+                    color: '#fff',
+                    boxShadow: isRecording ? '0 8px 28px rgba(255,123,84,0.5)' : '0 8px 24px rgba(255,123,84,0.35)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    transition: 'all 0.3s',
+                    transform: isRecording ? 'scale(1.05)' : 'scale(1)',
+                    border: 'none',
+                    cursor: 'pointer',
+                    outline: 'none',
+                    position: 'relative',
+                    zIndex: 2
+                  }
+                },
+                React.createElement(icons.Mic, { size: isRecording ? 40 : 36 })
+                )
               ),
-              isRecording && React.createElement('div', { className: 'flex gap-1' },
-                React.createElement('span', { className: 'w-2 h-2 rounded-full bg-red-500 animate-bounce', style: { animationDelay: '0s' } }),
-                React.createElement('span', { className: 'w-2 h-2 rounded-full bg-red-500 animate-bounce', style: { animationDelay: '0.15s' } }),
-                React.createElement('span', { className: 'w-2 h-2 rounded-full bg-red-500 animate-bounce', style: { animationDelay: '0.3s' } })
+              // 音波条（录音时）
+              isRecording && React.createElement('div', { className: 'flex items-end gap-[4px] h-6' },
+                [0, 0.15, 0.05, 0.2, 0.1, 0.25, 0.08, 0.18, 0.12].map((delay, i) =>
+                  React.createElement('span', {
+                    key: i,
+                    className: 'animate-sound-bar rounded-full',
+                    style: { width: '4px', height: '100%', backgroundColor: '#FF7B54', animationDelay: `${delay}s`, opacity: 0.7 }
+                  })
+                )
               ),
+              // 文字提示
+              React.createElement('div', { className: 'text-center' },
+                React.createElement('p', { className: 'text-sm font-medium', style: { color: '#FF7B54' } }, isRecording ? '正在聆听...' : '点击麦克风开始录音'),
+                isRecording && React.createElement('p', { className: 'text-xs text-gray-400 mt-1' }, 'AI 正在分析金额、标题、分类和时间...')
+              ),
+              // 录音结果文字
               recordingText && !isRecording && React.createElement('p', { className: 'text-sm text-dark bg-white px-3 py-1.5 rounded-full shadow-sm max-w-xs truncate' }, recordingText)
             )
           ),
@@ -1669,8 +1720,11 @@
                 React.createElement('button', { onClick: () => setRecordType('income'), style: { border: 'none', outline: 'none' }, className: `flex-1 py-2 rounded-full text-sm font-medium transition-all ${recordType === 'income' ? 'bg-green-500 text-white shadow-sm' : 'bg-gray-100 text-gray-500'}` }, '收入')
               ),
               React.createElement('button', {
-                onClick: () => setShowFilters(!showFilters),
-                className: 'flex items-center gap-1 px-3 py-2 bg-gray-100 rounded-full text-sm text-gray-600 flex-shrink-0 relative',
+                onClick: () => {
+                  if (showFilters) { resetFilters(); }
+                  setShowFilters(!showFilters);
+                },
+                className: `flex items-center gap-1 px-3 py-2 rounded-full text-sm flex-shrink-0 relative transition-all ${(showFilters || activeFilterCount > 0) ? 'bg-primary text-white shadow-sm' : 'bg-gray-100 text-gray-600'}`,
                 style: { border: 'none', outline: 'none' }
               },
                 React.createElement('svg', { width: '16', height: '16', viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: '2', strokeLinecap: 'round', strokeLinejoin: 'round' },
@@ -1686,13 +1740,49 @@
               // 类别筛选
               React.createElement('div', null,
                 React.createElement('label', { className: 'block text-sm text-gray-600 mb-2' }, '类别'),
-                React.createElement('select', {
-                  value: selectedCategory || '',
-                  onChange: function(e) { setSelectedCategory(e.target.value || null); },
-                  className: 'w-full px-3 py-2.5 bg-gray-50 border-none rounded-xl outline-none focus:ring-2 focus:ring-primary/30 text-dark text-sm appearance-none'
-                },
-                  React.createElement('option', { value: '' }, '全部类别'),
-                  categories.map(function(cat) { return React.createElement('option', { key: cat.id, value: cat.id }, cat.name); })
+                React.createElement('div', { className: 'grid grid-cols-5 gap-2' },
+                  // 「全部」按钮
+                  React.createElement('button', {
+                    onClick: () => setSelectedCategory(null),
+                    style: { background: 'none', border: 'none' },
+                    className: 'flex flex-col items-center gap-1 py-2 transition-all'
+                  },
+                    React.createElement('div', { className: 'w-9 h-9 rounded-full flex items-center justify-center transition-all',
+                      style: {
+                        backgroundColor: !selectedCategory ? '#7ED7D1' : '#f3f4f6',
+                        transform: !selectedCategory ? 'scale(1.05)' : 'scale(1)',
+                        boxShadow: !selectedCategory ? '0 2px 8px rgba(126,215,209,0.35)' : 'none'
+                      }
+                    },
+                      React.createElement('svg', { width: '18', height: '18', viewBox: '0 0 24 24', fill: 'none', stroke: !selectedCategory ? '#fff' : '#9ca3af', strokeWidth: '2', strokeLinecap: 'round', strokeLinejoin: 'round' },
+                        React.createElement('rect', { x: '3', y: '3', width: '7', height: '7' }),
+                        React.createElement('rect', { x: '14', y: '3', width: '7', height: '7' }),
+                        React.createElement('rect', { x: '3', y: '14', width: '7', height: '7' }),
+                        React.createElement('rect', { x: '14', y: '14', width: '7', height: '7' })
+                      )
+                    ),
+                    React.createElement('span', { className: `text-xs transition-all ${!selectedCategory ? 'font-semibold' : ''}`, style: { color: !selectedCategory ? '#7ED7D1' : '#9ca3af' } }, '全部')
+                  ),
+                  categories.map(function(cat) {
+                    const active = selectedCategory === cat.id;
+                    return React.createElement('button', {
+                      key: cat.id,
+                      onClick: () => setSelectedCategory(active ? null : cat.id),
+                      className: 'flex flex-col items-center gap-1 py-2 transition-all bg-transparent border-none',
+                      style: { background: 'none', border: 'none' }
+                    },
+                      React.createElement('div', { className: 'w-9 h-9 rounded-full flex items-center justify-center transition-all',
+                        style: {
+                          backgroundColor: active ? cat.color : `${cat.color}15`,
+                          transform: active ? 'scale(1.05)' : 'scale(1)',
+                          boxShadow: active ? `0 2px 8px ${cat.color}40` : 'none'
+                        }
+                      },
+                        React.createElement(CategoryIcon, { icon: cat.icon, color: active ? '#fff' : cat.color, size: 18 })
+                      ),
+                      React.createElement('span', { className: `text-xs transition-all ${active ? 'font-semibold' : ''}`, style: { color: active ? cat.color : '#9ca3af' } }, cat.name)
+                    );
+                  })
                 )
               ),
               // 日期范围
@@ -1729,11 +1819,6 @@
                   })
                 )
               ),
-              // 重置按钮
-              activeFilterCount > 0 && React.createElement('button', {
-                onClick: resetFilters,
-                className: 'w-full py-2 text-sm text-gray-500 hover:text-primary transition-colors'
-              }, '重置筛选条件')
             ),
 
             // 结果统计
@@ -1784,7 +1869,24 @@
         const [selectedMonth, setSelectedMonth] = useState(now.getMonth() + 1);
         const [recordType, setRecordType] = useState('expense');
         const [selectedSlice, setSelectedSlice] = useState(null);
+        const [openDropdown, setOpenDropdown] = useState(null);
+        const dropdownRef = React.useRef(null);
         
+        // 点击下拉外部区域关闭
+        React.useEffect(() => {
+          if (!openDropdown) return;
+          const handler = (e) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+              setOpenDropdown(null);
+            }
+          };
+          document.addEventListener('mousedown', handler);
+          document.addEventListener('touchstart', handler);
+          return () => {
+            document.removeEventListener('mousedown', handler);
+            document.removeEventListener('touchstart', handler);
+          };
+        }, [openDropdown]);
         const totalAmount = getTotalByPeriod(periodType, selectedYear, selectedMonth, recordType);
         const categoryStats = getCategoryStats(periodType, selectedYear, selectedMonth, recordType);
         const sortedStats = [...categoryStats].sort((a, b) => b.amount - a.amount);
@@ -1834,26 +1936,67 @@
           React.createElement('div', { className: 'px-4 mt-4 relative z-10' },
             React.createElement('div', { className: 'bg-white rounded-2xl p-4 shadow-sm mb-4' },
               React.createElement('div', { className: 'flex items-center justify-between mb-4' },
-                React.createElement('div', { className: 'flex gap-2' },
-                  React.createElement('button', { onClick: () => setRecordType('expense'), style: { border: 'none', outline: 'none' }, className: `px-4 py-2 rounded-lg text-sm font-medium transition-all ${recordType === 'expense' ? 'bg-red-500 text-white' : 'bg-gray-100 text-gray-600'}` }, '支出'),
-                  React.createElement('button', { onClick: () => setRecordType('income'), style: { border: 'none', outline: 'none' }, className: `px-4 py-2 rounded-lg text-sm font-medium transition-all ${recordType === 'income' ? 'bg-green-500 text-white' : 'bg-gray-100 text-gray-600'}` }, '收入')
+                React.createElement('div', { className: 'flex gap-2 flex-1' },
+                  React.createElement('button', { onClick: () => setRecordType('expense'), style: { border: 'none', outline: 'none' }, className: `flex-1 py-2 px-5 rounded-full text-sm font-medium transition-all ${recordType === 'expense' ? 'bg-red-500 text-white shadow-sm' : 'bg-gray-100 text-gray-500'}` }, '支出'),
+                  React.createElement('button', { onClick: () => setRecordType('income'), style: { border: 'none', outline: 'none' }, className: `flex-1 py-2 px-5 rounded-full text-sm font-medium transition-all ${recordType === 'income' ? 'bg-green-500 text-white shadow-sm' : 'bg-gray-100 text-gray-500'}` }, '收入')
                 ),
-                React.createElement('div', { className: 'flex gap-2' },
-                  React.createElement('button', { onClick: () => setChartType('pie'), style: { border: 'none', outline: 'none' }, className: `px-4 py-2 rounded-lg text-sm font-medium transition-all ${chartType === 'pie' ? 'bg-primary text-white' : 'bg-gray-100 text-gray-600'}` }, '扇形图'),
-                  React.createElement('button', { onClick: () => setChartType('bar'), style: { border: 'none', outline: 'none' }, className: `px-4 py-2 rounded-lg text-sm font-medium transition-all ${chartType === 'bar' ? 'bg-primary text-white' : 'bg-gray-100 text-gray-600'}` }, '柱状图')
+                React.createElement('div', { className: 'flex gap-2 flex-1' },
+                  React.createElement('button', { onClick: () => setChartType('pie'), style: { border: 'none', outline: 'none' }, className: `flex-1 py-2 px-5 rounded-full text-sm font-medium transition-all ${chartType === 'pie' ? 'bg-primary text-white shadow-sm' : 'bg-gray-100 text-gray-500'}` }, '扇形图'),
+                  React.createElement('button', { onClick: () => setChartType('bar'), style: { border: 'none', outline: 'none' }, className: `flex-1 py-2 px-5 rounded-full text-sm font-medium transition-all ${chartType === 'bar' ? 'bg-primary text-white shadow-sm' : 'bg-gray-100 text-gray-500'}` }, '柱状图')
                 )
               ),
               React.createElement('div', { className: 'flex items-center justify-between mb-4' },
-                React.createElement('select', { value: periodType, onChange: (e) => setPeriodType(e.target.value), className: 'px-3 py-2 rounded-lg text-sm outline-none focus:ring-2 focus:ring-primary/30 bg-gray-50', style: { border: 'none' } },
-                  React.createElement('option', { value: 'month' }, '月度'),
-                  React.createElement('option', { value: 'year' }, '年度')
+                // 月度/年度 — 胶囊按钮，点击即生效
+                React.createElement('div', { className: 'flex gap-1' },
+                  React.createElement('button', {
+                    onClick: () => setPeriodType('month'),
+                    style: { border: 'none', outline: 'none' },
+                    className: `py-2 px-4 rounded-lg text-sm font-medium transition-all ${periodType === 'month' ? 'bg-primary text-white shadow-sm' : 'bg-gray-100 text-gray-500'}`
+                  }, '月度'),
+                  React.createElement('button', {
+                    onClick: () => setPeriodType('year'),
+                    style: { border: 'none', outline: 'none' },
+                    className: `py-2 px-4 rounded-lg text-sm font-medium transition-all ${periodType === 'year' ? 'bg-primary text-white shadow-sm' : 'bg-gray-100 text-gray-500'}`
+                  }, '年度')
                 ),
-                React.createElement('div', { className: 'flex items-center gap-2' },
-                  React.createElement('select', { value: selectedYear, onChange: (e) => setSelectedYear(parseInt(e.target.value)), className: 'px-3 py-2 rounded-lg text-sm outline-none focus:ring-2 focus:ring-primary/30 bg-gray-50', style: { border: 'none' } },
-                    years.map(year => React.createElement('option', { key: year, value: year }, `${year}年`))
+                React.createElement('div', { ref: dropdownRef, className: 'flex items-center gap-2' },
+                  // 年份下拉 — 点击展开，再点即选
+                  React.createElement('div', { className: 'relative' },
+                    React.createElement('button', {
+                      onClick: () => setOpenDropdown(openDropdown === 'year' ? null : 'year'),
+                      style: { border: 'none', outline: 'none' },
+                      className: 'py-2 px-4 rounded-lg text-sm font-medium bg-gray-100 text-gray-600 transition-all'
+                    }, `${selectedYear}年 ▾`),
+                    openDropdown === 'year' && React.createElement('div', {
+                      className: 'absolute top-full mt-1 right-0 bg-white rounded-xl shadow-lg border border-gray-100 z-50',
+                      style: { minWidth: '80px', paddingTop: '6px', paddingBottom: '6px' }
+                    },
+                      years.map(year => React.createElement('button', {
+                        key: year,
+                        onClick: () => { setSelectedYear(year); setOpenDropdown(null); },
+                        style: { border: 'none', outline: 'none', background: 'transparent' },
+                        className: `block w-full text-left px-4 py-3 text-sm ${year === selectedYear ? 'text-primary font-semibold' : 'text-gray-600'} hover:bg-gray-50`
+                      }, `${year}年`))
+                    )
                   ),
-                  periodType === 'month' && React.createElement('select', { value: selectedMonth, onChange: (e) => setSelectedMonth(parseInt(e.target.value)), className: 'px-3 py-2 rounded-lg text-sm outline-none focus:ring-2 focus:ring-primary/30 bg-gray-50', style: { border: 'none' } },
-                    months.map(month => React.createElement('option', { key: month, value: month }, `${month}月`))
+                  // 月份下拉 — 仅月度模式下显示，点击展开，再点即选
+                  periodType === 'month' && React.createElement('div', { className: 'relative' },
+                    React.createElement('button', {
+                      onClick: () => setOpenDropdown(openDropdown === 'month' ? null : 'month'),
+                      style: { border: 'none', outline: 'none' },
+                      className: 'py-2 px-4 rounded-lg text-sm font-medium bg-gray-100 text-gray-600 transition-all'
+                    }, `${selectedMonth}月 ▾`),
+                    openDropdown === 'month' && React.createElement('div', {
+                      className: 'absolute top-full mt-1 right-0 bg-white rounded-xl shadow-lg border border-gray-100 z-50',
+                      style: { minWidth: '80px', paddingTop: '6px', paddingBottom: '6px' }
+                    },
+                      months.map(month => React.createElement('button', {
+                        key: month,
+                        onClick: () => { setSelectedMonth(month); setOpenDropdown(null); },
+                        style: { border: 'none', outline: 'none', background: 'transparent' },
+                        className: `block w-full text-left px-4 py-3 text-sm ${month === selectedMonth ? 'text-primary font-semibold' : 'text-gray-600'} hover:bg-gray-50`
+                      }, `${month}月`))
+                    )
                   )
                 )
               )
@@ -1915,7 +2058,6 @@
                 )
               ) : React.createElement('div', { className: 'h-48' },
                 React.createElement('svg', { viewBox: '0 0 300 150', className: 'w-full h-full' },
-                  React.createElement('line', { x1: '0', y1: '130', x2: '300', y2: '130', stroke: '#E5E7EB', strokeWidth: '2' }),
                   sortedStats.map(function(stat, index) {
                     var category = getCategoryById(stat.category);
                     var barHeight = (stat.amount / maxAmount) * 100;
@@ -1923,7 +2065,7 @@
                     return React.createElement('g', { key: stat.category },
                       React.createElement('rect', { x: x, y: 130 - barHeight, width: '25', height: barHeight, fill: category.color, rx: '4', className: 'transition-all duration-300 hover:opacity-80' }),
                       React.createElement('text', { x: x + 12.5, y: 140, textAnchor: 'middle', className: 'text-xs fill-gray-400' }, category.name),
-                      React.createElement('text', { x: x + 12.5, y: 130 - barHeight - 5, textAnchor: 'middle', className: 'text-xs fill-gray-600 font-medium' }, formatAmount(stat.amount))
+                      React.createElement('text', { x: x + 12.5, y: 130 - barHeight - 5, textAnchor: 'middle', style: { fontSize: '10px', fill: '#6B7280', fontWeight: 500 } }, formatAmount(stat.amount))
                     );
                   })
                 )
@@ -1965,6 +2107,7 @@
         // testResult: null | { ok: true, message } | { ok: false, message }
         var [testResult, setTestResult] = useState(null);
         var [showKey, setShowKey] = useState(false);
+        var [confirmDialog, setConfirmDialog] = useState(null); // null | { type: 'switch' | 'logout' }
 
         // 选择预设时自动填入 baseUrl / defaultModel，且不覆盖用户已填的密钥
         var handlePresetChange = function(id) {
@@ -2130,26 +2273,21 @@
               // API Key
               React.createElement('div', { className: 'mb-1' },
                 React.createElement('label', { className: 'block text-sm text-gray-600 mb-1' }, 'API Key'),
-                React.createElement('div', { className: 'relative' },
+                React.createElement('div', { className: 'relative overflow-hidden rounded-xl' },
                   React.createElement('input', {
                     type: showKey ? 'text' : 'password',
                     value: apiKey,
                     onChange: function(e) { setApiKey(e.target.value); setTestResult(null); },
                     placeholder: '在此输入你的 API Key...',
-                    className: 'w-full px-3 py-2.5 pr-20 bg-gray-50 rounded-xl border-none outline-none text-dark placeholder-gray-400 text-sm font-mono'
+                    className: 'w-full px-3 py-2.5 pr-10 bg-gray-50 rounded-xl border-none outline-none text-dark placeholder-gray-400 text-sm font-mono',
+                    style: { overflow: 'hidden', textOverflow: 'ellipsis' }
                   }),
-                  React.createElement('div', { className: 'absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-2' },
-                    React.createElement('button', {
-                      type: 'button',
-                      onClick: function() { setShowKey(!showKey); },
-                      className: 'text-xs text-gray-500 hover:text-primary px-1'
-                    }, showKey ? '隐藏' : '显示'),
-                    apiKey && React.createElement('button', {
-                      type: 'button',
-                      onClick: function() { setApiKey(''); setTestResult(null); },
-                      className: 'text-xs text-gray-400 hover:text-red-400 px-1'
-                    }, '清除')
-                  )
+                  apiKey && React.createElement('button', {
+                    type: 'button',
+                    onClick: function() { setApiKey(''); setTestResult(null); },
+                    style: { border: 'none', outline: 'none', background: 'transparent', position: 'absolute', right: '8px', top: '50%', transform: 'translateY(-50%)' },
+                    className: 'text-gray-400 hover:text-gray-600 flex items-center justify-center'
+                  }, React.createElement(icons.X, { size: 16 }))
                 )
               ),
               React.createElement('p', { className: 'text-xs text-gray-400 mt-1' }, '密钥仅存储在本地浏览器 (localStorage)，不会上传到任何服务器。'),
@@ -2159,13 +2297,15 @@
                 React.createElement('button', {
                   onClick: handleTest,
                   disabled: testing,
-                  className: 'flex-1 py-2.5 rounded-xl font-medium transition-all duration-200 flex items-center justify-center gap-1.5 text-sm border ' + (testing ? 'border-gray-200 text-gray-400 cursor-not-allowed' : 'border-primary text-primary hover:bg-primary/5 active:scale-[0.98]')
+                  style: { border: 'none', outline: 'none' },
+                  className: 'flex-1 py-2.5 rounded-xl font-medium transition-all duration-200 flex items-center justify-center gap-1.5 text-sm ' + (testing ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-primary/10 text-primary hover:bg-primary/20 active:scale-[0.98]')
                 }, testing
                   ? React.createElement(React.Fragment, null, React.createElement('svg', { className: 'animate-spin', style: { width: '14px', height: '14px' }, xmlns: 'http://www.w3.org/2000/svg', fill: 'none', viewBox: '0 0 24 24' }, React.createElement('circle', { style: { opacity: 0.25 }, cx: '12', cy: '12', r: '10', stroke: 'currentColor', strokeWidth: '4' }), React.createElement('path', { style: { opacity: 0.75 }, fill: 'currentColor', d: 'M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z' })), '测试中...')
                   : React.createElement(React.Fragment, null, '🔗 测试连接')
                 ),
                 React.createElement('button', {
                   onClick: handleSave,
+                  style: { border: 'none', outline: 'none' },
                   className: 'flex-1 py-2.5 rounded-xl font-medium transition-all duration-200 text-sm ' + (saved ? 'bg-green-500 text-white' : 'bg-primary text-white hover:bg-primary/90 active:scale-[0.98]')
                 }, saved ? '✓ 已保存' : '保存配置')
               ),
@@ -2232,11 +2372,154 @@
               '回收站'
             ),
 
+            // 切换账号
+            React.createElement('button', {
+              onClick: function() { setConfirmDialog({ type: 'switch' }); },
+              className: 'w-full py-3 rounded-2xl text-sm font-medium text-primary bg-white shadow-sm transition-all duration-200 hover:bg-gray-50 active:scale-[0.98] flex items-center justify-center gap-2'
+            },
+              React.createElement(icons.UserSwitch, { size: 18 }),
+              '切换账号'
+            ),
+
             // 退出登录
             React.createElement('button', {
-              onClick: function() { localStorage.removeItem('jizhang_current_user'); window.location.reload(); },
+              onClick: function() { setConfirmDialog({ type: 'logout' }); },
               className: 'w-full py-3 rounded-2xl text-sm font-medium text-red-500 bg-white shadow-sm transition-all duration-200 hover:bg-gray-50 active:scale-[0.98]'
-            }, '退出登录')
+            }, '退出登录'),
+
+            // 确认弹窗
+            confirmDialog && React.createElement('div', {
+              className: 'fixed inset-0 z-50 flex items-end justify-center',
+              style: { backgroundColor: 'rgba(0,0,0,0.45)' },
+              onClick: function() { setConfirmDialog(null); }
+            },
+              React.createElement('div', {
+                className: 'w-full max-w-md bg-white rounded-t-2xl overflow-hidden',
+                onClick: function(e) { e.stopPropagation(); }
+              },
+                React.createElement('div', { className: 'pt-6 pb-2 px-6 text-center' },
+                  React.createElement('h3', { className: 'text-lg font-medium text-dark' },
+                    confirmDialog.type === 'switch' ? '确定切换账号？' : '确定退出登录？'
+                  ),
+                  React.createElement('p', { className: 'text-sm text-gray-400 mt-2' },
+                    confirmDialog.type === 'switch' ? '切换后需要重新登录' : '下次登录需要重新输入密码或验证码'
+                  )
+                ),
+                React.createElement('div', { className: 'px-6 py-3 text-center' },
+                  React.createElement('button', {
+                    onClick: function() {
+                      localStorage.removeItem('jizhang_current_user');
+                      window.location.reload();
+                    },
+                    className: 'w-full py-3 text-base font-medium ' + (confirmDialog.type === 'switch' ? 'text-primary' : 'text-red-500'),
+                    style: { border: 'none', outline: 'none', background: 'transparent' }
+                  },
+                    confirmDialog.type === 'switch' ? '切换账号' : '退出登录'
+                  )
+                ),
+                React.createElement('div', { className: 'h-2 bg-gray-100' }),
+                React.createElement('div', { className: 'px-6 py-3 text-center' },
+                  React.createElement('button', {
+                    onClick: function() { setConfirmDialog(null); },
+                    className: 'w-full py-3 text-base font-medium text-gray-500',
+                    style: { border: 'none', outline: 'none', background: 'transparent' }
+                  }, '取消')
+                ),
+                React.createElement('div', { style: { height: 'env(safe-area-inset-bottom, 0px)' } })
+              )
+            )
+          )
+        );
+      };
+
+      // ===== 可左滑的回收站条目 =====
+      const SwipeableTrashItem = function({ record, onRestore, onPermanentDelete }) {
+        var [translateX, setTranslateX] = useState(0);
+        var [transitioning, setTransitioning] = useState(false);
+        var startXRef = useRef(0);
+        var isDraggingRef = useRef(false);
+        var BUTTON_WIDTH = 140;
+        var THRESHOLD = -50;
+
+        var reset = function() { setTransitioning(true); setTranslateX(0); };
+        var open = function() { setTransitioning(true); setTranslateX(-BUTTON_WIDTH); };
+
+        var onTouchStart = function(e) {
+          startXRef.current = e.touches[0].clientX;
+          isDraggingRef.current = true;
+          setTransitioning(false);
+        };
+        var onTouchMove = function(e) {
+          if (!isDraggingRef.current) return;
+          var dx = e.touches[0].clientX - startXRef.current;
+          if (dx > 0) dx = Math.min(dx * 0.3, 20); // slight resistance right
+          if (dx < -BUTTON_WIDTH) dx = -BUTTON_WIDTH;
+          setTranslateX(dx);
+        };
+        var onTouchEnd = function() {
+          isDraggingRef.current = false;
+          setTransitioning(true);
+          if (translateX < THRESHOLD) { open(); }
+          else { reset(); }
+        };
+
+        var category = getCategoryById(record.category);
+        var isIncome = record.type === 'income';
+        var deletedAtStr = record.deletedAt ? new Date(record.deletedAt).toLocaleString('zh-CN', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
+
+        return React.createElement('div', { className: 'relative overflow-hidden rounded-xl mb-3' },
+          // 背部操作按钮
+          React.createElement('div', {
+            className: 'absolute inset-y-0 right-0 flex rounded-xl overflow-hidden',
+            style: { width: BUTTON_WIDTH + 'px' }
+          },
+            React.createElement('button', {
+              onClick: function() { reset(); onRestore(record.id); },
+              style: { border: 'none', outline: 'none', width: '70px', background: '#27AE60', color: '#fff', cursor: 'pointer', alignSelf: 'stretch' },
+              className: 'text-xs font-medium flex flex-col items-center justify-center gap-1'
+            },
+              React.createElement(icons.RotateCcw, { size: 16 }),
+              '恢复'
+            ),
+            React.createElement('button', {
+              onClick: function() { reset(); onPermanentDelete(record.id); },
+              style: { border: 'none', outline: 'none', width: '70px', background: '#E74C3C', color: '#fff', cursor: 'pointer', alignSelf: 'stretch' },
+              className: 'text-xs font-medium flex flex-col items-center justify-center gap-1'
+            },
+              React.createElement(icons.Trash2, { size: 16 }),
+              '删除'
+            )
+          ),
+          // 前层卡片（可滑动）
+          React.createElement('div', {
+            onTouchStart: onTouchStart,
+            onTouchMove: onTouchMove,
+            onTouchEnd: onTouchEnd,
+            style: {
+              transform: 'translateX(' + translateX + 'px)',
+              transition: transitioning ? 'transform 0.25s ease' : 'none',
+              position: 'relative',
+              zIndex: 1
+            },
+            className: 'flex items-center justify-between bg-white rounded-xl p-4 shadow-sm'
+          },
+            React.createElement('div', { className: 'flex items-center gap-3 flex-1 min-w-0' },
+              React.createElement('div', { className: 'w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0', style: { backgroundColor: category.color + '15' } },
+                React.createElement(CategoryIcon, { icon: category.icon, color: category.color, size: 20 })
+              ),
+              React.createElement('div', { className: 'min-w-0 flex-1' },
+                React.createElement('p', { className: 'text-dark font-medium text-xs truncate' }, record.description),
+                React.createElement('div', { className: 'flex items-center gap-2 mt-1 flex-wrap' },
+                  React.createElement('span', { className: 'text-xs px-2 py-0.5 rounded-full', style: { backgroundColor: category.color + '20', color: category.color } }, category.name),
+                  React.createElement('span', { className: 'text-xs px-2 py-0.5 rounded-full', style: { backgroundColor: isIncome ? '#27AE6020' : '#E74C3C20', color: isIncome ? '#27AE60' : '#E74C3C' } }, isIncome ? '收入' : '支出'),
+                  React.createElement('span', { className: 'text-gray-400 text-xs' }, formatDate(record.date) + (record.time ? ' ' + record.time : ''))
+                ),
+                deletedAtStr && React.createElement('p', { className: 'text-xs text-gray-400 mt-1' }, '删除于 ' + deletedAtStr)
+              )
+            ),
+            React.createElement('span', { className: 'font-bold text-sm flex-shrink-0 ' + (isIncome ? 'text-green-500' : 'text-red-500') },
+              (isIncome ? '+' : '-') + formatAmount(record.amount)
+            )
           )
         );
       };
@@ -2272,6 +2555,7 @@
               React.createElement('h1', { className: 'text-xl font-bold text-dark' }, '回收站'),
               trash.length > 0 && React.createElement('button', {
                 onClick: handleClearTrash,
+                style: { border: 'none', outline: 'none' },
                 className: 'text-xs px-3 py-1.5 rounded-full bg-red-50 text-red-500 hover:bg-red-100 transition-colors'
               }, '清空')
             )
@@ -2282,38 +2566,12 @@
               React.createElement('p', { className: 'text-gray-400 text-sm' }, '回收站是空的')
             ),
             trash.map(function(record) {
-              var category = getCategoryById(record.category);
-              var isIncome = record.type === 'income';
-              var deletedAtStr = record.deletedAt ? new Date(record.deletedAt).toLocaleString('zh-CN', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
-              return React.createElement('div', { key: record.id, className: 'flex items-center justify-between bg-white rounded-xl p-4 shadow-sm' },
-                React.createElement('div', { className: 'flex items-center gap-3 flex-1 min-w-0' },
-                  React.createElement('div', { className: 'w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0', style: { backgroundColor: `${category.color}15` } },
-                    React.createElement(CategoryIcon, { icon: category.icon, color: category.color, size: 20 })
-                  ),
-                  React.createElement('div', { className: 'min-w-0 flex-1' },
-                    React.createElement('p', { className: 'text-dark font-medium text-sm truncate' }, record.description),
-                    React.createElement('div', { className: 'flex items-center gap-2 mt-1 flex-wrap' },
-                      React.createElement('span', { className: 'text-xs px-2 py-0.5 rounded-full', style: { backgroundColor: `${category.color}20`, color: category.color } }, category.name),
-                      React.createElement('span', { className: 'text-xs px-2 py-0.5 rounded-full', style: { backgroundColor: isIncome ? '#27AE6020' : '#E74C3C20', color: isIncome ? '#27AE60' : '#E74C3C' } }, isIncome ? '收入' : '支出'),
-                      React.createElement('span', { className: 'text-gray-400 text-xs' }, formatDate(record.date) + (record.time ? ' ' + record.time : ''))
-                    ),
-                    deletedAtStr && React.createElement('p', { className: 'text-xs text-gray-400 mt-1' }, '删除于 ' + deletedAtStr)
-                  )
-                ),
-                React.createElement('div', { className: 'flex items-center gap-2 flex-shrink-0' },
-                  React.createElement('span', { className: `font-bold text-lg ${isIncome ? 'text-green-500' : 'text-red-500'}` }, `${isIncome ? '+' : '-'}${formatAmount(record.amount)}`),
-                  React.createElement('button', {
-                    onClick: function() { handleRestore(record.id); },
-                    title: '恢复',
-                    className: 'text-xs px-2.5 py-1 rounded-lg bg-green-50 text-green-600 hover:bg-green-100 transition-colors'
-                  }, '恢复'),
-                  React.createElement('button', {
-                    onClick: function() { handlePermanentDelete(record.id); },
-                    title: '永久删除',
-                    className: 'text-xs px-2.5 py-1 rounded-lg bg-red-50 text-red-500 hover:bg-red-100 transition-colors'
-                  }, '删除')
-                )
-              );
+              return React.createElement(SwipeableTrashItem, {
+                key: record.id,
+                record: record,
+                onRestore: handleRestore,
+                onPermanentDelete: handlePermanentDelete
+              });
             })
           )
         );
