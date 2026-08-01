@@ -31,9 +31,9 @@
     </script>
     <style>
       *{margin:0;padding:0;box-sizing:border-box}
-      html{scroll-behavior:smooth;width:100%;overflow-x:hidden}
-      body{font-family:'PingFang SC','Microsoft YaHei',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;background-color:#F5F5F5;width:100%;overflow-x:hidden}
-      #app{width:100%;overflow-x:hidden}
+      html{scroll-behavior:smooth;width:100%;overflow-x:clip}
+      body{font-family:'PingFang SC','Microsoft YaHei',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;background-color:#F5F5F5;width:100%;overflow-x:clip}
+      #app{width:100%;overflow-x:clip}
       ::-webkit-scrollbar{width:0;height:0;background:transparent}
       .bg-primary{background-color:#4ECDC4}
       .bg-secondary{background-color:#FF9F1C}
@@ -1703,7 +1703,7 @@
           setEditingRecord(null);
         };
 
-        return React.createElement('div', { className: 'min-h-screen pb-28 relative overflow-hidden', style: { background: 'linear-gradient(135deg, #f0fdfa 0%, #fdf4ff 30%, #fef9f3 60%, #f0f9ff 100%)' } },
+        return React.createElement('div', { className: 'min-h-screen pb-28 relative', style: { background: 'linear-gradient(135deg, #f0fdfa 0%, #fdf4ff 30%, #fef9f3 60%, #f0f9ff 100%)' } },
           // 装饰性背景元素
           React.createElement('div', { style: { position: 'absolute', top: '-80px', right: '-60px', width: '220px', height: '220px', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(99,102,241,0.15), rgba(168,85,247,0.1))', filter: 'blur(50px)', zIndex: 0 } }),
           React.createElement('div', { style: { position: 'absolute', top: '80px', left: '-70px', width: '160px', height: '160px', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(78,205,196,0.12), rgba(59,130,246,0.08))', filter: 'blur(40px)', zIndex: 0 } }),
@@ -1917,7 +1917,9 @@
             const x2 = cx + radius * Math.cos(endRad);
             const y2 = cy + radius * Math.sin(endRad);
             const largeArc = percentage > 50 ? 1 : 0;
-            const path = `M ${cx} ${cy} L ${x1} ${y1} A ${radius} ${radius} 0 ${largeArc} 1 ${x2} ${y2} Z`;
+            const path = percentage >= 99.999
+              ? `M ${cx} ${cy - radius} A ${radius} ${radius} 0 1 1 ${cx} ${cy + radius} A ${radius} ${radius} 0 1 1 ${cx} ${cy - radius} Z`
+              : `M ${cx} ${cy} L ${x1} ${y1} A ${radius} ${radius} 0 ${largeArc} 1 ${x2} ${y2} Z`;
             const category = getCategoryById(stat.category);
             return { ...stat, percentage, path, category, cx, cy, midRad };
           });
@@ -1925,7 +1927,7 @@
         
         const maxAmount = sortedStats.length > 0 ? Math.max(...sortedStats.map(s => s.amount)) : 1;
 
-        return React.createElement('div', { className: 'min-h-screen pb-24 relative overflow-hidden', style: { background: 'linear-gradient(135deg, #f0fdfa 0%, #fdf4ff 30%, #fef9f3 60%, #f0f9ff 100%)' } },
+        return React.createElement('div', { className: 'min-h-screen pb-24 relative', style: { background: 'linear-gradient(135deg, #f0fdfa 0%, #fdf4ff 30%, #fef9f3 60%, #f0f9ff 100%)' } },
           // 装饰性背景元素
           React.createElement('div', { style: { position: 'absolute', top: '-80px', right: '-60px', width: '220px', height: '220px', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(99,102,241,0.15), rgba(168,85,247,0.1))', filter: 'blur(50px)', zIndex: 0 } }),
           React.createElement('div', { style: { position: 'absolute', top: '80px', left: '-70px', width: '160px', height: '160px', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(78,205,196,0.12), rgba(59,130,246,0.08))', filter: 'blur(40px)', zIndex: 0 } }),
@@ -2218,7 +2220,7 @@
 
         var hasApiKey = apiKey.trim() !== '';
 
-        return React.createElement('div', { className: 'min-h-screen pb-24 relative overflow-hidden', style: { background: 'linear-gradient(135deg, #f0fdfa 0%, #fdf4ff 30%, #fef9f3 60%, #f0f9ff 100%)' } },
+        return React.createElement('div', { className: 'min-h-screen pb-24 relative', style: { background: 'linear-gradient(135deg, #f0fdfa 0%, #fdf4ff 30%, #fef9f3 60%, #f0f9ff 100%)' } },
           // 装饰性背景元素
           React.createElement('div', { style: { position: 'absolute', top: '-80px', right: '-60px', width: '220px', height: '220px', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(99,102,241,0.15), rgba(168,85,247,0.1))', filter: 'blur(50px)', zIndex: 0 } }),
           React.createElement('div', { style: { position: 'absolute', top: '80px', left: '-70px', width: '160px', height: '160px', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(78,205,196,0.12), rgba(59,130,246,0.08))', filter: 'blur(40px)', zIndex: 0 } }),
@@ -2546,7 +2548,7 @@
           }
         };
 
-        return React.createElement('div', { className: 'min-h-screen pb-24 relative overflow-hidden', style: { background: 'linear-gradient(135deg, #f0fdfa 0%, #fdf4ff 30%, #fef9f3 60%, #f0f9ff 100%)' } },
+        return React.createElement('div', { className: 'min-h-screen pb-24 relative', style: { background: 'linear-gradient(135deg, #f0fdfa 0%, #fdf4ff 30%, #fef9f3 60%, #f0f9ff 100%)' } },
           React.createElement('div', { style: { position: 'absolute', top: '-80px', right: '-60px', width: '220px', height: '220px', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(99,102,241,0.15), rgba(168,85,247,0.1))', filter: 'blur(50px)', zIndex: 0 } }),
           React.createElement('div', { style: { position: 'absolute', top: '80px', left: '-70px', width: '160px', height: '160px', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(78,205,196,0.12), rgba(59,130,246,0.08))', filter: 'blur(40px)', zIndex: 0 } }),
           React.createElement('div', { style: { position: 'absolute', bottom: '100px', right: '-30px', width: '140px', height: '140px', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(255,159,28,0.1), rgba(236,72,153,0.06))', filter: 'blur(35px)', zIndex: 0 } }),
@@ -2761,7 +2763,7 @@
           if (text) setVoiceInput(text);
           setShowAddModal(true);
         };
-        return React.createElement('div', { className: 'min-h-screen bg-light', style: { width: '100%', overflowX: 'hidden' } },
+        return React.createElement('div', { className: 'min-h-screen bg-light', style: { width: '100%', overflowX: 'clip' } },
           currentPage === '/' && React.createElement(HomePage, { onAddClick: handleVoiceAdd }),
           currentPage === '/bills' && React.createElement(BillsPage, null),
           currentPage === '/stats' && React.createElement(StatsPage, null),
