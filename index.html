@@ -318,6 +318,22 @@
           React.createElement('circle', { cx: '19', cy: '12', r: '1' }),
           React.createElement('circle', { cx: '5', cy: '12', r: '1' })
         ),
+        Package: (props) => React.createElement('svg', { ...props, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: '2', strokeLinecap: 'round', strokeLinejoin: 'round' },
+          React.createElement('line', { x1: '16.5', y1: '9.4', x2: '7.5', y2: '4.21' }),
+          React.createElement('path', { d: 'M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z' }),
+          React.createElement('polyline', { points: '3.27 6.96 12 12.01 20.73 6.96' }),
+          React.createElement('line', { x1: '12', y1: '22.08', x2: '12', y2: '12' })
+        ),
+        Store: (props) => React.createElement('svg', { ...props, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: '2', strokeLinecap: 'round', strokeLinejoin: 'round' },
+          React.createElement('path', { d: 'M3 9l1-5h16l1 5' }),
+          React.createElement('path', { d: 'M4 9v11a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V9' }),
+          React.createElement('path', { d: 'M9 21V14h6v7' })
+        ),
+        ShoppingCart: (props) => React.createElement('svg', { ...props, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: '2', strokeLinecap: 'round', strokeLinejoin: 'round' },
+          React.createElement('circle', { cx: '9', cy: '21', r: '1' }),
+          React.createElement('circle', { cx: '20', cy: '21', r: '1' }),
+          React.createElement('path', { d: 'M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6' })
+        ),
         RotateCcw: (props) => React.createElement('svg', { ...props, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: '2', strokeLinecap: 'round', strokeLinejoin: 'round' },
           React.createElement('polyline', { points: '1 4 1 10 7 10' }),
           React.createElement('path', { d: 'M3.51 15a9 9 0 1 0 2.13-9.36L1 10' })
@@ -394,23 +410,53 @@
       };
 
       const categories = [
-        { id: 'shopping', name: '购物', icon: 'ShoppingBag', color: '#FF6B6B', keywords: ['超市'] },
-        { id: 'food', name: '餐饮', icon: 'UtensilsCrossed', color: '#FF9F1C', keywords: ['早餐', '午餐', '晚餐'] },
-        { id: 'transport', name: '交通', icon: 'Car', color: '#4ECDC4', keywords: ['公交', '地铁'] },
-        { id: 'entertainment', name: '娱乐', icon: 'Gamepad2', color: '#9B59B6', keywords: ['电影', '游戏'] },
-        { id: 'living', name: '居住', icon: 'Home', color: '#3498DB', keywords: ['房租', '水电'] },
-        { id: 'medical', name: '医疗', icon: 'Heart', color: '#E74C3C', keywords: ['药', '医院'] },
-        { id: 'refund', name: '退货', icon: 'RotateCcw', color: '#F97316', keywords: ['退款', '退', '退货'] },
-        { id: 'education', name: '教育', icon: 'GraduationCap', color: '#1ABC9C', keywords: ['学习', '培训'] },
+        // 餐饮子类
+        { id: 'food_dinein', name: '实体餐饮', icon: 'UtensilsCrossed', color: '#FF9F1C', keywords: ['吃','饭','早餐','午餐','晚餐','零食','咖啡','饮料','菜','水果','奶茶','蛋糕','点心','火锅','烧烤','面条','包子','堂食','餐厅','饭店'] },
+        { id: 'food_delivery', name: '外卖', icon: 'Package', color: '#FFBF69', keywords: ['外卖','美团','饿了么','送餐','跑腿'] },
+        // 购物子类
+        { id: 'shopping_offline', name: '线下购物', icon: 'Store', color: '#FF6B6B', keywords: ['超市','商场','逛街','实体店','便利店','菜市场'] },
+        { id: 'shopping_online', name: '网购', icon: 'ShoppingBag', color: '#FF8787', keywords: ['买','购物','衣服','鞋','包','日用品','京东','裤子','裙子','帽子','袜子','化妆品','护肤品','下单'] },
+        { id: 'shopping_pdd', name: 'pdd购物', icon: 'ShoppingCart', color: '#E03131', keywords: ['拼多多','pdd','拼夕夕'] },
+        { id: 'shopping_taobao', name: '淘宝购物', icon: 'ShoppingCart', color: '#F759AB', keywords: ['淘宝','天猫','taobao','淘宝店'] },
+        { id: 'shopping_douyin', name: '抖音购物', icon: 'ShoppingCart', color: '#20C997', keywords: ['抖音','抖店','直播间','直播带货'] },
+        { id: 'transport', name: '交通', icon: 'Car', color: '#4ECDC4', keywords: ['公交','地铁','打车','加油','停车','滴滴','出租','高铁','火车','飞机','机票','车票','车'] },
+        { id: 'entertainment', name: '娱乐', icon: 'Gamepad2', color: '#9B59B6', keywords: ['电影','游戏','KTV','旅游','玩','门票','演出','演唱会','景点','游乐园','网吧','酒吧'] },
+        { id: 'living', name: '居住', icon: 'Home', color: '#3498DB', keywords: ['房租','水电','物业费','家具','装修','宽带','电视','维修','保洁'] },
+        { id: 'medical', name: '医疗', icon: 'Heart', color: '#E74C3C', keywords: ['药','医院','看病','体检','挂号','门诊','住院','医生','诊所'] },
+        { id: 'refund', name: '退货', icon: 'RotateCcw', color: '#F97316', keywords: ['退款','退','退货'] },
+        { id: 'education', name: '教育', icon: 'GraduationCap', color: '#1ABC9C', keywords: ['学习','培训','书','课程','学费','书本','文具','学校','辅导班'] },
         { id: 'salary', name: '工资', icon: 'DollarSign', color: '#27AE60', type: 'income', keywords: ['工资'] },
         { id: 'bonus', name: '奖金', icon: 'Star', color: '#2ECC71', type: 'income', keywords: ['奖金'] },
-        { id: 'investment', name: '理财', icon: 'BarChartUp', color: '#3498DB', type: 'income', keywords: ['理财', '利息'] },
+        { id: 'investment', name: '理财', icon: 'BarChartUp', color: '#3498DB', type: 'income', keywords: ['理财','利息'] },
         { id: 'gift', name: '礼金', icon: 'Gift', color: '#9B59B6', type: 'income', keywords: ['红包'] },
         { id: 'other', name: '其他', icon: 'MoreHorizontal', color: '#7F8C8D', keywords: [] }
       ];
 
       const getCategoryById = (id) => categories.find(c => c.id === id) || categories[categories.length - 1];
-      
+
+      // 按优先级匹配类别：1.特定平台 2.外卖 3.线下购物 4.通用类别
+      const getCategoryByKeyword = (text) => {
+        const cleanedText = String(text || '').replace(/[,，。、！？!?。\s]/g, '').toLowerCase();
+
+        const platformIds = ['shopping_pdd', 'shopping_taobao', 'shopping_douyin'];
+        for (const id of platformIds) {
+          const cat = categories.find(c => c.id === id);
+          if (cat && cat.keywords.some(kw => cleanedText.includes(String(kw).toLowerCase()))) return cat;
+        }
+        const delivery = categories.find(c => c.id === 'food_delivery');
+        if (delivery && delivery.keywords.some(kw => cleanedText.includes(String(kw).toLowerCase()))) return delivery;
+
+        const offline = categories.find(c => c.id === 'shopping_offline');
+        if (offline && offline.keywords.some(kw => cleanedText.includes(String(kw).toLowerCase()))) return offline;
+
+        const generalIds = ['food_dinein','shopping_online','transport','entertainment','living','medical','education','refund','salary','bonus','investment','gift'];
+        for (const id of generalIds) {
+          const cat = categories.find(c => c.id === id);
+          if (cat && cat.keywords.some(kw => cleanedText.includes(String(kw).toLowerCase()))) return cat;
+        }
+        return categories[categories.length - 1];
+      };
+
       const INCOME_CATEGORIES = ['salary', 'bonus', 'investment', 'gift'];
       const isIncomeCategory = (categoryId) => INCOME_CATEGORIES.includes(categoryId);
       
@@ -482,13 +528,19 @@
 可用类别列表：${categoryOptions}
 
 类别说明：
-- shopping: 购物（超市、淘宝、京东、拼多多等）
-- food: 餐饮（早餐、午餐、晚餐、外卖、吃等）
+- food_dinein: 实体餐饮（堂食、早餐、午餐、晚餐、火锅、奶茶、咖啡、水果、饭店等）
+- food_delivery: 外卖（美团、饿了么、外卖订单、跑腿送餐等）
+- shopping_offline: 线下购物（超市、商场、逛街、实体店、便利店、菜市场等）
+- shopping_online: 网购（未提平台的网上购物，如京东、买衣服、日用品等）
+- shopping_pdd: pdd购物（拼多多、pdd、拼夕夕）
+- shopping_taobao: 淘宝购物（淘宝、天猫）
+- shopping_douyin: 抖音购物（抖音、抖店、直播带货、直播间）
 - transport: 交通（公交、地铁、打车、加油等）
 - entertainment: 娱乐（电影、游戏、KTV等）
 - living: 居住（房租、水电等）
 - medical: 医疗（药、医院等）
 - education: 教育（学习、培训等）
+- refund: 退货退款
 - salary: 工资收入
 - bonus: 奖金收入
 - investment: 理财收入（理财、利息等）
@@ -646,31 +698,8 @@
         const records = [];
         const INCOME_KEYWORDS = ['收到', '收入', '工资', '奖金', '红包', '转账', '收款', '利息', '收益', '提成', '分红'];
 
-        let category = categories[categories.length - 1];
-
-        if (input.indexOf('超市') !== -1 || input.indexOf('淘宝') !== -1 || input.indexOf('京东') !== -1 || input.indexOf('拼多多') !== -1) {
-          category = categories[0];
-        } else if (input.indexOf('早餐') !== -1 || input.indexOf('午餐') !== -1 || input.indexOf('晚餐') !== -1 || input.indexOf('外卖') !== -1 || input.indexOf('吃') !== -1) {
-          category = categories[1];
-        } else if (input.indexOf('公交') !== -1 || input.indexOf('地铁') !== -1 || input.indexOf('打车') !== -1 || input.indexOf('加油') !== -1) {
-          category = categories[2];
-        } else if (input.indexOf('电影') !== -1 || input.indexOf('游戏') !== -1 || input.indexOf('KTV') !== -1) {
-          category = categories[3];
-        } else if (input.indexOf('房租') !== -1 || input.indexOf('水电') !== -1) {
-          category = categories[4];
-        } else if (input.indexOf('药') !== -1 || input.indexOf('医院') !== -1) {
-          category = categories[5];
-        } else if (input.indexOf('学习') !== -1 || input.indexOf('培训') !== -1) {
-          category = categories[6];
-        } else if (input.indexOf('工资') !== -1) {
-          category = categories[7];
-        } else if (input.indexOf('奖金') !== -1) {
-          category = categories[8];
-        } else if (input.indexOf('理财') !== -1 || input.indexOf('利息') !== -1) {
-          category = categories[9];
-        } else if (input.indexOf('红包') !== -1) {
-          category = categories[10];
-        }
+        // 用 getCategoryByKeyword 进行分级匹配
+        let category = getCategoryByKeyword(input);
 
         const isIncome = INCOME_KEYWORDS.some(function(k) { return input.indexOf(k) !== -1; }) || isIncomeCategory(category.id);
         const type = isIncome ? 'income' : 'expense';
@@ -783,9 +812,9 @@
         const today = getTodayStr();
         const yesterday = addDaysLocal(-1);
         return [
-          { id: '1', description: '早餐吃了两个鸡蛋', amount: 300, category: 'food', type: 'expense', date: today, time: '08:30', createdAt: now - 3600000 },
-          { id: '2', description: '买了一件T恤', amount: 3800, category: 'shopping', type: 'expense', date: today, time: '14:15', createdAt: now - 7200000 },
-          { id: '3', description: '中午外卖', amount: 2500, category: 'food', type: 'expense', date: yesterday, time: '12:00', createdAt: now - 86400000 + 3600000 },
+          { id: '1', description: '早餐吃了两个鸡蛋', amount: 300, category: 'food_dinein', type: 'expense', date: today, time: '08:30', createdAt: now - 3600000 },
+          { id: '2', description: '买了一件T恤', amount: 3800, category: 'shopping_online', type: 'expense', date: today, time: '14:15', createdAt: now - 7200000 },
+          { id: '3', description: '中午外卖', amount: 2500, category: 'food_delivery', type: 'expense', date: yesterday, time: '12:00', createdAt: now - 86400000 + 3600000 },
           { id: '4', description: '地铁充值', amount: 10000, category: 'transport', type: 'expense', date: yesterday, time: '09:20', createdAt: now - 86400000 + 7200000 },
           { id: '5', description: '看电影', amount: 6800, category: 'entertainment', type: 'expense', date: addDaysLocal(-2), time: '19:30', createdAt: now - 172800000 },
           { id: '6', description: '工资到账', amount: 800000, category: 'salary', type: 'income', date: addDaysLocal(-3), time: '10:00', createdAt: now - 259200000 },
@@ -953,29 +982,24 @@
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                width: '32px',
-                height: '32px',
-                borderRadius: '10px',
-                color: '#fff',
-                background: '#F28C82',
+                width: '28px',
+                height: '28px',
+                borderRadius: '8px',
+                background: 'transparent',
                 border: 'none',
                 outline: 'none',
                 cursor: 'pointer',
                 padding: 0,
                 transition: 'all 0.15s',
-                boxShadow: '0 2px 5px rgba(242,140,130,0.35)',
                 flexShrink: 0,
                 touchAction: 'manipulation',
-                zIndex: 5
+                zIndex: 5,
+                color: '#9ca3af'
               },
-              onMouseEnter: e => { e.currentTarget.style.transform = 'scale(1.1)'; e.currentTarget.style.boxShadow = '0 3px 8px rgba(242,140,130,0.45)'; },
-              onMouseLeave: e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 2px 5px rgba(242,140,130,0.35)'; }
+              onMouseEnter: e => { e.currentTarget.style.background = 'rgba(239,68,68,0.1)'; e.currentTarget.style.color = '#ef4444'; },
+              onMouseLeave: e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#9ca3af'; }
             },
-              React.createElement('svg', { width: '14', height: '14', viewBox: '-4 -4 32 32', fill: 'none', stroke: 'currentColor', strokeWidth: '2.5', strokeLinecap: 'round', strokeLinejoin: 'round' },
-                React.createElement('path', { d: 'M3 6h18' }),
-                React.createElement('path', { d: 'M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6' }),
-                React.createElement('path', { d: 'M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2' })
-              )
+              React.createElement(icons.Trash2, { size: 14 })
             )
           )
         );
@@ -1033,11 +1057,13 @@
                 React.createElement('div', { className: 'flex items-center' },
                   React.createElement('span', { className: 'text-lg font-bold text-dark mr-2' }, '¥'),
                   React.createElement('input', {
-                    type: 'number',
+                    type: 'text',
+                    inputMode: 'decimal',
                     value: amountStr,
-                    onChange: e => { setAmountStr(e.target.value); setError(''); },
+                    onChange: e => { const v = e.target.value.replace(/[^0-9.]/g, ''); setAmountStr(v); setError(''); },
                     step: '0.01',
                     min: '0',
+                    placeholder: '0.00',
                     className: 'flex-1 text-lg font-bold text-dark bg-gray-50 rounded-xl px-3 py-2 border-none outline-none'
                   })
                 )
@@ -1311,10 +1337,10 @@
             React.createElement('div', { className: 'p-4 border-t border-gray-100' },
               React.createElement('button', {
                 onClick: handleSubmit, disabled: parsedRecords.length === 0 || isLoading,
-                className: `w-full py-3 rounded-xl font-medium transition-all duration-200 flex items-center justify-center gap-2 ${parsedRecords.length > 0 && !isLoading ? 'bg-primary text-white hover:bg-primary/90 active:scale-[0.98]' : 'bg-gray-200 text-gray-400 cursor-not-allowed'}`
+                className: `w-full py-3 rounded-xl font-medium transition-all duration-200 flex items-center justify-center ${parsedRecords.length > 0 && !isLoading ? 'bg-primary text-white hover:bg-primary/90 active:scale-[0.98]' : 'bg-gray-200 text-gray-400 cursor-not-allowed'}`
               },
               isLoading ? React.createElement('svg', { className: 'animate-spin h-5 w-5 text-white', style: { width: '1.25rem', height: '1.25rem' }, xmlns: 'http://www.w3.org/2000/svg', fill: 'none', viewBox: '0 0 24 24' }, React.createElement('circle', { className: 'opacity-25', cx: '12', cy: '12', r: '10', stroke: 'currentColor', strokeWidth: '4' }), React.createElement('path', { className: 'opacity-75', fill: 'currentColor', d: 'M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z' }))
-                : React.createElement(React.Fragment, null, React.createElement(icons.Check, { size: 20 }), `确认记账 (${parsedRecords.length})`)
+                : React.createElement(icons.Check, { size: 22 })
               )
             )
           )
@@ -1938,13 +1964,13 @@
           React.createElement('div', { className: 'px-4 mt-4 relative z-10' },
             React.createElement('div', { className: 'bg-white rounded-2xl p-4 shadow-sm mb-4' },
               React.createElement('div', { className: 'flex items-center justify-between mb-4' },
-                React.createElement('div', { className: 'flex gap-2 flex-1' },
-                  React.createElement('button', { onClick: () => setRecordType('expense'), style: { border: 'none', outline: 'none' }, className: `flex-1 py-2 px-5 rounded-full text-sm font-medium transition-all ${recordType === 'expense' ? 'bg-red-500 text-white shadow-sm' : 'bg-gray-100 text-gray-500'}` }, '支出'),
-                  React.createElement('button', { onClick: () => setRecordType('income'), style: { border: 'none', outline: 'none' }, className: `flex-1 py-2 px-5 rounded-full text-sm font-medium transition-all ${recordType === 'income' ? 'bg-green-500 text-white shadow-sm' : 'bg-gray-100 text-gray-500'}` }, '收入')
+                React.createElement('div', { className: 'flex gap-2' },
+                  React.createElement('button', { onClick: () => setRecordType('expense'), style: { border: 'none', outline: 'none', minWidth: '88px' }, className: `py-2 px-5 rounded-full text-sm font-medium transition-all ${recordType === 'expense' ? 'bg-red-500 text-white shadow-sm' : 'bg-gray-100 text-gray-500'}` }, '支出'),
+                  React.createElement('button', { onClick: () => setRecordType('income'), style: { border: 'none', outline: 'none', minWidth: '88px' }, className: `py-2 px-5 rounded-full text-sm font-medium transition-all ${recordType === 'income' ? 'bg-green-500 text-white shadow-sm' : 'bg-gray-100 text-gray-500'}` }, '收入')
                 ),
-                React.createElement('div', { className: 'flex gap-2 flex-1' },
-                  React.createElement('button', { onClick: () => setChartType('pie'), style: { border: 'none', outline: 'none' }, className: `flex-1 py-2 px-5 rounded-full text-sm font-medium transition-all ${chartType === 'pie' ? 'bg-primary text-white shadow-sm' : 'bg-gray-100 text-gray-500'}` }, '扇形图'),
-                  React.createElement('button', { onClick: () => setChartType('bar'), style: { border: 'none', outline: 'none' }, className: `flex-1 py-2 px-5 rounded-full text-sm font-medium transition-all ${chartType === 'bar' ? 'bg-primary text-white shadow-sm' : 'bg-gray-100 text-gray-500'}` }, '柱状图')
+                React.createElement('div', { className: 'flex gap-2' },
+                  React.createElement('button', { onClick: () => setChartType('pie'), style: { border: 'none', outline: 'none', minWidth: '88px' }, className: `py-2 px-5 rounded-full text-sm font-medium transition-all ${chartType === 'pie' ? 'bg-primary text-white shadow-sm' : 'bg-gray-100 text-gray-500'}` }, '扇形图'),
+                  React.createElement('button', { onClick: () => setChartType('bar'), style: { border: 'none', outline: 'none', minWidth: '88px' }, className: `py-2 px-5 rounded-full text-sm font-medium transition-all ${chartType === 'bar' ? 'bg-primary text-white shadow-sm' : 'bg-gray-100 text-gray-500'}` }, '柱状图')
                 )
               ),
               React.createElement('div', { className: 'flex items-center justify-between mb-4' },
