@@ -559,6 +559,18 @@
 - "前天晚上"等带时段的词，仍归到对应日期
 - 同一条输入里若多笔消费日期不同，分别给出各自 date
 
+时间解析规则（time 字段必须为 "HH:mm" 24小时制格式）：
+- 用户提及具体时间时，提取对应时间
+- 时段词映射：
+  - "凌晨"、"早上"、"早晨" → 06:00
+  - "上午"、"上午X点" → 提取小时
+  - "中午"、"中午X点" → 12:00
+  - "下午"、"下午X点" → 小时+12（如"下午5点"=17:00）
+  - "晚上"、"晚上X点"、"夜里" → 小时+12（如"晚上8点"=20:00）
+  - "X点X分"、"X:XX" → 直接提取
+  - 若只说"X点"没说分，默认 :00
+- 用户未提及时间时，time 设为 null
+
 请严格按照以下JSON格式输出，不要包含任何额外文字、不要使用代码块：
 {
   "records": [
@@ -567,7 +579,8 @@
       "amount": 金额数字(元),
       "category": "类别ID",
       "type": "income或expense",
-      "date": "YYYY-MM-DD"
+      "date": "YYYY-MM-DD",
+      "time": "HH:mm或null"
     }
   ]
 }
@@ -623,7 +636,8 @@
             return result.records.map(r => ({
               ...r,
               amount: Math.round(r.amount * 100),
-              date: normalizeDateStr(r.date) || getTodayStr()
+              date: normalizeDateStr(r.date) || getTodayStr(),
+              time: r.time && typeof r.time === 'string' && r.time !== 'null' ? r.time : undefined
             }));
           }
         } catch (error) {
@@ -694,6 +708,46 @@
         return null;
       };
 
+      // 从文本中提取时间，返回 "HH:mm"；未识别则返回 null
+      const extractTimeFromText = (text) => {
+        // 先标准化口语化时段词
+        text = text.replace(/昨晚/g, '晚上').replace(/今早/g, '早上');
+
+        // 1. 匹配 "下午5点" / "晚上8点30" / "上午10点" 等
+        const periodMatch = text.match(/(凌晨|早上|早晨|上午|中午|下午|晚上|夜里|夜里)?(\d{1,2})[点时:：](\d{1,2})?分?/);
+        if (periodMatch) {
+          const period = periodMatch[1] || '';
+          let hour = parseInt(periodMatch[2]);
+          const minute = periodMatch[3] ? parseInt(periodMatch[3]) : 0;
+
+          // 根据时段调整小时
+          if ((period === '下午' || period === '晚上' || period === '夜里') && hour < 12) {
+            hour += 12;
+          } else if (period === '中午' && hour < 12) {
+            hour = 12;
+          }
+          return `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
+        }
+
+        // 2. 匹配纯时间格式 "HH:mm" / "H:MM"
+        const timeMatch = text.match(/(\d{1,2}):(\d{2})/);
+        if (timeMatch) {
+          const h = parseInt(timeMatch[1]);
+          const m = parseInt(timeMatch[2]);
+          if (h >= 0 && h <= 23 && m >= 0 && m <= 59) {
+            return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+          }
+        }
+
+        // 3. 匹配 "下午" 单独出现，默认 15:00；"晚上" 默认 20:00；"中午" 默认 12:00
+        if (text.indexOf('晚上') !== -1 || text.indexOf('夜里') !== -1) return '20:00';
+        if (text.indexOf('下午') !== -1) return '15:00';
+        if (text.indexOf('中午') !== -1) return '12:00';
+        if (text.indexOf('早上') !== -1 || text.indexOf('早晨') !== -1 || text.indexOf('凌晨') !== -1) return '06:00';
+
+        return null;
+      };
+
       const parseInputFallback = (input) => {
         const records = [];
         const INCOME_KEYWORDS = ['收到', '收入', '工资', '奖金', '红包', '转账', '收款', '利息', '收益', '提成', '分红'];
@@ -724,12 +778,18 @@
 
             // 逐句解析日期，未识别则用今天
             var parsedDate = extractDateFromText(part) || getTodayStr();
+            var parsedTime = extractTimeFromText(part);
 
             var description = part;
             // 清理日期关键词，避免污染描述
             ['大前天','前天','昨天','今天'].forEach(function(kw){
               description = description.split(kw).join('');
             });
+            // 清理时间关键词
+            description = description.replace(/(凌晨|早上|早晨|上午|中午|下午|晚上|夜里)?\s*\d{1,2}[点时:：]\s*\d{0,2}分?/g, '');
+            description = description.replace(/(\d{1,2}):(\d{2})/g, '');
+            // 清理时段词
+            description = description.replace(/(凌晨|早上|早晨|上午|中午|下午|晚上|夜里)/g, '');
             description = description.replace(/(\d{1,2})月(\d{1,2})[日号]/g, '');
             description = description.replace(/上(?:星期|周)[一二三四五六日天]/g, '');
             description = description.replace(/(?:本周|这周|这星期)[一二三四五六日天]/g, '');
@@ -737,7 +797,9 @@
 
             if (!description) description = type === 'income' ? '收入' : '日常消费';
 
-            records.push({ description: description, amount: amounts[amountIndex] * 100, category: category.id, type: type, date: parsedDate });
+            var recordObj = { description: description, amount: amounts[amountIndex] * 100, category: category.id, type: type, date: parsedDate };
+            if (parsedTime) recordObj.time = parsedTime;
+            records.push(recordObj);
 
             amountIndex++;
           }
@@ -1206,8 +1268,11 @@
         const handleSubmit = () => {
           if (parsedRecords.length > 0) {
             const categoryToApply = selectedCategory || (parsedRecords[0] && parsedRecords[0].category);
-            const finalTime = userTouchedTime ? selectedTime : getCurrentTimeStr();
-            addRecords(parsedRecords.map(r => ({ ...r, category: categoryToApply || r.category, time: finalTime })));
+            addRecords(parsedRecords.map(r => ({
+              ...r,
+              category: categoryToApply || r.category,
+              time: userTouchedTime ? selectedTime : (r.time || getCurrentTimeStr())
+            })));
             setInput('');
             setParsedRecords([]);
             setSelectedDate(getTodayStr());
@@ -2781,22 +2846,190 @@
         );
       };
 
+      // 一级页面列表（底部导航栏页面）
+      const ROOT_PAGES = ['/', '/bills', '/stats', '/settings', '/trash'];
+
+      // Toast 组件
+      const Toast = ({ message, visible }) => {
+        if (!visible) return null;
+        return React.createElement('div', {
+          style: {
+            position: 'fixed',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            backgroundColor: 'rgba(0,0,0,0.75)',
+            color: '#fff',
+            padding: '12px 20px',
+            borderRadius: '12px',
+            fontSize: '14px',
+            zIndex: 9999,
+            pointerEvents: 'none',
+            transition: 'opacity 0.3s'
+          }
+        }, message);
+      };
+
       const AppContent = function() {
         var [currentPage, setCurrentPage] = useState('/');
         var [showAddModal, setShowAddModal] = useState(false);
         var [voiceInput, setVoiceInput] = useState('');
+        var [toastVisible, setToastVisible] = useState(false);
+        var [toastMessage, setToastMessage] = useState('');
+        var lastBackTime = React.useRef(0);
+        var touchStartX = React.useRef(0);
+        var touchStartY = React.useRef(0);
+        var isEdgeSwipe = React.useRef(false);
+        var toastTimer = React.useRef(null);
+
+        // 显示 Toast 提示
+        const showToast = function(msg) {
+          setToastMessage(msg);
+          setToastVisible(true);
+          if (toastTimer.current) clearTimeout(toastTimer.current);
+          toastTimer.current = setTimeout(function() {
+            setToastVisible(false);
+          }, 1500);
+        };
+
+        // 判断是否是一级页面
+        const isRootPage = function(page) {
+          return ROOT_PAGES.indexOf(page) !== -1;
+        };
+
+        // 处理返回手势
+        const handleBackGesture = function() {
+          // 1. 如果有记账弹窗打开，关闭
+          if (showAddModal) {
+            setShowAddModal(false);
+            return;
+          }
+
+          // 2. 检查是否有其他 modal 打开（编辑弹窗等）
+          // 查找最顶层的 modal 背景层
+          const modals = document.querySelectorAll('.fixed.inset-0[class*="bg-black"]');
+          for (let i = modals.length - 1; i >= 0; i--) {
+            const modal = modals[i];
+            if (getComputedStyle(modal).opacity !== '0') {
+              // 找到 modal 内的内容区域
+              const content = modal.querySelector('.bg-white');
+              if (content) {
+                // 找到第一个 button（通常是关闭/取消按钮）
+                const firstButton = content.querySelector('button');
+                if (firstButton) {
+                  firstButton.click();
+                  return;
+                }
+              }
+              // 备选：点击 modal 自身（背景点击关闭）
+              modal.click();
+              return;
+            }
+          }
+
+          // 3. 如果当前页面不是一级页面，返回上一级
+          if (!isRootPage(currentPage)) {
+            window.history.back();
+            return;
+          }
+
+          // 4. 一级页面：双击退出逻辑
+          const now = Date.now();
+          if (now - lastBackTime.current < 2000) {
+            window.close();
+            setTimeout(function() { window.location.href = 'about:blank'; }, 100);
+          } else {
+            lastBackTime.current = now;
+            showToast('再滑一次退出');
+          }
+        };
+
+        // 触摸手势监听
+        React.useEffect(function() {
+          const handleTouchStart = function(e) {
+            if (e.touches.length === 1) {
+              touchStartX.current = e.touches[0].clientX;
+              touchStartY.current = e.touches[0].clientY;
+              // 从左边缘开始（屏幕左侧 30px 内）
+              isEdgeSwipe.current = touchStartX.current < 30;
+            }
+          };
+
+          const handleTouchEnd = function(e) {
+            if (e.changedTouches.length === 1) {
+              const endX = e.changedTouches[0].clientX;
+              const endY = e.changedTouches[0].clientY;
+              const deltaX = endX - touchStartX.current;
+              const deltaY = endY - touchStartY.current;
+
+              // 从左边缘向右滑动，水平距离 > 80px，垂直距离 < 100px
+              if (isEdgeSwipe.current && deltaX > 80 && Math.abs(deltaY) < 100) {
+                e.preventDefault();
+                handleBackGesture();
+              }
+            }
+          };
+
+          document.addEventListener('touchstart', handleTouchStart, { passive: true });
+          document.addEventListener('touchend', handleTouchEnd, { passive: true });
+
+          return function() {
+            document.removeEventListener('touchstart', handleTouchStart);
+            document.removeEventListener('touchend', handleTouchEnd);
+          };
+        }, [currentPage, showAddModal]);
+
+        // 历史栈管理
+        React.useEffect(function() {
+          // 初始化：推入根页面
+          if (window.history.length <= 1) {
+            window.history.pushState({ page: '/' }, '', '#/');
+          }
+
+          const handlePopState = function(e) {
+            if (e.state && e.state.page) {
+              const targetPage = e.state.page;
+              // 如果目标是一级页面，直接跳转
+              if (isRootPage(targetPage)) {
+                setCurrentPage(targetPage);
+              }
+            }
+          };
+
+          window.addEventListener('popstate', handlePopState);
+          return function() {
+            window.removeEventListener('popstate', handlePopState);
+          };
+        }, []);
+
+        // 导航函数（带历史记录）
+        const navigateTo = function(page, replace) {
+          if (page !== currentPage) {
+            setCurrentPage(page);
+            if (replace || ROOT_PAGES.indexOf(page) !== -1) {
+              // 一级页面：替换当前历史记录
+              window.history.replaceState({ page: page }, '', '#' + page);
+            } else {
+              // 二级页面：推入新历史记录
+              window.history.pushState({ page: page }, '', '#' + page);
+            }
+          }
+        };
+
         var handleVoiceAdd = function(text) {
           if (text) setVoiceInput(text);
           setShowAddModal(true);
         };
+
         return React.createElement('div', { className: 'min-h-screen bg-light', style: { width: '100%', overflowX: 'clip' } },
           currentPage === '/' && React.createElement(HomePage, { onAddClick: handleVoiceAdd }),
           currentPage === '/bills' && React.createElement(BillsPage, null),
           currentPage === '/stats' && React.createElement(StatsPage, null),
           currentPage === '/trash' && React.createElement(TrashPage, null),
-          currentPage === '/settings' && React.createElement(SettingsPage, { onNavigate: setCurrentPage }),
+          currentPage === '/settings' && React.createElement(SettingsPage, { onNavigate: navigateTo }),
           React.createElement(AddRecordModal, { isOpen: showAddModal, initialText: voiceInput, onClose: function() { setShowAddModal(false); setVoiceInput(''); } }),
-          React.createElement(BottomNav, { currentPage: currentPage, onNavigate: setCurrentPage, onAddClick: function() { setShowAddModal(true); } })
+          React.createElement(BottomNav, { currentPage: currentPage, onNavigate: navigateTo, onAddClick: function() { setShowAddModal(true); } }),
+          React.createElement(Toast, { message: toastMessage, visible: toastVisible })
         );
       };
 
