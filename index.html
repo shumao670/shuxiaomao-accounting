@@ -432,7 +432,7 @@
       }
       .btn-ghost:hover{background:rgba(155,118,83,0.12)}
       .record-card{
-        background:#FFFBF3;border-radius:14px;padding:14px 16px;
+        background:#FFFBF3;border-radius:14px;padding:12px 4px 12px 10px;
         position:relative;border:1px solid rgba(155,118,83,0.08);
         box-shadow:0 1px 3px rgba(107,68,35,0.04);
         transition:transform 0.25s ease,box-shadow 0.25s ease;
@@ -1235,23 +1235,23 @@
       const RecordCard = ({ record, onDelete, onEdit }) => {
         const category = getCategoryById(record.category);
         const isIncome = record.type === 'income';
-        return React.createElement('div', { className: 'record-card', style: { padding: '14px 16px' } },
+        return React.createElement('div', { className: 'record-card', style: { padding: '14px 16px', cursor: onEdit ? 'pointer' : 'default' }, onClick: onEdit },
           React.createElement('div', { className: 'flex items-center justify-between' },
-            React.createElement('div', { className: 'flex items-center gap-3 flex-1 min-w-0', onClick: onEdit, style: { cursor: onEdit ? 'pointer' : 'default' } },
+            React.createElement('div', { className: 'flex items-center gap-3', style: { flex: 1, minWidth: 0 } },
               React.createElement('div', { className: 'cat-icon-bg', style: { width: '40px', height: '40px', borderRadius: '10px', flexShrink: 0 } },
                 React.createElement(CategoryIcon, { icon: category.icon, color: '#9B7653', size: 18 })
               ),
-              React.createElement('div', { className: 'min-w-0 flex-1' },
-                React.createElement('p', { className: 'text-dark font-medium text-sm truncate', style: { fontFamily: "'Noto Sans SC', sans-serif", color: '#2C1810' } }, record.description),
-                React.createElement('div', { className: 'flex items-center gap-2 mt-1', style: { textSizeAdjust: 'none', WebkitTextSizeAdjust: 'none', flexWrap: 'nowrap' } },
+              React.createElement('div', { style: { flex: 1, minWidth: 0, overflow: 'hidden' } },
+                React.createElement('p', { className: 'text-dark font-medium text-sm', style: { fontFamily: "'Noto Sans SC', sans-serif", color: '#2C1810', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' } }, record.description),
+                React.createElement('div', { style: { display: 'flex', alignItems: 'center', gap: '6px', marginTop: '4px', minWidth: 0, overflow: 'hidden' } },
                   React.createElement('span', { className: 'tag-warm', style: { fontSize: '11px', padding: '2px 8px', borderRadius: '8px', whiteSpace: 'nowrap', flexShrink: 0 } }, category.name),
                   React.createElement('span', { className: isIncome ? 'tag-income' : 'tag-expense', style: { fontSize: '11px', padding: '2px 8px', borderRadius: '8px', whiteSpace: 'nowrap', flexShrink: 0 } }, isIncome ? '收入' : '支出'),
-                  React.createElement('span', { className: 'text-gray-400 text-xs', style: { color: '#8B7D6B', whiteSpace: 'nowrap', flexShrink: 0 } }, formatDate(record.date) + (record.time ? ' ' + record.time : ''))
+                  React.createElement('span', { className: 'text-gray-400 text-xs', style: { color: '#8B7D6B', whiteSpace: 'nowrap', minWidth: 0, flex: 1, overflow: 'hidden', textOverflow: 'ellipsis' } }, formatDate(record.date) + (record.time ? ' ' + record.time : ''))
                 )
               )
             ),
-            React.createElement('div', { className: 'flex items-center gap-1 flex-shrink-0' },
-              React.createElement('span', { className: isIncome ? 'amount-income' : 'amount-expense', style: { fontSize: '15px' } }, `${isIncome ? '+' : '-'}${formatAmount(record.amount)}`),
+            React.createElement('div', { style: { display: 'flex', alignItems: 'center', gap: '0px', flexShrink: 0, height: '28px' } },
+              React.createElement('span', { className: isIncome ? 'amount-income' : 'amount-expense', style: { fontSize: '15px', lineHeight: '28px', whiteSpace: 'nowrap' } }, `${isIncome ? '+' : '-'}${formatAmount(record.amount)}`),
               onDelete && React.createElement('button', {
                 onClick: function(e) { e.stopPropagation(); if (window.confirm('确认删除这条记录？')) onDelete(); },
                 title: '删除', 'aria-label': '删除',
@@ -1926,7 +1926,7 @@
               recordingText && !isRecording && React.createElement('p', { className: 'text-sm px-3 py-1.5 rounded-full shadow-sm max-w-xs truncate', style: { background: '#FFFBF3', color: '#2C1810', border: '1px solid rgba(155,118,83,0.1)' } }, recordingText)
             )
           ),
-          React.createElement('div', { className: 'px-4 mt-8' },
+          React.createElement('div', { className: 'px-2 mt-8' },
             React.createElement('div', { className: 'flex items-center justify-center mb-4 w-full' },
               React.createElement('div', { className: 'flex items-center gap-3' },
                 React.createElement('div', { style: { width: '24px', height: '2px', background: 'linear-gradient(to right, transparent, #9B7653)' } }),
@@ -2019,7 +2019,7 @@
           React.createElement('header', { className: 'pt-8 pb-4 px-4 sticky top-0 z-10', style: { background: 'rgba(255,251,243,0.88)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)' } },
             React.createElement('h1', { className: 'text-xl journal-title text-center' }, '账单明细')
           ),
-          React.createElement('div', { className: 'px-4 mt-4 relative z-10' },
+          React.createElement('div', { className: 'px-2 mt-4 relative z-10' },
             // 顶部：收支切换 + 筛选按钮
             React.createElement('div', { className: 'flex items-center gap-2 mb-3' },
               React.createElement('div', { className: 'flex-1 flex gap-2' },
@@ -2824,21 +2824,21 @@
             },
             className: 'flex items-center justify-between bg-white rounded-xl p-4 shadow-sm'
           },
-            React.createElement('div', { className: 'flex items-center gap-3 flex-1 min-w-0' },
+            React.createElement('div', { style: { display: 'flex', alignItems: 'center', gap: '12px', flex: 1, minWidth: 0 } },
               React.createElement('div', { className: 'w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0', style: { backgroundColor: category.color + '15' } },
                 React.createElement(CategoryIcon, { icon: category.icon, color: category.color, size: 20 })
               ),
-              React.createElement('div', { className: 'min-w-0 flex-1' },
-                React.createElement('p', { className: 'text-dark font-medium text-xs truncate' }, record.description),
-                React.createElement('div', { className: 'flex items-center gap-2 mt-1', style: { flexWrap: 'nowrap' } },
+              React.createElement('div', { style: { flex: 1, minWidth: 0, overflow: 'hidden' } },
+                React.createElement('p', { className: 'text-dark font-medium text-xs', style: { whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' } }, record.description),
+                React.createElement('div', { style: { display: 'flex', alignItems: 'center', gap: '6px', marginTop: '4px', minWidth: 0, overflow: 'hidden' } },
                   React.createElement('span', { className: 'text-xs px-2 py-0.5 rounded-full', style: { backgroundColor: category.color + '20', color: category.color, whiteSpace: 'nowrap', flexShrink: 0 } }, category.name),
                   React.createElement('span', { className: 'text-xs px-2 py-0.5 rounded-full', style: { backgroundColor: isIncome ? '#27AE6020' : '#E74C3C20', color: isIncome ? '#27AE60' : '#E74C3C', whiteSpace: 'nowrap', flexShrink: 0 } }, isIncome ? '收入' : '支出'),
-                  React.createElement('span', { className: 'text-gray-400 text-xs', style: { whiteSpace: 'nowrap', flexShrink: 0 } }, formatDate(record.date) + (record.time ? ' ' + record.time : ''))
+                  React.createElement('span', { className: 'text-gray-400 text-xs', style: { whiteSpace: 'nowrap', minWidth: 0, flex: 1, overflow: 'hidden', textOverflow: 'ellipsis' } }, formatDate(record.date) + (record.time ? ' ' + record.time : ''))
                 ),
                 deletedAtStr && React.createElement('p', { className: 'text-xs text-gray-400 mt-1' }, '删除于 ' + deletedAtStr)
               )
             ),
-            React.createElement('span', { className: 'font-bold text-sm flex-shrink-0 ' + (isIncome ? 'text-green-500' : 'text-red-500') },
+            React.createElement('span', { className: 'font-bold text-sm', style: { flexShrink: 0, marginLeft: '8px', whiteSpace: 'nowrap' } },
               (isIncome ? '+' : '-') + formatAmount(record.amount)
             )
           )
@@ -2881,7 +2881,7 @@
               }, '清空')
             )
           ),
-          React.createElement('div', { className: 'px-4 mt-4 space-y-3 relative z-10' },
+          React.createElement('div', { className: 'px-2 mt-4 space-y-3 relative z-10' },
             trash.length === 0 && React.createElement('div', { className: 'flex flex-col items-center justify-center py-20' },
               React.createElement(icons.Trash2, { size: 48, className: 'text-gray-300 mb-4' }),
               React.createElement('p', { className: 'text-gray-400 text-sm' }, '回收站是空的')
@@ -3273,127 +3273,6 @@
       var root = createRoot(document.getElementById('app'));
       root.render(React.createElement(App, null));
     </script>
-    <!-- 手机预览模式 -->
-    <div id="mobile-preview" style="display:none;position:fixed;inset:0;background:#1a1a2e;z-index:9999;flex-direction:column;align-items:center;justify-content:center;padding:20px;gap:16px;">
-      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center;">
-        <span style="color:#fff;font-size:14px;">📱 手机预览</span>
-        <select id="device-select" style="padding:6px 10px;border-radius:8px;border:1px solid #444;background:#2a2a3e;color:#fff;font-size:13px;cursor:pointer;">
-          <option value="390,844">iPhone 12 Pro</option>
-          <option value="375,812">iPhone X</option>
-          <option value="360,800">Pixel 5</option>
-          <option value="414,896">iPhone 14 Pro Max</option>
-          <option value="360,640">Galaxy S5</option>
-          <option value="320,568">iPhone SE</option>
-        </select>
-        <button id="rotate-btn" style="padding:6px 12px;border-radius:8px;border:1px solid #444;background:#2a2a3e;color:#fff;font-size:13px;cursor:pointer;">🔄 横竖屏</button>
-      </div>
-      <div id="phone-frame" style="width:390px;height:844px;border-radius:45px;border:12px solid #333;background:#000;box-shadow:0 20px 60px rgba(0,0,0,0.5);overflow:hidden;position:relative;transition:all 0.3s;">
-        <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:120px;height:28px;background:#333;border-radius:0 0 20px 20px;z-index:10;"></div>
-        <div id="phone-screen" style="width:100%;height:100%;overflow:hidden;background:#FDF8F0;"></div>
-      </div>
-      <button id="close-preview" style="padding:8px 24px;border-radius:20px;border:1px solid #555;background:#2a2a3e;color:#fff;font-size:13px;cursor:pointer;">✕ 退出预览 (ESC)</button>
-      <p style="color:#888;font-size:12px;margin:0;">提示：使用鼠标滚轮可缩放预览区域</p>
-    </div>
-    <!-- 预览切换按钮 -->
-    <button id="toggle-preview" style="position:fixed;bottom:20px;right:20px;width:44px;height:44px;border-radius:50%;border:none;background:#9B7653;color:#fff;font-size:20px;cursor:pointer;box-shadow:0 4px 12px rgba(155,118,83,0.4);z-index:9998;transition:transform 0.2s;" title="手机预览模式">📱</button>
-    <script>
-      (function(){
-        var toggleBtn = document.getElementById('toggle-preview');
-        var preview = document.getElementById('mobile-preview');
-        var closeBtn = document.getElementById('close-preview');
-        var deviceSelect = document.getElementById('device-select');
-        var rotateBtn = document.getElementById('rotate-btn');
-        var phoneFrame = document.getElementById('phone-frame');
-        var phoneScreen = document.getElementById('phone-screen');
-        var app = document.getElementById('app');
-        var isLandscape = false;
-        var scale = 1;
 
-        function setDevice(width, height){
-          if(isLandscape){
-            phoneFrame.style.width = height + 'px';
-            phoneFrame.style.height = width + 'px';
-          } else {
-            phoneFrame.style.width = width + 'px';
-            phoneFrame.style.height = height + 'px';
-          }
-          phoneFrame.dataset.width = width;
-          phoneFrame.dataset.height = height;
-        }
-
-        function toggleRotate(){
-          isLandscape = !isLandscape;
-          var w = phoneFrame.dataset.width;
-          var h = phoneFrame.dataset.height;
-          setDevice(w, h);
-        }
-
-        function enterPreview(){
-          // 克隆 app 内容到预览窗口
-          var clone = app.cloneNode(true);
-          phoneScreen.innerHTML = '';
-          phoneScreen.appendChild(clone);
-          
-          // 调整样式以适应手机
-          clone.style.width = '100%';
-          clone.style.maxWidth = 'none';
-          
-          preview.style.display = 'flex';
-          toggleBtn.style.display = 'none';
-          document.body.style.overflow = 'hidden';
-          
-          // 自动缩放适应屏幕
-          fitToScreen();
-        }
-
-        function fitToScreen(){
-          var previewWidth = preview.clientWidth - 80;
-          var previewHeight = preview.clientHeight - 150;
-          var frameWidth = parseInt(phoneFrame.style.width);
-          var frameHeight = parseInt(phoneFrame.style.height);
-          
-          var scaleX = previewWidth / frameWidth;
-          var scaleY = previewHeight / frameHeight;
-          scale = Math.min(scaleX, scaleY, 1);
-          
-          phoneFrame.style.transform = 'scale(' + scale + ')';
-          phoneFrame.style.transformOrigin = 'center center';
-        }
-
-        function exitPreview(){
-          preview.style.display = 'none';
-          toggleBtn.style.display = 'flex';
-          document.body.style.overflow = '';
-          phoneScreen.innerHTML = '';
-        }
-
-        toggleBtn.addEventListener('click', enterPreview);
-        closeBtn.addEventListener('click', exitPreview);
-        rotateBtn.addEventListener('click', function(){
-          toggleRotate();
-          fitToScreen();
-        });
-        
-        deviceSelect.addEventListener('change', function(){
-          var parts = this.value.split(',');
-          setDevice(parts[0], parts[1]);
-          fitToScreen();
-        });
-
-        // 窗口大小改变时重新适配
-        window.addEventListener('resize', function(){
-          if(preview.style.display === 'flex'){
-            fitToScreen();
-          }
-        });
-
-        // ESC 键退出预览
-        document.addEventListener('keydown', function(e){
-          if(e.key === 'Escape' && preview.style.display === 'flex'){
-            exitPreview();
-          }
-        });
-      })();
-    </script>
   </body>
 </html>
