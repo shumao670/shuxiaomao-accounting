@@ -3,26 +3,42 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-    <meta name="theme-color" content="#4ECDC4" />
+    <meta name="theme-color" content="#8B6F4E" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="舒小茂记账" />
     <link rel="manifest" href="manifest.json" />
-    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%234ECDC4'/><text x='50' y='65' font-size='40' text-anchor='middle' fill='white'>记</text></svg>" />
-    <title>舒小茂记账</title>
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%238B6F4E'/><text x='50' y='65' font-size='40' text-anchor='middle' fill='white'>账</text></svg>" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700;900&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
+    <title>舒小茂记账 · 手写账本</title>
     <script>
       var tailwind = {
         config: {
           theme: {
             extend: {
               colors: {
-                primary: '#4ECDC4',
-                secondary: '#FF9F1C',
-                dark: '#2C3E50',
-                light: '#F5F5F5',
+                primary: '#9B7653',
+                'primary-light': '#C4A484',
+                'primary-dark': '#6B4423',
+                secondary: '#B5651D',
+                'secondary-light': '#D4A574',
+                dark: '#2C1810',
+                ink: '#2C1810',
+                light: '#FDF8F0',
+                paper: '#FDF8F0',
+                'paper-dark': '#F5E6D3',
+                'expense': '#C44536',
+                'income': '#6B8E3D',
+                'gold': '#C8902A',
+                'rust': '#B5651D',
+                'sage': '#6B8E3D',
+                'clay': '#C44536',
               },
               fontFamily: {
-                sans: ['PingFang SC', 'Microsoft YaHei', 'sans-serif'],
+                sans: ['"Noto Sans SC"', '"PingFang SC"', '"Microsoft YaHei"', 'sans-serif'],
+                serif: ['"Noto Serif SC"', '"PingFang SC"', 'serif'],
               },
             },
           },
@@ -30,29 +46,44 @@
       };
     </script>
     <style>
+      :root{
+        --primary:#9B7653;
+        --primary-light:#C4A484;
+        --primary-dark:#6B4423;
+        --secondary:#B5651D;
+        --accent:#704214;
+        --paper:#FDF8F0;
+        --paper-dark:#F5E6D3;
+        --ink:#2C1810;
+        --ink-soft:#5C4033;
+        --rule:#D4C5B0;
+        --expense:#C44536;
+        --income:#6B8E3D;
+        --gold:#C8902A;
+      }
       *{margin:0;padding:0;box-sizing:border-box}
       html{scroll-behavior:smooth;width:100%;overflow-x:clip}
-      body{font-family:'PingFang SC','Microsoft YaHei',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;background-color:#F5F5F5;width:100%;overflow-x:clip}
+      body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',-apple-system,BlinkMacSystemFont,sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;background-color:var(--paper);background-image:radial-gradient(ellipse at 20% 0%,rgba(155,118,83,0.06) 0%,transparent 50%),radial-gradient(ellipse at 80% 100%,rgba(181,101,29,0.04) 0%,transparent 50%),url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");width:100%;overflow-x:clip;color:var(--ink)}
       #app{width:100%;overflow-x:clip}
       ::-webkit-scrollbar{width:0;height:0;background:transparent}
-      .bg-primary{background-color:#4ECDC4}
-      .bg-secondary{background-color:#FF9F1C}
-      .bg-dark{background-color:#2C3E50}
-      .bg-light{background-color:#F5F5F5}
-      .bg-white{background-color:#ffffff}
-      .bg-gray-50{background-color:#f9fafb}
-      .bg-gray-100{background-color:#f3f4f6}
-      .bg-gray-200{background-color:#e5e7eb}
-      .bg-red-500{background-color:#ef4444}
-      .bg-green-500{background-color:#22c55e}
-      .text-primary{color:#4ECDC4}
-      .text-secondary{color:#FF9F1C}
-      .text-dark{color:#2C3E50}
-      .text-gray-400{color:#9ca3af}
-      .text-gray-500{color:#6b7280}
-      .text-gray-600{color:#4b5563}
-      .text-red-500{color:#ef4444}
-      .text-green-500{color:#22c55e}
+      .bg-primary{background-color:#9B7653}
+      .bg-secondary{background-color:#B5651D}
+      .bg-dark{background-color:#2C1810}
+      .bg-light{background-color:#FDF8F0}
+      .bg-white{background-color:#FFFBF3}
+      .bg-gray-50{background-color:rgba(155,118,83,0.06)}
+      .bg-gray-100{background-color:rgba(155,118,83,0.1)}
+      .bg-gray-200{background-color:rgba(155,118,83,0.15)}
+      .bg-red-500{background-color:#C44536}
+      .bg-green-500{background-color:#6B8E3D}
+      .text-primary{color:#9B7653}
+      .text-secondary{color:#B5651D}
+      .text-dark{color:#2C1810}
+      .text-gray-400{color:#A89B8C}
+      .text-gray-500{color:#8B7D6B}
+      .text-gray-600{color:#5C4033}
+      .text-red-500{color:#C44536}
+      .text-green-500{color:#6B8E3D}
       .text-white{color:#ffffff}
       .font-bold{font-weight:700}
       .font-medium{font-weight:500}
@@ -92,10 +123,10 @@
       .border-none{border-width:0}
       .border-gray-100{border-color:#f3f4f6}
       .border-gray-200{border-color:#e5e7eb}
-      .shadow-sm{box-shadow:0 1px 2px 0 rgba(0,0,0,.05)}
-      .shadow-md{box-shadow:0 4px 6px -1px rgba(0,0,0,.1),0 2px 4px -2px rgba(0,0,0,.1)}
-      .shadow-lg{box-shadow:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -4px rgba(0,0,0,.1)}
-      .shadow-xl{box-shadow:0 20px 25px -5px rgba(0,0,0,.1),0 8px 10px -6px rgba(0,0,0,.1)}
+      .shadow-sm{box-shadow:0 1px 3px rgba(139,111,78,0.08)}
+      .shadow-md{box-shadow:0 4px 12px rgba(139,111,78,0.1)}
+      .shadow-lg{box-shadow:0 8px 24px rgba(139,111,78,0.12)}
+      .shadow-xl{box-shadow:0 16px 40px rgba(139,111,78,0.15)}
       .flex{display:flex}
       svg{display:block;flex-shrink:0;width:24px;height:24px}
       svg[size="16"]{width:16px;height:16px}
@@ -209,7 +240,7 @@
       @keyframes sound-bar{0%,100%{transform:scaleY(.25)}50%{transform:scaleY(1)}}
       .animate-ripple{animation:ripple 2s ease-out infinite}
       .animate-sound-bar{animation:sound-bar .7s ease-in-out infinite}
-      .ripple-ring{position:absolute;top:50%;left:50%;width:96px;height:96px;border-radius:50%;border:2px solid rgba(255,123,84,.4);transform:translate(-50%,-50%) scale(.8);pointer-events:none}
+      .ripple-ring{position:absolute;top:50%;left:50%;width:96px;height:96px;border-radius:50%;border:2px solid rgba(196,101,61,0.4);transform:translate(-50%,-50%) scale(.8);pointer-events:none}
       .ripple-ring:nth-child(2){animation-delay:.6s}
       .ripple-ring:nth-child(3){animation-delay:1.2s}
       .auth-mountains{
@@ -258,7 +289,190 @@
         border-radius:3px;display:inline-flex;align-items:center;justify-content:center;
         cursor:pointer;background:transparent;
       }
-      .auth-checkbox.checked{background:#4ECDC4;border-color:#4ECDC4}
+      .auth-checkbox.checked{background:#9B7653;border-color:#9B7653}
+
+      /* ======== 手账本风格扩展样式 ======== */
+      .paper-texture{
+        background-color:var(--paper);
+        background-image:
+          radial-gradient(ellipse at 15% 20%, rgba(155,118,83,0.06) 0%, transparent 50%),
+          radial-gradient(ellipse at 85% 80%, rgba(181,101,29,0.04) 0%, transparent 50%),
+          url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      }
+      .journal-page{
+        background:#FFFBF3;border-radius:20px;
+        box-shadow:0 2px 4px rgba(107,68,35,0.06),0 8px 24px rgba(107,68,35,0.05);
+        border:1px solid rgba(155,118,83,0.12);
+        position:relative;overflow:hidden;
+      }
+      .journal-page::before{
+        content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+        background:linear-gradient(to bottom,var(--primary-light),var(--secondary),var(--primary-light));
+        opacity:0.3;border-radius:20px 0 0 20px;
+      }
+      .stamp{
+        display:inline-block;padding:8px 18px;
+        border:2px solid var(--expense);border-radius:4px;
+        color:var(--expense);font-weight:700;
+        font-family:'Noto Serif SC',serif;
+        letter-spacing:2px;transform:rotate(-3deg);
+        background:rgba(255,255,255,0.6);
+        box-shadow:inset 0 0 0 1px var(--expense);
+      }
+      .paper-card{
+        background:#FFFBF3;border-radius:16px;
+        box-shadow:0 2px 4px rgba(107,68,35,0.04),0 6px 16px rgba(107,68,35,0.04);
+        border:1px solid rgba(155,118,83,0.1);
+        transition:transform 0.2s ease,box-shadow 0.2s ease;
+      }
+      .paper-card:hover{
+        transform:translateY(-2px);
+        box-shadow:0 4px 8px rgba(107,68,35,0.06),0 12px 28px rgba(107,68,35,0.06);
+      }
+      .ink-divider{
+        height:1px;background:linear-gradient(to right, transparent, var(--rule), transparent);
+        margin:12px 0;
+      }
+      .tag-warm{background:rgba(155,118,83,0.1);color:var(--primary-dark);border:1px solid rgba(155,118,83,0.15);border-radius:8px;font-size:11px;padding:2px 8px}
+      .tag-expense{background:rgba(196,69,54,0.08);color:var(--expense);border:1px solid rgba(196,69,54,0.15);border-radius:8px;font-size:11px;padding:2px 8px}
+      .tag-income{background:rgba(107,142,61,0.08);color:var(--income);border:1px solid rgba(107,142,61,0.15);border-radius:8px;font-size:11px;padding:2px 8px}
+      .voice-btn{
+        width:96px;height:96px;border-radius:50%;
+        background:linear-gradient(145deg, var(--secondary), #8B4513);
+        color:#fff;
+        box-shadow:0 8px 28px rgba(181,101,29,0.4),inset 0 2px 4px rgba(255,255,255,0.15);
+        display:flex;align-items:center;justify-content:center;
+        transition:all 0.3s;border:none;cursor:pointer;
+      }
+      .voice-btn.recording{
+        background:linear-gradient(145deg, #B8472B, #923720);
+        transform:scale(1.05);
+        box-shadow:0 12px 36px rgba(196,69,54,0.55),inset 0 2px 4px rgba(255,255,255,0.15);
+      }
+      .sound-bar{
+        width:4px;border-radius:2px;
+        background:linear-gradient(to top, var(--secondary), var(--gold));
+        animation:sound-bar 0.7s ease-in-out infinite;
+      }
+      .toast-journal{
+        background:rgba(44,24,16,0.88);backdrop-filter:blur(14px);
+        -webkit-backdrop-filter:blur(14px);
+        color:#FDF8F0;border:1px solid rgba(255,251,243,0.12);
+        border-radius:14px;padding:10px 18px;font-size:13px;
+        font-family:'Noto Serif SC',serif;letter-spacing:0.5px;
+        box-shadow:0 8px 24px rgba(0,0,0,0.2);
+      }
+      .journal-title{font-family:'Noto Serif SC',serif;font-weight:700;color:var(--ink)}
+      .amount-expense{color:var(--expense);font-weight:700;font-family:'Noto Serif SC',serif}
+      .amount-income{color:var(--income);font-weight:700;font-family:'Noto Serif SC',serif}
+      .bg-journal-grad{background:linear-gradient(180deg, rgba(155,118,83,0.06) 0%, transparent 100%)}
+      .cat-icon-bg{
+        width:44px;height:44px;border-radius:12px;
+        display:flex;align-items:center;justify-content:center;
+        background:linear-gradient(135deg, rgba(155,118,83,0.12), rgba(181,101,29,0.06));
+        color:var(--primary);
+      }
+      .tab-group{display:flex;background:rgba(155,118,83,0.1);border-radius:14px;padding:4px}
+      .tab-item{
+        flex:1;padding:10px 16px;text-align:center;border-radius:10px;
+        cursor:pointer;font-weight:500;font-size:14px;
+        color:rgba(44,24,16,0.5);transition:all 0.25s cubic-bezier(.4,0,.2,1);border:none;background:transparent;
+      }
+      .tab-item.active{background:#FFFBF3;color:var(--ink);box-shadow:0 2px 8px rgba(155,118,83,0.12)}
+      .nav-item{
+        display:flex;flex-direction:column;align-items:center;justify-content:center;
+        gap:3px;padding:8px 12px;border-radius:14px;
+        transition:all 0.25s cubic-bezier(.4,0,.2,1);cursor:pointer;color:rgba(44,24,16,0.5);
+      }
+      .nav-item.active{background:rgba(155,118,83,0.12);color:var(--primary);box-shadow:inset 0 0 0 1px rgba(155,118,83,0.15)}
+      .nav-item svg{width:22px;height:22px}
+      .bottom-bar{
+        background:rgba(255,251,243,0.88);
+        backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+        border-top:1px solid rgba(155,118,83,0.12);
+        box-shadow:0 -4px 20px rgba(107,68,35,0.06);
+      }
+      .stat-card{
+        background:linear-gradient(145deg, #FFFBF3, #F9F0E0);
+        border-radius:20px;padding:20px;
+        box-shadow:0 2px 8px rgba(107,68,35,0.06),0 8px 24px rgba(107,68,35,0.04),inset 0 1px 0 rgba(255,255,255,0.6);
+        border:1px solid rgba(155,118,83,0.1);position:relative;overflow:hidden;
+        transition:transform 0.3s cubic-bezier(.4,0,.2,1),box-shadow 0.3s ease;
+      }
+      .stat-card::after{
+        content:'';position:absolute;top:0;right:0;width:60px;height:60px;
+        background:radial-gradient(circle,rgba(200,144,42,0.08) 0%,transparent 70%);
+        pointer-events:none;
+      }
+      .stat-card:hover{
+        transform:translateY(-3px);
+        box-shadow:0 4px 12px rgba(107,68,35,0.08),0 16px 36px rgba(107,68,35,0.08),inset 0 1px 0 rgba(255,255,255,0.6);
+      }
+      .input-paper{
+        background:#FFFBF3;border:1px solid rgba(155,118,83,0.15);
+        border-radius:12px;padding:12px 16px;font-family:'Noto Sans SC',sans-serif;
+        font-size:15px;color:var(--ink);width:100%;
+        transition:border-color 0.25s,box-shadow 0.25s;
+      }
+      .input-paper:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(155,118,83,0.12)}
+      .btn-primary{
+        background:linear-gradient(135deg, var(--primary), var(--primary-light));
+        color:#fff;border:none;border-radius:12px;
+        padding:14px 24px;font-weight:600;
+        box-shadow:0 4px 14px rgba(155,118,83,0.3);
+        transition:all 0.25s cubic-bezier(.4,0,.2,1);cursor:pointer;
+      }
+      .btn-primary:active{transform:scale(0.97);box-shadow:0 2px 8px rgba(155,118,83,0.3)}
+      .btn-primary:hover{box-shadow:0 6px 20px rgba(155,118,83,0.4)}
+      .btn-ghost{
+        background:rgba(155,118,83,0.08);color:var(--primary);
+        border:1px solid rgba(155,118,83,0.15);
+        border-radius:10px;padding:10px 20px;font-weight:500;
+        transition:all 0.25s cubic-bezier(.4,0,.2,1);cursor:pointer;
+      }
+      .btn-ghost:hover{background:rgba(155,118,83,0.12)}
+      .record-card{
+        background:#FFFBF3;border-radius:14px;padding:14px 16px;
+        position:relative;border:1px solid rgba(155,118,83,0.08);
+        box-shadow:0 1px 3px rgba(107,68,35,0.04);
+        transition:transform 0.25s ease,box-shadow 0.25s ease;
+      }
+      .record-card:hover{
+        transform:translateY(-2px);
+        box-shadow:0 4px 12px rgba(107,68,35,0.08);
+      }
+      .record-card::before{
+        content:'';position:absolute;left:8px;top:50%;transform:translateY(-50%);
+        width:3px;height:calc(100% - 24px);
+        background:linear-gradient(to bottom,transparent,var(--rule),transparent);
+        opacity:0.6;
+      }
+      .cat-selected{
+        background:linear-gradient(145deg, rgba(155,118,83,0.18), rgba(181,101,29,0.1))!important;
+        transform:scale(1.05)!important;box-shadow:0 4px 12px rgba(155,118,83,0.2)!important;
+      }
+      .animate-fade-in{animation:fade-in 0.3s ease-out}
+      @keyframes fade-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+      @keyframes slide-up{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}
+      .animate-slide-up{animation:slide-up 0.35s cubic-bezier(.22,1,.36,1)}
+      @keyframes stagger-fade-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+      .stat-card-stagger{animation:stagger-fade-in 0.5s cubic-bezier(.22,1,.36,1) both}
+      .stat-card-stagger:nth-child(1){animation-delay:0.05s}
+      .stat-card-stagger:nth-child(2){animation-delay:0.15s}
+      .stat-card-stagger:nth-child(3){animation-delay:0.25s}
+      .stat-card-stagger:nth-child(4){animation-delay:0.35s}
+      @keyframes pulse-glow{0%,100%{box-shadow:0 4px 14px rgba(155,118,83,0.3)}50%{box-shadow:0 6px 24px rgba(155,118,83,0.5)}}
+      .btn-paper{
+        background:linear-gradient(145deg, #FFFBF3, #F5E6D3);
+        color:var(--ink);border:1px solid rgba(155,118,83,0.2);
+        border-radius:12px;padding:12px 24px;font-weight:600;font-family:'Noto Serif SC',serif;
+        box-shadow:0 2px 6px rgba(107,68,35,0.08),inset 0 1px 0 rgba(255,255,255,0.8);
+        transition:all 0.25s cubic-bezier(.4,0,.2,1);cursor:pointer;
+      }
+      .btn-paper:hover{box-shadow:0 4px 12px rgba(107,68,35,0.12)}
+      .btn-paper:active{transform:scale(0.97)}
+      .modal-backdrop{backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);background:rgba(44,24,16,0.4)}
+      .ripple-ring{position:absolute;top:50%;left:50%;width:96px;height:96px;border-radius:50%;border:2px solid rgba(181,101,29,0.4);transform:translate(-50%,-50%) scale(.8);pointer-events:none}
     </style>
   </head>
   <body class="bg-light min-h-screen">
@@ -1021,47 +1235,49 @@
       const RecordCard = ({ record, onDelete, onEdit }) => {
         const category = getCategoryById(record.category);
         const isIncome = record.type === 'income';
-        return React.createElement('div', { className: 'flex items-center justify-between bg-white rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow duration-200' },
-          React.createElement('div', { className: 'flex items-center gap-3 flex-1 min-w-0', onClick: onEdit, style: { cursor: onEdit ? 'pointer' : 'default' } },
-            React.createElement('div', { className: 'w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0', style: { backgroundColor: `${category.color}15` } },
-              React.createElement(CategoryIcon, { icon: category.icon, color: category.color, size: 20 })
-            ),
-            React.createElement('div', { className: 'min-w-0 flex-1' },
-              React.createElement('p', { className: 'text-dark font-medium text-xs truncate' }, record.description),
-              React.createElement('div', { className: 'flex items-center gap-2 mt-1 flex-wrap', style: { textSizeAdjust: 'none', WebkitTextSizeAdjust: 'none' } },
-                React.createElement('span', { className: 'text-xs px-2 py-0.5 rounded-full', style: { backgroundColor: `${category.color}20`, color: category.color } }, category.name),
-                React.createElement('span', { className: 'text-xs px-2 py-0.5 rounded-full', style: { backgroundColor: isIncome ? '#27AE6020' : '#E74C3C20', color: isIncome ? '#27AE60' : '#E74C3C' } }, isIncome ? '收入' : '支出'),
-                React.createElement('span', { className: 'text-gray-400 text-xs' }, formatDate(record.date) + (record.time ? ' ' + record.time : ''))
+        return React.createElement('div', { className: 'record-card', style: { padding: '14px 16px' } },
+          React.createElement('div', { className: 'flex items-center justify-between' },
+            React.createElement('div', { className: 'flex items-center gap-3 flex-1 min-w-0', onClick: onEdit, style: { cursor: onEdit ? 'pointer' : 'default' } },
+              React.createElement('div', { className: 'cat-icon-bg', style: { width: '40px', height: '40px', borderRadius: '10px', flexShrink: 0 } },
+                React.createElement(CategoryIcon, { icon: category.icon, color: '#9B7653', size: 18 })
+              ),
+              React.createElement('div', { className: 'min-w-0 flex-1' },
+                React.createElement('p', { className: 'text-dark font-medium text-sm truncate', style: { fontFamily: "'Noto Sans SC', sans-serif", color: '#2C1810' } }, record.description),
+                React.createElement('div', { className: 'flex items-center gap-2 mt-1', style: { textSizeAdjust: 'none', WebkitTextSizeAdjust: 'none' } },
+                  React.createElement('span', { className: 'tag-warm', style: { fontSize: '11px', padding: '2px 8px', borderRadius: '8px' } }, category.name),
+                  React.createElement('span', { className: isIncome ? 'tag-income' : 'tag-expense', style: { fontSize: '11px', padding: '2px 8px', borderRadius: '8px' } }, isIncome ? '收入' : '支出'),
+                  React.createElement('span', { className: 'text-gray-400 text-xs', style: { color: '#8B7D6B' } }, formatDate(record.date) + (record.time ? ' ' + record.time : ''))
+                )
               )
-            )
-          ),
-          React.createElement('div', { className: 'flex items-center gap-1 flex-shrink-0' },
-            React.createElement('span', { className: `font-bold text-sm ${isIncome ? 'text-green-500' : 'text-red-500'}` }, `${isIncome ? '+' : '-'}${formatAmount(record.amount)}`),
-            onDelete && React.createElement('button', {
-              onClick: function(e) { e.stopPropagation(); if (window.confirm('确认删除这条记录？')) onDelete(); },
-              title: '删除', 'aria-label': '删除',
-              style: {
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '28px',
-                height: '28px',
-                borderRadius: '8px',
-                background: 'transparent',
-                border: 'none',
-                outline: 'none',
-                cursor: 'pointer',
-                padding: 0,
-                transition: 'all 0.15s',
-                flexShrink: 0,
-                touchAction: 'manipulation',
-                zIndex: 5,
-                color: '#9ca3af'
+            ),
+            React.createElement('div', { className: 'flex items-center gap-1 flex-shrink-0' },
+              React.createElement('span', { className: isIncome ? 'amount-income' : 'amount-expense', style: { fontSize: '15px' } }, `${isIncome ? '+' : '-'}${formatAmount(record.amount)}`),
+              onDelete && React.createElement('button', {
+                onClick: function(e) { e.stopPropagation(); if (window.confirm('确认删除这条记录？')) onDelete(); },
+                title: '删除', 'aria-label': '删除',
+                style: {
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '28px',
+                  height: '28px',
+                  borderRadius: '8px',
+                  background: 'transparent',
+                  border: 'none',
+                  outline: 'none',
+                  cursor: 'pointer',
+                  padding: 0,
+                  transition: 'all 0.15s',
+                  flexShrink: 0,
+                  touchAction: 'manipulation',
+                  zIndex: 5,
+                  color: '#8B7D6B'
+                },
+                onMouseEnter: e => { e.currentTarget.style.background = 'rgba(196,69,54,0.1)'; e.currentTarget.style.color = '#C44536'; },
+                onMouseLeave: e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#8B7D6B'; }
               },
-              onMouseEnter: e => { e.currentTarget.style.background = 'rgba(239,68,68,0.1)'; e.currentTarget.style.color = '#ef4444'; },
-              onMouseLeave: e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#9ca3af'; }
-            },
-              React.createElement(icons.Trash2, { size: 14 })
+                React.createElement(icons.Trash2, { size: 14 })
+              )
             )
           )
         );
@@ -1094,30 +1310,28 @@
 
         const showCategories = categories;
 
-        return React.createElement('div', { className: 'fixed inset-0 z-50 flex items-end justify-center bg-black/40', onClick: onClose },
-          React.createElement('div', { className: 'w-full max-w-md bg-white rounded-t-3xl animate-slide-up max-h-[85vh] overflow-y-auto', onClick: e => e.stopPropagation() },
-            // 标题栏
-            React.createElement('div', { className: 'flex items-center justify-between p-5 border-b border-gray-100 sticky top-0 bg-white z-10' },
+        return React.createElement('div', { className: 'fixed inset-0 z-50 flex items-end justify-center modal-backdrop', onClick: onClose },
+          React.createElement('div', { className: 'w-full max-w-md rounded-t-3xl animate-slide-up max-h-[85vh] overflow-y-auto', style: { background: '#FFFBF3', borderRadius: '20px 20px 0 0' } },
+            React.createElement('div', { className: 'flex items-center justify-between p-5 border-b', style: { borderColor: 'rgba(155,118,83,0.15)' } },
               React.createElement('button', {
                 onClick: onClose,
-                className: 'text-gray-500 text-base font-medium',
-                style: { border: 'none', outline: 'none', background: 'transparent', padding: '6px 14px', borderRadius: '10px', cursor: 'pointer' }
+                className: 'text-sm font-medium',
+                style: { border: 'none', outline: 'none', background: 'transparent', padding: '6px 14px', borderRadius: '10px', cursor: 'pointer', color: '#5C4033' }
               }, '取消'),
-              React.createElement('h3', { className: 'text-base font-bold text-dark' }, '编辑记录'),
+              React.createElement('h3', { className: 'text-base font-bold', style: { color: '#2C1810' } }, '编辑记录'),
               React.createElement('div', { style: { width: '62px' } })
             ),
             // 表单
             React.createElement('div', { className: 'p-5 space-y-4' },
-              // 收支类型切换 — 长条形胶囊
               React.createElement('div', { className: 'flex gap-2' },
-                React.createElement('button', { onClick: () => setType('expense'), style: { border: 'none', outline: 'none' }, className: `flex-1 py-2 rounded-full text-sm font-medium transition-all ${type === 'expense' ? 'bg-red-500 text-white shadow-sm' : 'bg-gray-100 text-gray-500'}` }, '支出'),
-                React.createElement('button', { onClick: () => setType('income'), style: { border: 'none', outline: 'none' }, className: `flex-1 py-2 rounded-full text-sm font-medium transition-all ${type === 'income' ? 'bg-green-500 text-white shadow-sm' : 'bg-gray-100 text-gray-500'}` }, '收入')
+                React.createElement('button', { onClick: () => setType('expense'), style: { border: 'none', outline: 'none', background: type === 'expense' ? '#C44536' : 'rgba(155,118,83,0.08)', color: type === 'expense' ? '#fff' : '#5C4033' }, className: 'flex-1 py-2 rounded-full text-sm font-medium transition-all' }, '支出'),
+                React.createElement('button', { onClick: () => setType('income'), style: { border: 'none', outline: 'none', background: type === 'income' ? '#6B8E3D' : 'rgba(155,118,83,0.08)', color: type === 'income' ? '#fff' : '#5C4033' }, className: 'flex-1 py-2 rounded-full text-sm font-medium transition-all' }, '收入')
               ),
               // 金额
               React.createElement('div', null,
-                React.createElement('label', { className: 'block text-sm text-gray-600 mb-1' }, '金额'),
+                React.createElement('label', { className: 'block text-sm mb-1', style: { color: '#5C4033' } }, '金额'),
                 React.createElement('div', { className: 'flex items-center' },
-                  React.createElement('span', { className: 'text-lg font-bold text-dark mr-2' }, '¥'),
+                  React.createElement('span', { className: 'text-lg font-bold mr-2', style: { color: '#2C1810', fontFamily: "'Noto Serif SC', serif" } }, '¥'),
                   React.createElement('input', {
                     type: 'text',
                     inputMode: 'decimal',
@@ -1126,43 +1340,45 @@
                     step: '0.01',
                     min: '0',
                     placeholder: '0.00',
-                    className: 'flex-1 text-lg font-bold text-dark bg-gray-50 rounded-xl px-3 py-2 border-none outline-none'
+                    className: 'flex-1 text-lg font-bold rounded-xl px-3 py-2 border-none outline-none',
+                    style: { background: 'rgba(155,118,83,0.06)', color: '#2C1810' }
                   })
                 )
               ),
               // 日期和时间
               React.createElement('div', { style: { display: 'grid', gridTemplateColumns: '1fr auto 1fr', gap: '8px', width: '100%' } },
                 React.createElement('div', null,
-                  React.createElement('label', { className: 'block text-sm text-gray-600 mb-1' }, '日期'),
+                  React.createElement('label', { className: 'block text-sm mb-1', style: { color: '#5C4033' } }, '日期'),
                   React.createElement('input', {
                     type: 'date',
                     value: date,
                     onChange: e => setDate(e.target.value),
-                    className: 'w-full px-3 py-2.5 bg-gray-50 rounded-xl border-none outline-none text-dark text-sm',
-                    style: { width: '100%', boxSizing: 'border-box' }
+                    className: 'w-full px-3 py-2.5 rounded-xl border-none outline-none text-sm',
+                    style: { width: '100%', boxSizing: 'border-box', background: 'rgba(155,118,83,0.06)', color: '#2C1810' }
                   })
                 ),
-                React.createElement('span', { style: { color: '#9ca3af', fontSize: '14px', alignSelf: 'center', whiteSpace: 'nowrap', paddingTop: '20px' } }, ''),
+                React.createElement('span', { style: { color: '#8B7D6B', fontSize: '14px', alignSelf: 'center', whiteSpace: 'nowrap', paddingTop: '20px' } }, ''),
                 React.createElement('div', null,
-                  React.createElement('label', { className: 'block text-sm text-gray-600 mb-1' }, '时间'),
+                  React.createElement('label', { className: 'block text-sm mb-1', style: { color: '#5C4033' } }, '时间'),
                   React.createElement('input', {
                     type: 'time',
                     value: time,
                     onChange: e => setTime(e.target.value),
-                    className: 'w-full px-3 py-2.5 bg-gray-50 rounded-xl border-none outline-none text-dark text-sm',
-                    style: { width: '100%', boxSizing: 'border-box' }
+                    className: 'w-full px-3 py-2.5 rounded-xl border-none outline-none text-sm',
+                    style: { width: '100%', boxSizing: 'border-box', background: 'rgba(155,118,83,0.06)', color: '#2C1810' }
                   })
                 )
               ),
               // 描述
               React.createElement('div', null,
-                React.createElement('label', { className: 'block text-sm text-gray-600 mb-1' }, '描述'),
+                React.createElement('label', { className: 'block text-sm mb-1', style: { color: '#5C4033' } }, '描述'),
                 React.createElement('input', {
                   type: 'text',
                   value: description,
                   onChange: e => { setDescription(e.target.value); setError(''); },
                   placeholder: '这笔钱花在哪了？',
-                  className: 'w-full px-3 py-2.5 bg-gray-50 rounded-xl border-none outline-none text-dark placeholder-gray-400 text-sm'
+                  className: 'w-full px-3 py-2.5 rounded-xl border-none outline-none text-sm',
+                  style: { background: 'rgba(155,118,83,0.06)', color: '#2C1810' }
                 })
               ),
               // 类别 — 无外框，单行多列
@@ -1196,7 +1412,7 @@
                 React.createElement('button', {
                   onClick: handleSave,
                   className: 'w-full text-white text-base font-medium',
-                  style: { border: 'none', outline: 'none', background: '#7ED7D1', padding: '12px 0', borderRadius: '12px', cursor: 'pointer', boxShadow: '0 2px 8px rgba(126,215,209,0.35)' }
+                  style: { border: 'none', outline: 'none', background: 'linear-gradient(135deg, #9B7653, #C4A484)', padding: '12px 0', borderRadius: '12px', cursor: 'pointer', boxShadow: '0 4px 16px rgba(155,118,83,0.35)', transition: 'all 0.25s' }
                 }, '保存')
               ),
               // 错误提示
@@ -1318,35 +1534,35 @@
 
         if (!isOpen) return null;
 
-        return React.createElement('div', { className: 'fixed inset-0 bg-black/40 flex items-end sm:items-center justify-center z-50' },
-          React.createElement('div', { className: 'bg-white w-full sm:w-[90%] sm:max-w-md rounded-t-2xl sm:rounded-2xl max-h-[85vh] flex flex-col animate-slide-up' },
-            React.createElement('div', { className: 'flex items-center justify-between p-4 border-b border-gray-100' },
-              React.createElement('h2', { className: 'text-lg font-bold text-dark' }, '记一笔'),
-              React.createElement('button', { onClick: onClose, className: 'w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center transition-colors' },
-                React.createElement(icons.X, { size: 20, className: 'text-gray-500' })
+        return React.createElement('div', { className: 'fixed inset-0 modal-backdrop flex items-end sm:items-center justify-center z-50' },
+          React.createElement('div', { className: 'w-full sm:w-[90%] sm:max-w-md rounded-t-2xl sm:rounded-2xl max-h-[85vh] flex flex-col animate-slide-up', style: { background: '#FFFBF3' } },
+            React.createElement('div', { className: 'flex items-center justify-between p-4 border-b', style: { borderColor: 'rgba(155,118,83,0.15)' } },
+              React.createElement('h2', { className: 'text-lg font-bold', style: { color: '#2C1810', fontFamily: "'Noto Serif SC', serif" } }, '记一笔'),
+              React.createElement('button', { onClick: onClose, className: 'w-8 h-8 rounded-full flex items-center justify-center transition-colors', style: { background: 'transparent', border: 'none', color: '#5C4033' } },
+                React.createElement(icons.X, { size: 20 })
               )
             ),
             React.createElement('div', { className: 'p-4 flex-1 overflow-y-auto' },
               // 日期 + 时间 同一栏：默认今天当前时间，可手动改；点「自动」恢复自然语言识别的日期 + 当前时间
               React.createElement('div', { className: 'flex items-end gap-2 mb-3' },
                 React.createElement('div', { className: 'flex-1' },
-                  React.createElement('span', { className: 'text-xs text-gray-500' }, '日期'),
+                  React.createElement('span', { className: 'text-xs', style: { color: '#5C4033' } }, '日期'),
                   React.createElement('input', {
                     type: 'date',
                     value: selectedDate,
                     onChange: handleDateChange,
-                    className: 'w-full mt-1 px-3 py-2 bg-gray-50 rounded-lg border-none outline-none text-sm text-dark',
-                    style: { colorScheme: 'light', width: '100%', boxSizing: 'border-box' }
+                    className: 'w-full mt-1 px-3 py-2 rounded-lg border-none outline-none text-sm',
+                    style: { colorScheme: 'light', width: '100%', boxSizing: 'border-box', background: 'rgba(155,118,83,0.06)', color: '#2C1810' }
                   })
                 ),
                 React.createElement('div', { className: 'flex-1' },
-                  React.createElement('span', { className: 'text-xs text-gray-500' }, '时间'),
+                  React.createElement('span', { className: 'text-xs', style: { color: '#5C4033' } }, '时间'),
                   React.createElement('input', {
                     type: 'time',
                     value: selectedTime,
                     onChange: handleTimeChange,
-                    className: 'w-full mt-1 px-3 py-2 bg-gray-50 rounded-lg border-none outline-none text-sm text-dark',
-                    style: { width: '100%', boxSizing: 'border-box' }
+                    className: 'w-full mt-1 px-3 py-2 rounded-lg border-none outline-none text-sm',
+                    style: { width: '100%', boxSizing: 'border-box', background: 'rgba(155,118,83,0.06)', color: '#2C1810' }
                   })
                 ),
                 (userTouchedDate || userTouchedTime) && React.createElement('button', {
@@ -1369,7 +1585,8 @@
               React.createElement('textarea', {
                 value: input, onChange: (e) => setInput(e.target.value),
                 placeholder: '记一笔...',
-                className: 'w-full h-24 p-4 bg-gray-50 rounded-xl border-none outline-none text-dark placeholder-gray-400 resize-none text-base',
+                className: 'w-full h-24 p-4 rounded-xl border-none outline-none resize-none text-base',
+                style: { background: 'rgba(155,118,83,0.06)', color: '#2C1810' },
                 autoFocus: true
               }),
               parsedRecords.length > 0 && React.createElement('div', { className: 'mt-4 space-y-3' },
@@ -1399,10 +1616,13 @@
                 })
               )
             ),
-            React.createElement('div', { className: 'p-4 border-t border-gray-100' },
+            React.createElement('div', { className: 'p-4 border-t', style: { borderColor: 'rgba(155,118,83,0.15)' } },
               React.createElement('button', {
                 onClick: handleSubmit, disabled: parsedRecords.length === 0 || isLoading,
-                className: `w-full py-3 rounded-xl font-medium transition-all duration-200 flex items-center justify-center ${parsedRecords.length > 0 && !isLoading ? 'bg-primary text-white hover:bg-primary/90 active:scale-[0.98]' : 'bg-gray-200 text-gray-400 cursor-not-allowed'}`
+                className: 'w-full py-3 rounded-xl font-medium transition-all duration-200 flex items-center justify-center',
+                style: parsedRecords.length > 0 && !isLoading
+                  ? { background: 'linear-gradient(135deg, #9B7653, #C4A484)', color: '#fff', boxShadow: '0 4px 16px rgba(155,118,83,0.35)', border: 'none', cursor: 'pointer' }
+                  : { background: 'rgba(155,118,83,0.15)', color: '#8B7D6B', border: 'none', cursor: 'not-allowed' }
               },
               isLoading ? React.createElement('svg', { className: 'animate-spin h-5 w-5 text-white', style: { width: '1.25rem', height: '1.25rem' }, xmlns: 'http://www.w3.org/2000/svg', fill: 'none', viewBox: '0 0 24 24' }, React.createElement('circle', { className: 'opacity-25', cx: '12', cy: '12', r: '10', stroke: 'currentColor', strokeWidth: '4' }), React.createElement('path', { className: 'opacity-75', fill: 'currentColor', d: 'M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z' }))
                 : React.createElement(icons.Check, { size: 22 })
@@ -1421,30 +1641,30 @@
           { id: '/stats', icon: icons.BarChart3, label: '统计' },
           { id: '/settings', icon: icons.Settings, label: '设置' },
         ];
-        return React.createElement('nav', { className: 'fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 px-4 py-2 pb-safe z-40' },
+        return React.createElement('nav', { className: 'bottom-bar fixed bottom-0 left-0 right-0 px-4 py-2 pb-safe z-40' },
           React.createElement('div', { className: 'flex justify-around items-center' },
             leftItems.map(item => {
               const Icon = item.icon;
               const isActive = currentPage === item.id;
               return React.createElement('button', {
                 key: item.id, onClick: () => onNavigate(item.id),
-                className: `flex flex-col items-center gap-1 py-1 transition-all duration-200 outline-none ${isActive ? 'text-primary' : 'text-gray-400 hover:text-gray-600'}`,
+                className: `nav-item ${isActive ? 'active' : ''}`,
                 style: { background: 'transparent', border: 'none', WebkitAppearance: 'none' }
-              }, React.createElement(Icon, { size: 24, className: isActive ? 'scale-110' : '' }), React.createElement('span', { className: 'text-xs font-medium' }, item.label));
+              }, React.createElement(Icon, { size: 24 }), React.createElement('span', { className: 'text-xs font-medium' }, item.label));
             }),
             React.createElement('button', {
               onClick: onAddClick,
-              className: 'flex items-center justify-center w-12 h-10 rounded-2xl bg-gray-100 text-gray-600 transition-all duration-200 hover:bg-primary/10 hover:text-primary active:scale-95 outline-none',
-              style: { border: 'none', WebkitAppearance: 'none' }
+              className: 'flex items-center justify-center w-12 h-10 rounded-2xl text-white transition-all duration-200 active:scale-95 outline-none',
+              style: { border: 'none', WebkitAppearance: 'none', background: 'linear-gradient(145deg, #9B7653, #C4A484)', boxShadow: '0 4px 14px rgba(155,118,83,0.4)' }
             }, React.createElement(icons.Plus, { size: 22 })),
             rightItems.map(item => {
               const Icon = item.icon;
               const isActive = currentPage === item.id;
               return React.createElement('button', {
                 key: item.id, onClick: () => onNavigate(item.id),
-                className: `flex flex-col items-center gap-1 py-1 transition-all duration-200 outline-none ${isActive ? 'text-primary' : 'text-gray-400 hover:text-gray-600'}`,
+                className: `nav-item ${isActive ? 'active' : ''}`,
                 style: { background: 'transparent', border: 'none', WebkitAppearance: 'none' }
-              }, React.createElement(Icon, { size: 24, className: isActive ? 'scale-110' : '' }), React.createElement('span', { className: 'text-xs font-medium' }, item.label));
+              }, React.createElement(Icon, { size: 24 }), React.createElement('span', { className: 'text-xs font-medium' }, item.label));
             })
           )
         );
@@ -1563,17 +1783,13 @@
           }
         };
 
-        return React.createElement('div', { className: 'min-h-screen pb-32 relative', style: { background: 'linear-gradient(135deg, #f0fdfa 0%, #fdf4ff 30%, #fef9f3 60%, #f0f9ff 100%)' } },
-          // 装饰性背景元素 - 顶部右侧淡紫色（首页）
-          React.createElement('div', { style: { position: 'absolute', top: '-80px', right: '-60px', width: '220px', height: '220px', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(99,102,241,0.15), rgba(168,85,247,0.1))', filter: 'blur(50px)', zIndex: 0 } }),
-          // 装饰性背景元素 - 顶部左侧淡青色
-          React.createElement('div', { style: { position: 'absolute', top: '80px', left: '-70px', width: '160px', height: '160px', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(78,205,196,0.12), rgba(59,130,246,0.08))', filter: 'blur(40px)', zIndex: 0 } }),
-          // 装饰性背景元素 - 中间淡粉色
-          React.createElement('div', { style: { position: 'absolute', top: '20px', left: '55%', width: '100px', height: '100px', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(236,72,153,0.1), rgba(99,102,241,0.06))', filter: 'blur(30px)', zIndex: 0 } }),
-          // 装饰性背景元素 - 底部淡橙色
-          React.createElement('div', { style: { position: 'absolute', bottom: '100px', right: '-30px', width: '140px', height: '140px', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(255,159,28,0.1), rgba(236,72,153,0.06))', filter: 'blur(35px)', zIndex: 0 } }),
-          // 装饰性背景元素 - 底部左侧
-          React.createElement('div', { style: { position: 'absolute', bottom: '200px', left: '-40px', width: '120px', height: '120px', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(168,85,247,0.1), rgba(78,205,196,0.06))', filter: 'blur(32px)', zIndex: 0 } }),
+        return React.createElement('div', { className: 'paper-texture min-h-screen pb-32 relative', style: {} },
+          // 装饰性背景 - 温暖纸张纹理
+          React.createElement('div', { style: { position: 'absolute', top: '-60px', right: '-40px', width: '180px', height: '180px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(196,101,61,0.08), transparent 70%)', filter: 'blur(40px)', zIndex: 0 } }),
+          React.createElement('div', { style: { position: 'absolute', top: '120px', left: '-50px', width: '140px', height: '140px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(139,111,78,0.07), transparent 70%)', filter: 'blur(35px)', zIndex: 0 } }),
+          React.createElement('div', { style: { position: 'absolute', bottom: '120px', right: '-20px', width: '160px', height: '160px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(184,134,11,0.06), transparent 70%)', filter: 'blur(40px)', zIndex: 0 } }),
+          // 账本装订孔装饰
+          React.createElement('div', { className: 'binding-holes', style: { position: 'absolute', left: '6px', top: '80px', bottom: '120px', width: '8px', zIndex: 0, opacity: 0.3 } }),
           React.createElement('header', { className: 'pt-8 pb-4 px-4 relative z-10' },
             React.createElement('div', { className: 'flex items-center justify-center', style: { gap: '4px' } },
               // 可爱小猫图标（黑白简约风格）
@@ -1623,29 +1839,29 @@
                   React.createElement('path', { d: 'M58 65 Q72 58 68 48 Q65 42 60 45', stroke: '#2C3E50', strokeWidth: '2.5', fill: 'none', strokeLinecap: 'round' })
                 )
               ),
-              React.createElement('h1', { className: 'text-2xl font-bold text-dark' }, '舒小茂记账')
+              React.createElement('h1', { className: 'text-2xl font-bold journal-title' }, '舒小茂记账')
             ),
-            React.createElement('p', { className: 'text-center text-gray-400 text-sm mt-1' }, '轻松记录每一笔')
+            React.createElement('p', { className: 'text-center text-sm mt-1', style: { color: '#8B7D6B', fontFamily: "'Noto Serif SC', serif" } }, '轻松记录每一笔')
           ),
           React.createElement('div', { className: 'px-4 mt-6 relative z-10' },
             React.createElement('div', { className: 'grid grid-cols-2 gap-4' },
-              React.createElement('div', { className: 'bg-white rounded-2xl p-4 shadow-sm' },
-                React.createElement('p', { className: 'text-gray-400 text-xs' }, '今日支出'),
-                React.createElement('p', { className: 'text-xl font-bold text-red-500 mt-1' }, `-${formatAmount(todayExpense)}`)
+              React.createElement('div', { className: 'stat-card stat-card-stagger' },
+                React.createElement('p', { className: 'text-xs', style: { color: '#8B7D6B' } }, '今日支出'),
+                React.createElement('p', { className: 'text-xl font-bold amount-expense mt-1', style: { fontFamily: "'Noto Serif SC', serif" } }, `-${formatAmount(todayExpense)}`)
               ),
-              React.createElement('div', { className: 'bg-white rounded-2xl p-4 shadow-sm' },
-                React.createElement('p', { className: 'text-gray-400 text-xs' }, '今日收入'),
-                React.createElement('p', { className: 'text-xl font-bold text-green-500 mt-1' }, `+${formatAmount(todayIncome)}`)
+              React.createElement('div', { className: 'stat-card stat-card-stagger' },
+                React.createElement('p', { className: 'text-xs', style: { color: '#8B7D6B' } }, '今日收入'),
+                React.createElement('p', { className: 'text-xl font-bold amount-income mt-1', style: { fontFamily: "'Noto Serif SC', serif" } }, `+${formatAmount(todayIncome)}`)
               )
             ),
             React.createElement('div', { className: 'grid grid-cols-2 gap-4 mt-4' },
-              React.createElement('div', { className: 'bg-white rounded-2xl p-4 shadow-sm' },
-                React.createElement('p', { className: 'text-gray-400 text-xs' }, '本月支出'),
-                React.createElement('p', { className: 'text-xl font-bold text-red-500 mt-1' }, `-${formatAmount(monthExpense)}`)
+              React.createElement('div', { className: 'stat-card stat-card-stagger' },
+                React.createElement('p', { className: 'text-xs', style: { color: '#8B7D6B' } }, '本月支出'),
+                React.createElement('p', { className: 'text-xl font-bold amount-expense mt-1', style: { fontFamily: "'Noto Serif SC', serif" } }, `-${formatAmount(monthExpense)}`)
               ),
-              React.createElement('div', { className: 'bg-white rounded-2xl p-4 shadow-sm' },
-                React.createElement('p', { className: 'text-gray-400 text-xs' }, '本月收入'),
-                React.createElement('p', { className: 'text-xl font-bold text-green-500 mt-1' }, `+${formatAmount(monthIncome)}`)
+              React.createElement('div', { className: 'stat-card stat-card-stagger' },
+                React.createElement('p', { className: 'text-xs', style: { color: '#8B7D6B' } }, '本月收入'),
+                React.createElement('p', { className: 'text-xl font-bold amount-income mt-1', style: { fontFamily: "'Noto Serif SC', serif" } }, `+${formatAmount(monthIncome)}`)
               )
             )
           ),
@@ -1673,9 +1889,9 @@
                     width: '96px',
                     height: '96px',
                     borderRadius: '50%',
-                    backgroundColor: '#FF7B54',
+                    background: isRecording ? 'linear-gradient(145deg, #B8472B, #923720)' : 'linear-gradient(145deg, #B5651D, #8B4513)',
                     color: '#fff',
-                    boxShadow: isRecording ? '0 8px 28px rgba(255,123,84,0.5)' : '0 8px 24px rgba(255,123,84,0.35)',
+                    boxShadow: isRecording ? '0 12px 36px rgba(196,69,54,0.55), inset 0 2px 4px rgba(255,255,255,0.15)' : '0 8px 28px rgba(181,101,29,0.4), inset 0 2px 4px rgba(255,255,255,0.15)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -1697,24 +1913,25 @@
                   React.createElement('span', {
                     key: i,
                     className: 'animate-sound-bar rounded-full',
-                    style: { width: '4px', height: '100%', backgroundColor: '#FF7B54', animationDelay: `${delay}s`, opacity: 0.7 }
+                    style: { width: '4px', height: '100%', backgroundColor: '#B5651D', animationDelay: `${delay}s`, opacity: 0.7 }
                   })
                 )
               ),
               // 文字提示
               React.createElement('div', { className: 'text-center' },
-                React.createElement('p', { className: 'text-sm font-medium', style: { color: '#FF7B54' } }, isRecording ? '正在聆听...' : '点击麦克风开始录音'),
-                isRecording && React.createElement('p', { className: 'text-xs text-gray-400 mt-1' }, 'AI 正在分析金额、标题、分类和时间...')
+                React.createElement('p', { className: 'text-sm font-medium', style: { color: '#B5651D' } }, isRecording ? '正在聆听...' : '点击麦克风开始录音'),
+                isRecording && React.createElement('p', { className: 'text-xs mt-1', style: { color: '#8B7D6B' } }, 'AI 正在分析金额、标题、分类和时间...')
               ),
               // 录音结果文字
-              recordingText && !isRecording && React.createElement('p', { className: 'text-sm text-dark bg-white px-3 py-1.5 rounded-full shadow-sm max-w-xs truncate' }, recordingText)
+              recordingText && !isRecording && React.createElement('p', { className: 'text-sm px-3 py-1.5 rounded-full shadow-sm max-w-xs truncate', style: { background: '#FFFBF3', color: '#2C1810', border: '1px solid rgba(155,118,83,0.1)' } }, recordingText)
             )
           ),
           React.createElement('div', { className: 'px-4 mt-8' },
-            React.createElement('div', { className: 'flex items-center justify-start mb-4 w-full' },
-              React.createElement('div', { className: 'flex items-center gap-2' },
-                React.createElement(icons.TrendingUp, { size: 18, className: 'text-primary' }),
-                React.createElement('h2', { className: 'text-lg font-bold text-dark' }, '最近记录')
+            React.createElement('div', { className: 'flex items-center justify-center mb-4 w-full' },
+              React.createElement('div', { className: 'flex items-center gap-3' },
+                React.createElement('div', { style: { width: '24px', height: '2px', background: 'linear-gradient(to right, transparent, #9B7653)' } }),
+                React.createElement('h2', { className: 'text-lg font-bold journal-title' }, '最近记录'),
+                React.createElement('div', { style: { width: '24px', height: '2px', background: 'linear-gradient(to left, transparent, #9B7653)' } })
               )
             ),
             recentRecords.length > 0 ? React.createElement('div', { className: 'space-y-3' },
@@ -1724,7 +1941,7 @@
                 onDelete: () => deleteRecord(record.id),
                 onEdit: () => setEditingRecord(record)
               }))
-            ) : React.createElement('div', { className: 'text-center py-8 text-gray-400' },
+            ) : React.createElement('div', { className: 'text-center py-8', style: { color: '#8B7D6B' } },
               React.createElement('p', null, '暂无记录'),
               React.createElement('p', { className: 'text-xs mt-1' }, '点击上方按钮开始语音记账')
             )
@@ -1794,29 +2011,29 @@
           setEditingRecord(null);
         };
 
-        return React.createElement('div', { className: 'min-h-screen pb-28 relative', style: { background: 'linear-gradient(135deg, #f0fdfa 0%, #fdf4ff 30%, #fef9f3 60%, #f0f9ff 100%)' } },
+        return React.createElement('div', { className: 'paper-texture min-h-screen pb-28 relative' },
           // 装饰性背景元素
-          React.createElement('div', { style: { position: 'absolute', top: '-80px', right: '-60px', width: '220px', height: '220px', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(99,102,241,0.15), rgba(168,85,247,0.1))', filter: 'blur(50px)', zIndex: 0 } }),
-          React.createElement('div', { style: { position: 'absolute', top: '80px', left: '-70px', width: '160px', height: '160px', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(78,205,196,0.12), rgba(59,130,246,0.08))', filter: 'blur(40px)', zIndex: 0 } }),
-          React.createElement('div', { style: { position: 'absolute', bottom: '100px', right: '-30px', width: '140px', height: '140px', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(255,159,28,0.1), rgba(236,72,153,0.06))', filter: 'blur(35px)', zIndex: 0 } }),
-          React.createElement('header', { className: 'pt-8 pb-4 px-4 bg-white/80 sticky top-0 z-10', style: { backdropFilter: 'blur(12px)' } },
-            React.createElement('h1', { className: 'text-xl font-bold text-dark text-center' }, '账单明细')
+          React.createElement('div', { style: { position: 'absolute', top: '-60px', right: '-40px', width: '180px', height: '180px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(196,101,61,0.08), transparent 70%)', filter: 'blur(45px)', zIndex: 0 } }),
+          React.createElement('div', { style: { position: 'absolute', top: '100px', left: '-50px', width: '150px', height: '150px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(139,111,78,0.07), transparent 70%)', filter: 'blur(40px)', zIndex: 0 } }),
+          React.createElement('div', { style: { position: 'absolute', bottom: '100px', right: '-30px', width: '140px', height: '140px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(184,134,11,0.06), transparent 70%)', filter: 'blur(35px)', zIndex: 0 } }),
+          React.createElement('header', { className: 'pt-8 pb-4 px-4 sticky top-0 z-10', style: { background: 'rgba(255,251,243,0.88)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)' } },
+            React.createElement('h1', { className: 'text-xl journal-title text-center' }, '账单明细')
           ),
           React.createElement('div', { className: 'px-4 mt-4 relative z-10' },
             // 顶部：收支切换 + 筛选按钮
             React.createElement('div', { className: 'flex items-center gap-2 mb-3' },
               React.createElement('div', { className: 'flex-1 flex gap-2' },
-                React.createElement('button', { onClick: () => setRecordType('all'), style: { border: 'none', outline: 'none' }, className: `flex-1 py-2 rounded-full text-sm font-medium transition-all ${recordType === 'all' ? 'bg-primary text-white shadow-sm' : 'bg-gray-100 text-gray-500'}` }, '全部'),
-                React.createElement('button', { onClick: () => setRecordType('expense'), style: { border: 'none', outline: 'none' }, className: `flex-1 py-2 rounded-full text-sm font-medium transition-all ${recordType === 'expense' ? 'bg-red-500 text-white shadow-sm' : 'bg-gray-100 text-gray-500'}` }, '支出'),
-                React.createElement('button', { onClick: () => setRecordType('income'), style: { border: 'none', outline: 'none' }, className: `flex-1 py-2 rounded-full text-sm font-medium transition-all ${recordType === 'income' ? 'bg-green-500 text-white shadow-sm' : 'bg-gray-100 text-gray-500'}` }, '收入')
+                React.createElement('button', { onClick: () => setRecordType('all'), style: { border: 'none', outline: 'none', background: recordType === 'all' ? '#9B7653' : 'rgba(155,118,83,0.08)', color: recordType === 'all' ? '#fff' : '#5C4033' }, className: 'flex-1 py-2 rounded-full text-sm font-medium transition-all' }, '全部'),
+                React.createElement('button', { onClick: () => setRecordType('expense'), style: { border: 'none', outline: 'none', background: recordType === 'expense' ? '#C44536' : 'rgba(155,118,83,0.08)', color: recordType === 'expense' ? '#fff' : '#5C4033' }, className: 'flex-1 py-2 rounded-full text-sm font-medium transition-all' }, '支出'),
+                React.createElement('button', { onClick: () => setRecordType('income'), style: { border: 'none', outline: 'none', background: recordType === 'income' ? '#6B8E3D' : 'rgba(155,118,83,0.08)', color: recordType === 'income' ? '#fff' : '#5C4033' }, className: 'flex-1 py-2 rounded-full text-sm font-medium transition-all' }, '收入')
               ),
               React.createElement('button', {
                 onClick: () => {
                   if (showFilters) { resetFilters(); }
                   setShowFilters(!showFilters);
                 },
-                className: `flex items-center gap-1 px-3 py-2 rounded-full text-sm flex-shrink-0 relative transition-all ${(showFilters || activeFilterCount > 0) ? 'bg-primary text-white shadow-sm' : 'bg-gray-100 text-gray-600'}`,
-                style: { border: 'none', outline: 'none' }
+                className: 'flex items-center gap-1 px-3 py-2 rounded-full text-sm flex-shrink-0 relative transition-all',
+                style: { border: 'none', outline: 'none', background: (showFilters || activeFilterCount > 0) ? '#9B7653' : 'rgba(155,118,83,0.08)', color: (showFilters || activeFilterCount > 0) ? '#fff' : '#5C4033' }
               },
                 React.createElement('svg', { width: '16', height: '16', viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: '2', strokeLinecap: 'round', strokeLinejoin: 'round' },
                   React.createElement('polygon', { points: '22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3' })
@@ -1939,7 +2156,7 @@
                 )
               ),
               React.createElement('p', null, activeFilterCount > 0 ? '没有符合条件的记录' : '暂无记录'),
-              activeFilterCount > 0 && React.createElement('button', { onClick: resetFilters, className: 'mt-3 text-sm text-primary' }, '清除筛选')
+              activeFilterCount > 0 && React.createElement('button', { onClick: resetFilters, className: 'mt-3 text-sm', style: { color: '#9B7653', background: 'none', border: 'none', cursor: 'pointer' } }, '清除筛选')
             )
           ),
           // 编辑弹窗
@@ -2018,24 +2235,24 @@
         
         const maxAmount = sortedStats.length > 0 ? Math.max(...sortedStats.map(s => s.amount)) : 1;
 
-        return React.createElement('div', { className: 'min-h-screen pb-24 relative', style: { background: 'linear-gradient(135deg, #f0fdfa 0%, #fdf4ff 30%, #fef9f3 60%, #f0f9ff 100%)' } },
+        return React.createElement('div', { className: 'paper-texture min-h-screen pb-24 relative' },
           // 装饰性背景元素
           React.createElement('div', { style: { position: 'absolute', top: '-80px', right: '-60px', width: '220px', height: '220px', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(99,102,241,0.15), rgba(168,85,247,0.1))', filter: 'blur(50px)', zIndex: 0 } }),
           React.createElement('div', { style: { position: 'absolute', top: '80px', left: '-70px', width: '160px', height: '160px', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(78,205,196,0.12), rgba(59,130,246,0.08))', filter: 'blur(40px)', zIndex: 0 } }),
           React.createElement('div', { style: { position: 'absolute', bottom: '100px', right: '-30px', width: '140px', height: '140px', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(255,159,28,0.1), rgba(236,72,153,0.06))', filter: 'blur(35px)', zIndex: 0 } }),
-          React.createElement('header', { className: 'pt-8 pb-4 px-4 bg-white/80 sticky top-0 z-10', style: { backdropFilter: 'blur(12px)' } },
-            React.createElement('h1', { className: 'text-xl font-bold text-dark text-center' }, '收支统计')
+          React.createElement('header', { className: 'pt-8 pb-4 px-4 sticky top-0 z-10', style: { background: 'rgba(255,251,243,0.88)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)' } },
+            React.createElement('h1', { className: 'text-xl font-bold text-center', style: { color: '#2C1810', fontFamily: "'Noto Serif SC', serif" } }, '收支统计')
           ),
           React.createElement('div', { className: 'px-4 mt-4 relative z-10' },
             React.createElement('div', { className: 'bg-white rounded-2xl p-4 shadow-sm mb-4' },
               React.createElement('div', { className: 'flex items-center justify-between mb-4' },
                 React.createElement('div', { className: 'flex gap-2' },
-                  React.createElement('button', { onClick: () => setRecordType('expense'), style: { border: 'none', outline: 'none', minWidth: '88px' }, className: `py-2 px-5 rounded-full text-sm font-medium transition-all ${recordType === 'expense' ? 'bg-red-500 text-white shadow-sm' : 'bg-gray-100 text-gray-500'}` }, '支出'),
-                  React.createElement('button', { onClick: () => setRecordType('income'), style: { border: 'none', outline: 'none', minWidth: '88px' }, className: `py-2 px-5 rounded-full text-sm font-medium transition-all ${recordType === 'income' ? 'bg-green-500 text-white shadow-sm' : 'bg-gray-100 text-gray-500'}` }, '收入')
+                  React.createElement('button', { onClick: () => setRecordType('expense'), style: { border: 'none', outline: 'none', minWidth: '88px', background: recordType === 'expense' ? '#C44536' : 'rgba(155,118,83,0.08)', color: recordType === 'expense' ? '#fff' : '#5C4033' }, className: 'py-2 px-5 rounded-full text-sm font-medium transition-all' }, '支出'),
+                  React.createElement('button', { onClick: () => setRecordType('income'), style: { border: 'none', outline: 'none', minWidth: '88px', background: recordType === 'income' ? '#6B8E3D' : 'rgba(155,118,83,0.08)', color: recordType === 'income' ? '#fff' : '#5C4033' }, className: 'py-2 px-5 rounded-full text-sm font-medium transition-all' }, '收入')
                 ),
                 React.createElement('div', { className: 'flex gap-2' },
-                  React.createElement('button', { onClick: () => setChartType('pie'), style: { border: 'none', outline: 'none', minWidth: '88px' }, className: `py-2 px-5 rounded-full text-sm font-medium transition-all ${chartType === 'pie' ? 'bg-primary text-white shadow-sm' : 'bg-gray-100 text-gray-500'}` }, '扇形图'),
-                  React.createElement('button', { onClick: () => setChartType('bar'), style: { border: 'none', outline: 'none', minWidth: '88px' }, className: `py-2 px-5 rounded-full text-sm font-medium transition-all ${chartType === 'bar' ? 'bg-primary text-white shadow-sm' : 'bg-gray-100 text-gray-500'}` }, '柱状图')
+                  React.createElement('button', { onClick: () => setChartType('pie'), style: { border: 'none', outline: 'none', minWidth: '88px', background: chartType === 'pie' ? '#9B7653' : 'rgba(155,118,83,0.08)', color: chartType === 'pie' ? '#fff' : '#5C4033' }, className: 'py-2 px-5 rounded-full text-sm font-medium transition-all' }, '扇形图'),
+                  React.createElement('button', { onClick: () => setChartType('bar'), style: { border: 'none', outline: 'none', minWidth: '88px', background: chartType === 'bar' ? '#9B7653' : 'rgba(155,118,83,0.08)', color: chartType === 'bar' ? '#fff' : '#5C4033' }, className: 'py-2 px-5 rounded-full text-sm font-medium transition-all' }, '柱状图')
                 )
               ),
               React.createElement('div', { className: 'flex items-center justify-between mb-4' },
@@ -2043,13 +2260,13 @@
                 React.createElement('div', { className: 'flex gap-1' },
                   React.createElement('button', {
                     onClick: () => setPeriodType('month'),
-                    style: { border: 'none', outline: 'none' },
-                    className: `py-2 px-4 rounded-lg text-sm font-medium transition-all ${periodType === 'month' ? 'bg-primary text-white shadow-sm' : 'bg-gray-100 text-gray-500'}`
+                    style: { border: 'none', outline: 'none', background: periodType === 'month' ? '#9B7653' : 'rgba(155,118,83,0.08)', color: periodType === 'month' ? '#fff' : '#5C4033' },
+                    className: 'py-2 px-4 rounded-lg text-sm font-medium transition-all'
                   }, '月度'),
                   React.createElement('button', {
                     onClick: () => setPeriodType('year'),
-                    style: { border: 'none', outline: 'none' },
-                    className: `py-2 px-4 rounded-lg text-sm font-medium transition-all ${periodType === 'year' ? 'bg-primary text-white shadow-sm' : 'bg-gray-100 text-gray-500'}`
+                    style: { border: 'none', outline: 'none', background: periodType === 'year' ? '#9B7653' : 'rgba(155,118,83,0.08)', color: periodType === 'year' ? '#fff' : '#5C4033' },
+                    className: 'py-2 px-4 rounded-lg text-sm font-medium transition-all'
                   }, '年度')
                 ),
                 React.createElement('div', { ref: dropdownRef, className: 'flex items-center gap-2' },
@@ -2103,7 +2320,7 @@
             ) : React.createElement('div', { className: 'bg-white rounded-2xl p-6 shadow-sm mb-6' },
               React.createElement('div', { className: 'text-center mb-6' },
                 React.createElement('p', { className: 'text-xs text-gray-400' }, `${getPeriodLabel()}${recordType === 'income' ? '总收入' : '总支出'}`),
-                React.createElement('p', { className: `text-3xl font-bold mt-1 ${recordType === 'income' ? 'text-green-500' : 'text-red-500'}` }, `${recordType === 'income' ? '+' : '-'}¥${formatAmount(totalAmount)}`)
+                React.createElement('p', { className: `text-3xl font-bold mt-1 ${recordType === 'income' ? '' : ''}`, style: { color: recordType === 'income' ? '#6B8E3D' : '#C44536', fontFamily: "'Noto Serif SC', serif" } }, `${recordType === 'income' ? '+' : '-'}¥${formatAmount(totalAmount)}`)
               ),
               chartType === 'pie' ? React.createElement('div', { className: 'flex flex-col items-center mb-6' },
                 React.createElement('div', { className: 'relative w-64 h-64' },
@@ -2311,12 +2528,12 @@
 
         var hasApiKey = apiKey.trim() !== '';
 
-        return React.createElement('div', { className: 'min-h-screen pb-24 relative', style: { background: 'linear-gradient(135deg, #f0fdfa 0%, #fdf4ff 30%, #fef9f3 60%, #f0f9ff 100%)' } },
+        return React.createElement('div', { className: 'paper-texture min-h-screen pb-24 relative' },
           // 装饰性背景元素
           React.createElement('div', { style: { position: 'absolute', top: '-80px', right: '-60px', width: '220px', height: '220px', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(99,102,241,0.15), rgba(168,85,247,0.1))', filter: 'blur(50px)', zIndex: 0 } }),
           React.createElement('div', { style: { position: 'absolute', top: '80px', left: '-70px', width: '160px', height: '160px', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(78,205,196,0.12), rgba(59,130,246,0.08))', filter: 'blur(40px)', zIndex: 0 } }),
           React.createElement('div', { style: { position: 'absolute', bottom: '100px', right: '-30px', width: '140px', height: '140px', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(255,159,28,0.1), rgba(236,72,153,0.06))', filter: 'blur(35px)', zIndex: 0 } }),
-          React.createElement('header', { className: 'pt-8 pb-4 px-4 bg-white/80 sticky top-0 z-10', style: { backdropFilter: 'blur(12px)' } },
+          React.createElement('header', { className: 'pt-8 pb-4 px-4 sticky top-0 z-10', style: { background: 'rgba(255,251,243,0.88)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)' } },
             React.createElement('h1', { className: 'text-xl font-bold text-dark text-center' }, '设置')
           ),
           React.createElement('div', { className: 'px-4 mt-4 space-y-4 relative z-10' },
@@ -2639,11 +2856,11 @@
           }
         };
 
-        return React.createElement('div', { className: 'min-h-screen pb-24 relative', style: { background: 'linear-gradient(135deg, #f0fdfa 0%, #fdf4ff 30%, #fef9f3 60%, #f0f9ff 100%)' } },
+        return React.createElement('div', { className: 'paper-texture min-h-screen pb-24 relative' },
           React.createElement('div', { style: { position: 'absolute', top: '-80px', right: '-60px', width: '220px', height: '220px', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(99,102,241,0.15), rgba(168,85,247,0.1))', filter: 'blur(50px)', zIndex: 0 } }),
           React.createElement('div', { style: { position: 'absolute', top: '80px', left: '-70px', width: '160px', height: '160px', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(78,205,196,0.12), rgba(59,130,246,0.08))', filter: 'blur(40px)', zIndex: 0 } }),
           React.createElement('div', { style: { position: 'absolute', bottom: '100px', right: '-30px', width: '140px', height: '140px', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(255,159,28,0.1), rgba(236,72,153,0.06))', filter: 'blur(35px)', zIndex: 0 } }),
-          React.createElement('header', { className: 'pt-8 pb-4 px-4 bg-white/80 sticky top-0 z-10', style: { backdropFilter: 'blur(12px)' } },
+          React.createElement('header', { className: 'pt-8 pb-4 px-4 sticky top-0 z-10', style: { background: 'rgba(255,251,243,0.88)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)' } },
             React.createElement('div', { className: 'flex items-center justify-between' },
               React.createElement('h1', { className: 'text-xl font-bold text-dark' }, '回收站'),
               trash.length > 0 && React.createElement('button', {
@@ -2853,19 +3070,17 @@
       const Toast = ({ message, visible }) => {
         if (!visible) return null;
         return React.createElement('div', {
+          className: 'toast-journal animate-fade-in',
           style: {
             position: 'fixed',
             top: '50%',
             left: '50%',
             transform: 'translate(-50%, -50%)',
-            backgroundColor: 'rgba(0,0,0,0.75)',
-            color: '#fff',
-            padding: '12px 20px',
-            borderRadius: '12px',
-            fontSize: '14px',
             zIndex: 9999,
             pointerEvents: 'none',
-            transition: 'opacity 0.3s'
+            transition: 'opacity 0.3s',
+            fontFamily: "'Noto Serif SC', serif",
+            letterSpacing: '1px'
           }
         }, message);
       };
@@ -3021,7 +3236,7 @@
           setShowAddModal(true);
         };
 
-        return React.createElement('div', { className: 'min-h-screen bg-light', style: { width: '100%', overflowX: 'clip' } },
+        return React.createElement('div', { className: 'min-h-screen paper-texture', style: { width: '100%', overflowX: 'clip' } },
           currentPage === '/' && React.createElement(HomePage, { onAddClick: handleVoiceAdd }),
           currentPage === '/bills' && React.createElement(BillsPage, null),
           currentPage === '/stats' && React.createElement(StatsPage, null),
